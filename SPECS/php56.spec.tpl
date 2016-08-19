@@ -34,6 +34,9 @@
 %global oraclever 12.1
 %endif
 
+%bcond_with httpd24
+%bcond_with libgd
+
 # Build for LiteSpeed Web Server (LSAPI)
 %global with_lsws     1
 
@@ -111,7 +114,7 @@
 %global with_systemdmax 0
 %endif
 # httpd 2.4.10 with httpd-filesystem and sethandler support
-%if 0%{?fedora} >= 21 || %{?_with_httpd24} == "--with-httpd24"
+%if 0%{?fedora} >= 21 || %{with httpd24}
 %global with_httpd24 1
 %else
 %global with_httpd24 0
@@ -128,10 +131,10 @@
 %else
 %global with_dtrace 0
 %endif
-%if 0%{?fedora} < 14 || 0%{?rhel} < 7
-%global with_libgd   0
-%else
+%if 0%{?fedora} > 13 || 0%{?rhel} > 6 || %{with libgd}
 %global with_libgd   1
+%else
+%global with_libgd   0 
 %endif
 
 %global with_libzip  0
