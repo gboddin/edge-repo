@@ -1,0 +1,9 @@
+*bz2
+*gz
+*xz
+*.rpm
+BUILD
+RPMS
+SPECS/httpd.spec
+SPECS/php56.spec
+BUILDROOT
