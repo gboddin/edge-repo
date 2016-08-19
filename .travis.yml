@@ -6,6 +6,7 @@ install:
   - mkdir ${DISTRO} 
   - tar -C ${DISTRO} -xjf ${DISTRO}-rootfs-salted.tar.bz2
 script:
+  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-7 -0 /bin/bash /root/build/common.sh
   - echo ${APACHE_VERSION}|grep -q "^2.4" && ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-7 -0 /bin/bash /root/build/build-apache.sh
   - echo ${APACHE_VERSION}|grep -q "^2.4" && ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-7 -0 rpm -Uvh /root/build/RPMS/$(uname -m)/httpd-{,devel-}${APACHE_VERSION}-.*.$(uname -m).rpm
   - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-7 -0 /bin/bash /root/build/build-php.sh
