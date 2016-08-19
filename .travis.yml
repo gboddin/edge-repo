@@ -12,7 +12,6 @@ script:
   - ${PROOT} /bin/bash /root/build/build-redis.sh
   - echo ${APACHE_VERSION}|grep -q "^2.4" && ${PROOT} /bin/bash /root/build/build-apache.sh
   - echo ${APACHE_VERSION}|grep -q "^2.4" && ${PROOT} rpm -Uvh /root/build/RPMS/$(uname -m)/httpd-{,devel-}${APACHE_VERSION}-.*.$(uname -m).rpm
-  - echo ${APACHE_VERSION}|grep -q "^2.4" && ${PROOT} rpm -Uvh /root/build/RPMS/$(uname -m)/*.rpm
   - echo ${APACHE_VERSION}|grep -q "^2.4" && cp SOURCES/httpd-php-build.conf ${DISTRO}/etc/httpd/conf/httpd.conf 
   - ${PROOT} /bin/bash /root/build/build-php.sh
 before_deploy:
