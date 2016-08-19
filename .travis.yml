@@ -6,11 +6,11 @@ install:
   - tar -C centos-6 -xjvf centos-6-rootfs-salted.tar.bz2
 script:
   - echo $PHP_CONFIG_FLAGS|grep -q httpd24 && ./centos-6/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-6 -0 /bin/bash /root/build/build-apache.sh
-  - echo $PHP_CONFIG_FLAGS|grep -q httpd24 && ./centos-6/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-6 -0 rpm -Uvh /root/build/RPMS/*.rpm
+  - echo $PHP_CONFIG_FLAGS|grep -q httpd24 && ./centos-6/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-6 -0 rpm -Uvh /root/build/RPMS/$(uname -m)/*.rpm
   - echo $PHP_CONFIG_FLAGS|grep -q httpd24 && cp SOURCES/httpd-php-build.conf centos-6/etc/httpd/conf/httpd.conf 
   - ./centos-6/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-6 -0 /bin/bash /root/build/build-php.sh
 before_deploy:
-  - export RELEASE_PKG_FILE=$(ls RPMS/*.rpm)
+  - export RELEASE_PKG_FILE=$(ls RPMS/`uname -m`/*.rpm)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
   file_glob: true
