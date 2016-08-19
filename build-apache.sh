@@ -3,9 +3,7 @@ DISTCACHE_VERSION=1.4.5-23
 APR_VERSION=1.5.2
 APR_UTIL_VERSION=1.5.4
 . versions
-echo Downloading deps :
-rpm -ivh ${EPEL}
-yum install /etc/mime.types tar expat-devel freetds-devel db4-devel rpm-build postgresql-devel mysql-devel sqlite-devel wget unixODBC-devel nss-devel doxygen automake libtool autoconf zlib-devel libselinux-devel libuuid-devel pcre-devel openldap-devel lua-devel libxml2-devel  openssl-devel -y
+yum install /etc/mime.types expat-devel freetds-devel db4-devel rpm-build postgresql-devel mysql-devel sqlite-devel unixODBC-devel nss-devel doxygen automake libtool autoconf zlib-devel libselinux-devel libuuid-devel pcre-devel openldap-devel lua-devel libxml2-devel  openssl-devel -y
 wget -c https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/18/Fedora/source/SRPMS/d/distcache-${DISTCACHE_VERSION}.src.rpm -O SRPMS/distcache-${DISTCACHE_VERSION}.src.rpm 
 wget -c http://www.apache.si/apr/apr-${APR_VERSION}.tar.bz2 -O SOURCES/apr-${APR_VERSION}.tar.bz2
 wget -c  http://www.apache.si/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2 -O SOURCES/apr-util-${APR_UTIL_VERSION}.tar.bz2
