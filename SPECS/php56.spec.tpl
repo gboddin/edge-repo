@@ -111,7 +111,7 @@
 %global with_systemdmax 0
 %endif
 # httpd 2.4.10 with httpd-filesystem and sethandler support
-%if 0%{?fedora} >= 21 || %{?_with_httpd24} == "--with-httpd24"
+%if 0%{?fedora} >= 21 || %{?_with_httpd24:1}
 %global with_httpd24 1
 %else
 %global with_httpd24 0
@@ -128,7 +128,7 @@
 %else
 %global with_dtrace 0
 %endif
-%if 0%{?fedora} < 14 || 0%{?rhel} < 7
+%if 0%{?fedora} < 14 || 0%{?rhel} < 7 || %{?_with_libgd:1}
 %global with_libgd   0
 %else
 %global with_libgd   1
