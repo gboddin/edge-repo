@@ -2,8 +2,8 @@
 DISTCACHE_VERSION=1.4.5-23
 APR_VERSION=1.5.2
 APR_UTIL_VERSION=1.5.4
-. versions
-yum install rpm-build
+
+# Get packages 
 wget -c https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/18/Fedora/source/SRPMS/d/distcache-${DISTCACHE_VERSION}.src.rpm -O SRPMS/distcache-${DISTCACHE_VERSION}.src.rpm 
 wget -c http://www.apache.si/apr/apr-${APR_VERSION}.tar.bz2 -O SOURCES/apr-${APR_VERSION}.tar.bz2
 wget -c  http://www.apache.si/apr/apr-util-${APR_UTIL_VERSION}.tar.bz2 -O SOURCES/apr-util-${APR_UTIL_VERSION}.tar.bz2
