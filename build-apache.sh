@@ -18,4 +18,4 @@ rpmbuild --define "_topdir `pwd`"  -tb  SOURCES/apr-util-${APR_UTIL_VERSION}.tar
 rpm -Uvh RPMS/x86_64/apr-util*-${APR_UTIL_VERSION}*.x86_64.rpm
 wget -c "https://www.apache.org/dist/httpd/httpd-${APACHE_VERSION}.tar.bz2" -O SOURCES/httpd-${APACHE_VERSION}.tar.bz2 
 cat SPECS/httpd.spec.tpl |sed "s/TPL_HTTPD_VERSION/$APACHE_VERSION/g" > SPECS/httpd.spec
-rpmbuild --define "_topdir `pwd`"  -bb SPECS/httpd.spec
+rpmbuild --define "_topdir `pwd`" -bb SPECS/httpd.spec

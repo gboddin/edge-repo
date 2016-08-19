@@ -1,0 +1,20 @@
+install:
+  - wget "https://github.com/gboddin/upsalter/releases/download/0.2.3/centos-6-rootfs-salted.tar.bz2"
+  - mkdir centos-6
+  - tar -C centos-6 -xjvf centos-6-rootfs-salted.tar.bz2
+script:
+  - ./centos-6/proot -b $(pwd):/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /build -r centos-6 -0 /bin/bash /build/build-apache.sh
+  - ./centos-6/proot -b $(pwd):/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /build -r centos-6 -0 rpm -Uvh /build/*.rpm
+  - cp SOURCES/httpd-php-build.conf centos-6/etc/httpd/conf/httpd.conf 
+  - ./centos-6/proot -b $(pwd):/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /build -r centos-6 -0 /bin/bash /build/build-php.sh
+before_deploy:
+  - export RELEASE_PKG_FILE=$(ls RPMS/*.rpm)
+  - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
+deploy:
+  file_glob: true
+  file: "${RELEASE_PKG_FILE}"
+  on:
+    tags: true
+  provider: releases
+  api_key:
+    secure: tMqvtlXtlFZesTKVQBG0xRuDcKvQzHl2vlWz43/CTQkjczlJT/KtExlbP0AJbFbYB0f2/qc+b5z0lIWp44lHwTBwlk1f2kSpAbhLmscj3fSTjhkSbq1PZId68d7ebOkKirXM+yxYGRvofqBEwKgHjEIs8ll5kEXV7QJFRc3TSe2lkji1+afB/IwyLO4si/cAx6yHwL4esVxnw9IsSqf320XThyJ+gJaq2/xuq+XRVRAkjBoEggdTlUtX4pBibnOLKkV3HjtgfluWJPpvAJmL9XnXvvLvTXEDwyf2LBdYKPF/J4R6IF/ry2n1YmgbquUXWc8iNtQ+h9ZiapblRm4nJNLvXwvwWuJ0YT1p8ZqNlhTT+TivKy13HBI6dJSirT+viEG8SR6deDIYmEHSWJoCym/JhlzzfAKTaqaZaSToZvRgr61+GY6iboKUAp1Tfn5WMEC67eN9p3jvigA2qvHncr8VfDcGF7pQKoU42u+y8ADBilkP8xmJ0umW/tZuvUzRh7CEeYCioBACyxHoklD0GWbTQEsVCWC3kMAhvAJdOLw6sLI+ThvyPwaI5sx5OHupSbxQMEDUjCe/nO94VQXOsgPUPiJ5DyOTlvp3XSjRQuCLCmGScbKtbuXfI87fHjCsxUtrveiPJt1BqDbZBfJg7fz6myKYq1AG5Ix085FXJY0=
