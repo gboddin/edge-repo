@@ -11,8 +11,8 @@ wget "http://fr2.php.net/get/php-${PHP_VERSION}.tar.bz2/from/this/mirror" -cO SO
 
 cat SPECS/php56.spec.tpl |sed "s/TPL_PHP_VERSION/$PHP_VERSION/g" > SPECS/php56.spec
 
-wget "https://github.com/libgd/libgd/releases/download/gd-${GD_VERSION}/libgd-${GD_VERSION}.tar.xz" -cO SOURCES/libgd-${GD_VERSION}.tar.xz
-rpmbuild --define "_topdir `pwd`"  -bb SPECS/gd.spec
-rpm -ivh RPMS/$(uname -m)/gd-last-devel-${GD_VERSION}-1.el6.$(uname -m).rpm 
+echo $PHP_CONFIG_FLAGS|grep -q libgd && wget "https://github.com/libgd/libgd/releases/download/gd-${GD_VERSION}/libgd-${GD_VERSION}.tar.xz" -cO SOURCES/libgd-${GD_VERSION}.tar.xz
+echo $PHP_CONFIG_FLAGS|grep -q libgd && rpmbuild --define "_topdir `pwd`"  -bb SPECS/gd.spec
+echo $PHP_CONFIG_FLAGS|grep -q libgd && rpm -ivh RPMS/$(uname -m)/gd-last-*-${GD_VERSION}-1.el6.$(uname -m).rpm 
 
 rpmbuild --define "_topdir `pwd`" ${PHP_CONFIG_FLAGS} -bb SPECS/php56.spec
