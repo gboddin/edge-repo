@@ -1,5 +1,6 @@
 env:
   - PHP_CONFIG_FLAGS="--with httpd24 --with libgd"
+  - PHP_CONFIG_FLAGS="--with libgd"
 install:
   - wget "https://github.com/gboddin/upsalter/releases/download/0.2.3/centos-6-rootfs-salted.tar.bz2"
   - mkdir centos-6
