@@ -1,7 +1,8 @@
 #!/bin/bash
 GD_VERSION=2.2.3
+. versions
 echo Downloading deps :
-rpm -ivh  http://dl.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-8.noarch.rpm
+rpm -ivh ${EPEL} 
 yum install fontconfig-devel libjpeg-devel libX11-devel libXpm-devel httpd-devel libvpx-devel gettext-devel libtiff-devel libwebp-devel perl-generators enchant-devel libicu-devel recode-devel  aspell-devel libtidy-devel libmcrypt-devel tokyocabinet-devel  gdbm-devel gmp-devel t1lib-devel libxslt-devel net-snmp-devel firebird-devel libc-client-devel libacl-devel systemtap-sdt-devel libtool-ltdl-devel gcc-c++ libedit-devel smtpdaemon libstdc++-devel pam-devel curl-devel bzip2-devel libpng-devel git tar expat-devel freetds-devel db4-devel rpm-build postgresql-devel mysql-devel sqlite-devel wget unixODBC-devel nss-devel doxygen automake libtool autoconf zlib-devel libselinux-devel libuuid-devel pcre-devel openldap-devel lua-devel libxml2-devel  openssl-devel  freetype-devel  -y
 
 wget "http://fr2.php.net/get/php-${PHP_VERSION}.tar.bz2/from/this/mirror" -cO SOURCES/php-${PHP_VERSION}.tar.bz2
