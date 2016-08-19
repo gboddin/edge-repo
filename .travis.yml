@@ -1,6 +1,6 @@
 env:
   - PHP_VERSION=5.6.25 APACHE_VERSION=2.4.23 PHP_CONFIG_FLAGS="--with httpd24 --with libgd"
-  - PHP_VERSION=5.6.25 APACHE_VERSION="" PHP_CONFIG_FLAGS="--with libd"
+  - PHP_VERSION=5.6.25 APACHE_VERSION="" PHP_CONFIG_FLAGS="--with libgd"
   - PHP_VERSION=5.6.25 APACHE_VERSION="" PHP_CONFIG_FLAGS=""
 install:
   - wget "https://github.com/gboddin/upsalter/releases/download/0.2.3/centos-6-rootfs-salted.tar.bz2"
