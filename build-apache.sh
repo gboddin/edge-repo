@@ -15,7 +15,7 @@ rpm -Uvh RPMS/$(uname -m)/distcache*-${DISTCACHE_VERSION}.$(uname -m).rpm
 
 # Build apr :
 rpmbuild  --define "_topdir `pwd`" -ts SOURCES/apr-${APR_VERSION}.tar.bz2
-yum-builddep --nogpgcheck -y SRPMS/apr-util*-${APR_UTIL_VERSION}*.$(uname -m).src.rpm
+yum-builddep --nogpgcheck -y SRPMS/$(uname -m)/apr*-${APR_VERSION}*.$(uname -m).src.rpm 
 rpmbuild  --define "_topdir `pwd`" -tb SOURCES/apr-${APR_VERSION}.tar.bz2
 rpm -Uvh RPMS/$(uname -m)/apr*-${APR_VERSION}*.$(uname -m).rpm
 
