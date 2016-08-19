@@ -1,6 +1,4 @@
-[ ! -z $APACHE_VERSION ] && APACHE_VERSION=2.4.23
-[ ! -z $PHP_VERSION ] && PHP_VERSION=5.6.25
-[ ! -z $REDIS_VERSION ] && REDIS_VERSION=3.2.3
-[ ! -z $DISTRO ] && DISTRO=centos-6
-EPEL=https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
-[ "${DISTRO}" == "centos-7" ] && EPEL=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+export APACHE_VERSION=2.4.23
+export PHP_VERSION=5.6.25
+export REDIS_VERSION=3.2.3
+export DISTRO=centos-6
