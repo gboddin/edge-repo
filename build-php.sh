@@ -1,5 +1,4 @@
 #!/bin/bash
-PHP_VERSION=5.6.25
 GD_VERSION=2.2.3
 echo Downloading deps :
 rpm -ivh  http://dl.fedoraproject.org/pub/epel/6/$(uname -m)/epel-release-6-8.noarch.rpm
