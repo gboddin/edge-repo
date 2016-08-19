@@ -16,7 +16,7 @@ script:
   - echo ${APACHE_VERSION}|grep -q "^2.4" && cp SOURCES/httpd-php-build.conf ${DISTRO}/etc/httpd/conf/httpd.conf 
   - ${PROOT} /bin/bash /root/build/build-php.sh
 before_deploy:
-  - export RELEASE_PKG_FILE=$(ls RPMS/`uname -m`/*.rpm)
+  - export RELEASE_PKG_FILE=$(ls RPMS/`uname -m`/*.rpm SRPMS/*.rpm)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
   file_glob: true
