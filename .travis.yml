@@ -3,10 +3,10 @@ install:
   - mkdir centos-6
   - tar -C centos-6 -xjvf centos-6-rootfs-salted.tar.bz2
 script:
-  - ./centos-6/proot -b $(pwd):/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /build -r centos-6 -0 /bin/bash /build/build-apache.sh
-  - ./centos-6/proot -b $(pwd):/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /build -r centos-6 -0 rpm -Uvh /build/*.rpm
+  - ./centos-6/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-6 -0 /bin/bash /root/build/build-apache.sh
+  - ./centos-6/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-6 -0 rpm -Uvh /root/build/*.rpm
   - cp SOURCES/httpd-php-build.conf centos-6/etc/httpd/conf/httpd.conf 
-  - ./centos-6/proot -b $(pwd):/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /build -r centos-6 -0 /bin/bash /build/build-php.sh
+  - ./centos-6/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-6 -0 /bin/bash /root/build/build-php.sh
 before_deploy:
   - export RELEASE_PKG_FILE=$(ls RPMS/*.rpm)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
