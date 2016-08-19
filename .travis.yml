@@ -6,13 +6,13 @@ install:
   - mkdir ${DISTRO} 
   - tar -C ${DISTRO} -xjf ${DISTRO}-rootfs-salted.tar.bz2
 script:
-  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-${DISTRO} -0 /bin/bash /root/build/common.sh
-  - echo ${APACHE_VERSION}|grep -q "^2.4" && ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-${DISTRO} -0 /bin/bash /root/build/build-apache.sh
-  - echo ${APACHE_VERSION}|grep -q "^2.4" && ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-${DISTRO} -0 rpm -Uvh /root/build/RPMS/$(uname -m)/httpd-{,devel-}${APACHE_VERSION}-.*.$(uname -m).rpm
-  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-${DISTRO} -0 /bin/bash /root/build/build-php.sh
-  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-${DISTRO} -0 /bin/bash /root/build/build-redis.sh
+  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0 /bin/bash /root/build/common.sh
+  - echo ${APACHE_VERSION}|grep -q "^2.4" && ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0 /bin/bash /root/build/build-apache.sh
+  - echo ${APACHE_VERSION}|grep -q "^2.4" && ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0 rpm -Uvh /root/build/RPMS/$(uname -m)/httpd-{,devel-}${APACHE_VERSION}-.*.$(uname -m).rpm
+  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0 /bin/bash /root/build/build-php.sh
+  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0 /bin/bash /root/build/build-redis.sh
   - echo ${APACHE_VERSION}|grep -q "^2.4" && cp SOURCES/httpd-php-build.conf ${DISTRO}/etc/httpd/conf/httpd.conf 
-  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r centos-${DISTRO} -0 rpm -Uvh /root/build/RPMS/$(uname -m)/*.rpm
+  - ./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0 rpm -Uvh /root/build/RPMS/$(uname -m)/*.rpm
 before_deploy:
   - export RELEASE_PKG_FILE=$(ls RPMS/`uname -m`/*.rpm)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
