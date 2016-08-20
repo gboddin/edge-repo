@@ -11,7 +11,7 @@ URL: http://apr.apache.org/
 Source0: http://www.apache.org/dist/apr/apr-util-1.5.4.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: autoconf, libtool, doxygen, apr-devel >= 1.4.0
-BuildRequires: expat-devel, libuuid-devel
+BuildRequires: libdb-devel, expat-devel, libuuid-devel
 
 %description
 The mission of the Apache Portable Runtime (APR) is to provide a
