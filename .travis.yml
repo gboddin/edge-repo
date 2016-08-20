@@ -2,6 +2,7 @@ env:
   - DISTRO=centos-6 PHP_CONFIG_FLAGS="--with httpd24 --with libgd"
   - DISTRO=centos-7 PHP_CONFIG_FLAGS="--with httpd24 --with libgd"
 before_install:
+  - export MAKEFLAGS=-j$(cat /proc/cpuinfo|grep bogomips|wc -l)
   - export PROOT="./${DISTRO}/proot -b $(pwd):/root/build -b /etc/hosts -b /etc/hostname -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0"
   - source versions
 install:
