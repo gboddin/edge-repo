@@ -1,15 +1,13 @@
 #!/bin/bash
-DISTCACHE_VERSION=1.4.5-23
+DISTCACHE_VERSION=1.4.5
 APR_VERSION=1.5.2
 APR_UTIL_VERSION=1.5.4
 
-# Get packages 
-wget -c https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/18/Fedora/source/SRPMS/d/distcache-${DISTCACHE_VERSION}.src.rpm -O SRPMS/distcache-${DISTCACHE_VERSION}.src.rpm 
-
 # Build dist-cache
-yum-builddep -y --nogpgcheck SRPMS/distcache-${DISTCACHE_VERSION}.src.rpm
-rpmbuild --quiet --rebuild  --define "_topdir `pwd`"  SRPMS/distcache-${DISTCACHE_VERSION}.src.rpm > ${LOGFILE}
-rpm -Uvh RPMS/$(uname -m)/distcache*-${DISTCACHE_VERSION}.$(uname -m).rpm
+spectool -g -C SOURCES SPECS/distcache.spec
+yum-builddep -y --nogpgcheck SPECS/distcache.spec 
+rpmbuild  --quiet --define "rpmrel 24" --define "_topdir `pwd`" -ba SPECS/distcache.spec > ${LOGFILE}
+rpm -Uvh RPMS/$(uname -m)/distcache*-${DISTCACHE_VERSION}*.$(uname -m).rpm
 
 # Build apr :
 spectool -g -C SOURCES SPECS/apr.spec
