@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 env:
   - DISTRO=centos-6 PHP_CONFIG_FLAGS="--with httpd24 --with libgd"
   - DISTRO=centos-7 PHP_CONFIG_FLAGS="--with httpd24 --with libgd"
