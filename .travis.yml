@@ -26,4 +26,4 @@ before_deploy:
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
 deploy:
   - provider: script
-    script: sync_repo.sh 
+    script: ./sync_repo.sh 
