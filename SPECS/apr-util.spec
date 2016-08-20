@@ -11,8 +11,12 @@ URL: http://apr.apache.org/
 Source0: http://www.apache.org/dist/apr/apr-util-1.5.4.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: autoconf, libtool, doxygen, apr-devel >= 1.4.0
-BuildRequires: libdb-devel, expat-devel, libuuid-devel
-
+BuildRequires: expat-devel, libuuid-devel
+%if 0%{?fedora} >= 15 || 0%{?rhel} >= 7 
+BuildRequires : libdb-devel
+%else
+BuildRequires : db4-devel 
+%endif
 %description
 The mission of the Apache Portable Runtime (APR) is to provide a
 free library of C data structures and routines.  This library
