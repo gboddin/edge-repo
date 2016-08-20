@@ -14,18 +14,18 @@ rpm -Uvh RPMS/$(uname -m)/distcache*-${DISTCACHE_VERSION}.$(uname -m).rpm
 # Build apr :
 spectool -g -C SOURCES SPECS/apr.spec
 yum-builddep -y --nogpgcheck SPECS/apr.spec 
-rpmbuild  --quiet --define "_topdir `pwd`" -ba SPECS/apr.spec > ${LOGFILE}
+rpmbuild  --quiet --define "rpmrel 1" --define "_topdir `pwd`" -ba SPECS/apr.spec > ${LOGFILE}
 rpm -Uvh RPMS/$(uname -m)/apr*-${APR_VERSION}*.$(uname -m).rpm
 
 # Build apr-utils :
 
 spectool -g -C SOURCES SPECS/apr-util.spec
 yum-builddep -y --nogpgcheck SPECS/apr-util.spec 
-rpmbuild --quiet --define "_topdir `pwd`"  -ba  SPECS/apr-util.spec > ${LOGFILE}
+rpmbuild --quiet --define "rpmrel 1" --define "_topdir `pwd`"  -ba  SPECS/apr-util.spec > ${LOGFILE}
 rpm -Uvh RPMS/$(uname -m)/apr-util*-${APR_UTIL_VERSION}*.$(uname -m).rpm
 
 # Build httpd :
 cat SPECS/httpd.spec.tpl |sed "s/TPL_HTTPD_VERSION/$APACHE_VERSION/g" > SPECS/httpd.spec
 spectool -g -C SOURCES SPECS/httpd.spec
 yum-builddep -y SPECS/httpd.spec
-rpmbuild --quiet --define "_topdir `pwd`" -ba SPECS/httpd.spec > ${LOGFILE}
+rpmbuild --quiet --define "rpmrel ${APACHE_RELEASE}" --define "_topdir `pwd`" -ba SPECS/httpd.spec > ${LOGFILE}
