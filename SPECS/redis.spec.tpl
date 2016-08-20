@@ -28,17 +28,13 @@
 
 Name:             redis
 Version:          TPL_REDIS_VERSION
-Release:          1%{?dist}
+Release:          %{rpmrel}%{?dist} 
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
 License:          BSD
 URL:              http://redis.io
-%if 0%{?prever:1}
-Source0:          https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit}/%{name}-%{version}-%{gh_short}.tar.gz
-%else
-Source0:          http://download.redis.io/releases/%{name}-%{version}.tar.gz
-%endif
+Source0:          http://download.redis.io/releases/redis-TPL_REDIS_VERSION.tar.gz
 Source1:          %{name}.logrotate
 Source2:          %{name}.init
 Source3:          %{name}.service
