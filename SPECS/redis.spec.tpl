@@ -58,7 +58,8 @@ BuildRoot:        %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %if !0%{?el5}
 BuildRequires:    tcl >= 8.5
 %endif
-BuildRequires:    jemalloc-devel
+BuildRequires:    jemalloc-devel 
+BuildRequires:    gcc-c++
 
 # Required for redis-shutdown
 Requires:         /bin/awk
