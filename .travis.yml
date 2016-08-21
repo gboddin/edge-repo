@@ -5,9 +5,13 @@ env:
   matrix:
     - EPEL=6 DISTRO=centos-6 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
     - EPEL=7 DISTRO=centos-7 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
-    allow_failures:
-      - DISTRO=fedora-23 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
-      - DISTRO=fedora-24 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
+    - DISTRO=fedora-23 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
+    - DISTRO=fedora-24 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
+matrix:
+  allow_failures:
+    - env: DISTRO=fedora-23 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
+    - env: DISTRO=fedora-24 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
+
 before_install:
   - source versions
   - openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in deploy.key.enc -out deploy.key -d
