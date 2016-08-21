@@ -146,8 +146,6 @@
 %global db_devel  libdb-devel
 %endif
 
-%global rpmrel 1
-
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
 Version: TPL_PHP_VERSION 
