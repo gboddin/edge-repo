@@ -20,9 +20,7 @@ install:
   - ${PROOT} /bin/bash /root/build/install.sh
 script:
   - ${PROOT} /bin/bash -x /root/build/build-redis.sh
-  - echo ${APACHE_VERSION}|grep -q "^2.4" && ${PROOT} /bin/bash -x /root/build/build-apache.sh
-  - echo ${APACHE_VERSION}|grep -q "^2.4" && ${PROOT} yum -y --nogpgcheck localinstall /root/build/RPMS/$(uname -m)/httpd-{,devel-}${APACHE_VERSION}-*.$(uname -m).rpm
-  - echo ${APACHE_VERSION}|grep -q "^2.4" && cp SOURCES/httpd-php-build.conf ${DISTRO}/etc/httpd/conf/httpd.conf 
+  - ${PROOT} /bin/bash -x /root/build/build-apache.sh
   - ${PROOT} /bin/bash -x /root/build/build-php.sh
 before_deploy:
   - export RELEASE_PKG_FILE=$(ls RPMS/`uname -m`/*.rpm SRPMS/*.rpm)
