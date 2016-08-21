@@ -46,7 +46,7 @@
 %global mysql_config %{_libdir}/mysql/mysql_config
 
 # Optional components; pass "--with mssql" etc to rpmbuild.
-%global with_oci8     %{?_with_oci8:1}%{!?_with_oci8:0}
+%global with_oci8     %{with oci8}
 
 %if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 %global with_libpcre  1
