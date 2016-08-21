@@ -1211,7 +1211,7 @@ build --libdir=%{_libdir}/php \
       --with-gmp=shared \
       --enable-calendar=shared \
       --enable-bcmath=shared \
-      --enable-json=shared
+      --enable-json=shared \
       --with-bz2=shared \
       --enable-ctype=shared \
       --enable-dba=shared --with-db4=%{_prefix} \
@@ -1357,7 +1357,7 @@ build --includedir=%{_includedir}/php-zts \
       --with-gmp=shared \
       --enable-calendar=shared \
       --enable-bcmath=shared \
-      --enable-json=shared
+      --enable-json=shared \
       --with-bz2=shared \
       --enable-ctype=shared \
       --enable-dba=shared --with-db4=%{_prefix} \
