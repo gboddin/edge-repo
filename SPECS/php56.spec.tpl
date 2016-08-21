@@ -7,10 +7,6 @@
 # License: MIT 
 # http://opensource.org/licenses/MIT
 #
-# License: JSON License
-# The software builds and extension with "non-free" code
-# See : http://www.json.org/license.html
-#
 # Please preserve changelog entries
 #
 # API/ABI check
@@ -155,8 +151,7 @@ Release: %{rpmrel}%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
-# JSON built-in extension is licensed under JSON
-License: PHP and Zend and BSD and JSON
+License: PHP and Zend and BSD
 Group: Development/Languages
 URL: http://www.php.net/
 
@@ -778,6 +773,17 @@ Obsoletes: php53-gd, php53u-gd, php54-gd, php54w-gd, php55u-gd, php55w-gd, php56
 The php-gd package contains a dynamic shared object that will add
 support for using the gd graphics library to PHP.
 
+%package json
+Summary: A module for PHP applications for creating/parsing JSON
+Group: Development/Languages
+License: PHP
+Requires php-common%{?_isa} = %{version}-%{release}
+Obsoletes: php53-json, php53u-json, php54-json, php54w-json, php55u-json, php55w-json, php56u-json, php56w-json
+
+%description json
+The php-json package contains a dynamic shared object that will add
+support for creating/parsing JSON
+
 %package bcmath
 Summary: A module for PHP applications for using the bcmath library
 Group: Development/Languages
@@ -986,6 +992,7 @@ cp ext/mbstring/ucgendat/OPENLDAP_LICENSE ucgendat_LICENSE
 cp ext/fileinfo/libmagic/LICENSE libmagic_LICENSE
 cp ext/phar/LICENSE phar_LICENSE
 cp ext/bcmath/libbcmath/COPYING.LIB libbcmath_COPYING
+cp ext/json/CREDITS json_CREDITS
 
 # Multiple builds for multiple SAPIs
 mkdir build-cgi build-apache build-embedded \
@@ -1203,6 +1210,7 @@ build --libdir=%{_libdir}/php \
       --with-gmp=shared \
       --enable-calendar=shared \
       --enable-bcmath=shared \
+      --enable-json=shared
       --with-bz2=shared \
       --enable-ctype=shared \
       --enable-dba=shared --with-db4=%{_prefix} \
@@ -1348,6 +1356,7 @@ build --includedir=%{_includedir}/php-zts \
       --with-gmp=shared \
       --enable-calendar=shared \
       --enable-bcmath=shared \
+      --enable-json=shared
       --with-bz2=shared \
       --enable-ctype=shared \
       --enable-dba=shared --with-db4=%{_prefix} \
@@ -1963,6 +1972,7 @@ fi
 %files soap -f files.soap
 %files bcmath -f files.bcmath
 %license libbcmath_COPYING
+%files json -f files.json
 %files gmp -f files.gmp
 %files dba -f files.dba
 %files pdo -f files.pdo
@@ -1985,7 +1995,11 @@ fi
 
 
 %changelog
-* Thu Aug 19 2016 Gregory Boddin <gregory@siwhine.net> TPL_PHP_VERSION-1
+
+* Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> TPL_PHP_VERSION-3
+- PHP is now using jsond, no need to skip packaging for licensing reasons anymore.
+
+* Thu Aug 19 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-1
 - update to 5.6.25
 
 * Thu Aug  4 2016 Remi Collet <remi@fedoraproject.org> 5.6.25-0.1.RC1
