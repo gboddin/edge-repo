@@ -1,10 +1,15 @@
-# remirepo spec file for php 5.6
+# spec file for php 5.6
 # with backport stuff, adapted from
 #
+# remirepo spec file for php, adapted from
 # Fedora spec file for php
 #
-# License: MIT
+# License: MIT 
 # http://opensource.org/licenses/MIT
+#
+# License: JSON License
+# The software builds and extension with "non-free" code
+# See : http://www.json.org/license.html
 #
 # Please preserve changelog entries
 #
@@ -16,9 +21,6 @@
 %global fileinfover 1.0.5
 %global opcachever  7.0.6-dev
 %global oci8ver     2.0.11
-
-# Use for first build of PHP (before pecl/zip and pecl/jsonc)
-%global php_bootstrap   0
 
 # Adds -z now to the linker flags
 %global _hardened_build 1
@@ -41,11 +43,7 @@
 %global with_lsws     1
 
 # Regression tests take a long time, you can skip 'em with this
-%if %{php_bootstrap}
 %global runselftest 0
-%else
-%{!?runselftest: %global runselftest 1}
-%endif
 
 # Use the arch-specific mysql_config binary to avoid mismatch with the
 # arch detection heuristic used by bindir/mysql_config.
@@ -138,7 +136,7 @@
 %endif
 
 %global with_libzip  0
-%global with_zip     0
+%global with_zip     1 
 
 %if 0%{?fedora} < 18 && 0%{?rhel} < 7
 %global db_devel  db4-devel
@@ -157,7 +155,8 @@ Release: %{rpmrel}%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
-License: PHP and Zend and BSD
+# JSON built-in extension is licensed under JSON
+License: PHP and Zend and BSD and JSON
 Group: Development/Languages
 URL: http://www.php.net/
 
@@ -415,16 +414,9 @@ Provides: php-sockets, php-sockets%{?_isa}
 Provides: php-spl, php-spl%{?_isa}
 Provides: php-standard = %{version}, php-standard%{?_isa} = %{version}
 Provides: php-tokenizer, php-tokenizer%{?_isa}
-%if ! %{php_bootstrap}
-Requires: php-pecl-jsonc%{?_isa}
-%endif
 %if %{with_zip}
 Provides: php-zip, php-zip%{?_isa}
 Obsoletes: php-pecl-zip < 1.11
-%else
-%if ! %{php_bootstrap}
-Requires: php-pecl-zip%{?_isa}
-%endif
 %endif
 Provides: php-zlib, php-zlib%{?_isa}
 Obsoletes: php-pecl-phar < 1.2.4
@@ -452,9 +444,6 @@ Provides: php-zts-devel = %{version}-%{release}
 Provides: php-zts-devel%{?_isa} = %{version}-%{release}
 %endif
 Obsoletes: php53-devel, php53u-devel, php54-devel, php54w-devel, php55u-devel, php55w-devel, php56u-devel, php56w-devel
-%if ! %{php_bootstrap}
-Requires: php-pecl-jsonc-devel%{?_isa}
-%endif
 
 %description devel
 The php-devel package contains the files needed for building PHP
@@ -1610,7 +1599,7 @@ sed -e 's@proxy:fcgi://127.0.0.1:9000@proxy:unix:/run/php-fpm/www.sock|fcgi://lo
 
 # Generate files lists and stub .ini files for each subpackage
 for mod in pgsql odbc ldap snmp xmlrpc imap \
-    mysqlnd mysql mysqli pdo_mysql \
+    mysqlnd mysql mysqli pdo_mysql json \
     mbstring gd dom xsl soap bcmath dba xmlreader xmlwriter \
     simplexml bz2 calendar ctype exif ftp gettext gmp iconv \
     sockets tokenizer opcache \
@@ -1996,7 +1985,7 @@ fi
 
 
 %changelog
-* Thu Aug  19 2016 Gregory Boddin <gregory@siwhine.net> TPL_PHP_VERSION-1
+* Thu Aug 19 2016 Gregory Boddin <gregory@siwhine.net> TPL_PHP_VERSION-1
 - update to 5.6.25
 
 * Thu Aug  4 2016 Remi Collet <remi@fedoraproject.org> 5.6.25-0.1.RC1
