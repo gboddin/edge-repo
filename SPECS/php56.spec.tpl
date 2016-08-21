@@ -778,6 +778,7 @@ Summary: A module for PHP applications for creating/parsing JSON
 Group: Development/Languages
 License: PHP
 Requires php-common%{?_isa} = %{version}-%{release}
+Provides: php-pecl-json
 Obsoletes: php53-json, php53u-json, php54-json, php54w-json, php55u-json, php55w-json, php56u-json, php56w-json
 
 %description json
