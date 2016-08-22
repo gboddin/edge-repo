@@ -13,7 +13,7 @@ matrix:
     - env: DISTRO=fedora-24 PHP_CONFIG_FLAGS="--with httpd24 --with libgd --with oci8"
 
 before_install:
-  - source versions
+  - source common.env
   - openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in deploy.key.enc -out deploy.key -d
   - chmod 600 deploy.key
   - wget ${ENC_REPO}${ORACLE_OCI_RPM}.enc
