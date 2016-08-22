@@ -1999,7 +1999,7 @@ fi
 * Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> TPL_PACKAGE_VERSION-3
 - PHP is now using jsond, no need to skip packaging for licensing reasons anymore.
 
-* Thu Aug 19 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-1
+* Fri Aug 19 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-1
 - update to 5.6.25
 
 * Thu Aug  4 2016 Remi Collet <remi@fedoraproject.org> 5.6.25-0.1.RC1
