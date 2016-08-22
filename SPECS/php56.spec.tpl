@@ -34,6 +34,7 @@
 
 %bcond_with httpd24
 %bcond_with libgd
+%bcond_with oci8
 
 # Build for LiteSpeed Web Server (LSAPI)
 %global with_lsws     1
@@ -213,6 +214,7 @@ Patch301: php-5.6.0-oldpcre.patch
 
 BuildRequires: bzip2-devel, curl-devel >= 7.9
 BuildRequires: httpd-devel >= 2.0.46-1, pam-devel
+BuildRequires: gd-devel >= 2.0
 %if %{with_httpd24}
 # to ensure we are using httpd with filesystem feature (see #1081453)
 BuildRequires: httpd-filesystem
