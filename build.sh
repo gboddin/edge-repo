@@ -6,7 +6,7 @@ fi
 [ -z $PACKAGE ] && PACKAGE=$1
 
 # Replaces version tokens if needed :
-[ -f SPECS/${PACKAGE}.spec.tpl ] && sed 's/TPL_PACKAGE_VERSION/${PACKAGE_VERSION}/g' SPECS/${PACKAGE}.spec.tpl > SPECS/${PACKAGE}.spec
+[ -f SPECS/${PACKAGE}.spec.tpl ] && sed "s/TPL_PACKAGE_VERSION/${PACKAGE_VERSION}/g" SPECS/${PACKAGE}.spec.tpl > SPECS/${PACKAGE}.spec
 
 # Install sources :
 spectool -g -C SOURCES SPECS/${PACKAGE}.spec
