@@ -45,9 +45,6 @@
 # arch detection heuristic used by bindir/mysql_config.
 %global mysql_config %{_libdir}/mysql/mysql_config
 
-# Optional components; pass "--with mssql" etc to rpmbuild.
-%global with_oci8     %{with oci8}
-
 %if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 %global with_libpcre  1
 %else
@@ -142,7 +139,7 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
-Version: TPL_PHP_VERSION 
+Version: TPL_PACKAGE_VERSION 
 %if 0%{?rcver:1}
 Release: 0.%{rpmrel}.%{rcver}%{?dist}
 %else
@@ -158,7 +155,7 @@ URL: http://www.php.net/
 # Need to download official tarball and strip non-free stuff
 # wget http://www.php.net/distributions/php-%%{version}%%{?rcver}.tar.xz
 # ./strip.sh %%{version}
-Source0: http://www.php.net/distributions/php-TPL_PHP_VERSION.tar.xz
+Source0: http://www.php.net/distributions/php-TPL_PACKAGE_VERSION.tar.xz
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
@@ -637,7 +634,7 @@ relational database management system based on the source code released by
 Inprise Corp (now known as Borland Software Corp) under the InterBase Public
 License.
 
-%if %{with_oci8}
+%if %{with oci8}
 %package oci8
 Summary:        A module for PHP applications that use OCI8 databases
 Group:          Development/Languages
@@ -935,7 +932,7 @@ support for using the enchant library to PHP.
 
 
 %prep
-echo CIBLE = %{name}-%{version}-%{release} oci8=%{with_oci8} libzip=%{with_libzip}
+echo CIBLE = %{name}-%{version}-%{release} oci8=%{with oci8} libzip=%{with_libzip}
 
 # ensure than current httpd use prefork MPM.
 httpd -V  | grep -q 'threaded:.*yes' && exit 1
@@ -1229,7 +1226,7 @@ build --libdir=%{_libdir}/php \
       --with-mysql=shared,mysqlnd \
       --with-mysqli=shared,mysqlnd \
       --with-mysql-sock=%{mysql_sock} \
-%if %{with_oci8}
+%if %{with oci8}
 %ifarch x86_64
       --with-oci8=shared,instantclient,%{_libdir}/oracle/%{oraclever}/client64/lib,%{oraclever} \
 %else
@@ -1376,7 +1373,7 @@ build --includedir=%{_includedir}/php-zts \
       --with-mysqli=shared,mysqlnd \
       --with-mysql-sock=%{mysql_sock} \
       --enable-mysqlnd-threading \
-%if %{with_oci8}
+%if %{with oci8}
 %ifarch x86_64
       --with-oci8=shared,instantclient,%{_libdir}/oracle/%{oraclever}/client64/lib,%{oraclever} \
 %else
@@ -1617,7 +1614,7 @@ for mod in pgsql odbc ldap snmp xmlrpc imap \
 %if %{with_zip}
     zip \
 %endif
-%if %{with_oci8}
+%if %{with oci8}
     oci8 pdo_oci \
 %endif
     interbase pdo_firebird \
@@ -1680,7 +1677,7 @@ cat files.pdo_dblib >> files.mssql
 cat files.sybase_ct >> files.mssql
 cat files.pdo_pgsql >> files.pgsql
 cat files.pdo_odbc >> files.odbc
-%if %{with_oci8}
+%if %{with oci8}
 cat files.pdo_oci >> files.oci8
 %endif
 cat files.pdo_firebird >> files.interbase
@@ -1990,14 +1987,14 @@ fi
 %files opcache -f files.opcache
 %config(noreplace) %{_sysconfdir}/php.d/opcache-default.blacklist
 %config(noreplace) %{_sysconfdir}/php-zts.d/opcache-default.blacklist
-%if %{with_oci8}
+%if %{with oci8}
 %files oci8 -f files.oci8
 %endif
 
 
 %changelog
 
-* Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> TPL_PHP_VERSION-3
+* Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> TPL_PACKAGE_VERSION-3
 - PHP is now using jsond, no need to skip packaging for licensing reasons anymore.
 
 * Thu Aug 19 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-1

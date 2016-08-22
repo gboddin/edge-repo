@@ -4,11 +4,11 @@
 
 Summary: Apache HTTP Server
 Name: httpd
-Version: TPL_HTTPD_VERSION 
+Version: TPL_PACKAGE_VERSION 
 Release: %{rpmrel}%{?dist} 
 URL: http://httpd.apache.org/
 Vendor: Apache Software Foundation
-Source0: http://www.apache.org/dist/httpd/httpd-TPL_HTTPD_VERSION.tar.bz2
+Source0: http://www.apache.org/dist/httpd/httpd-TPL_PACKAGE_VERSION.tar.bz2
 License: Apache License, Version 2.0
 Group: System Environment/Daemons
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
