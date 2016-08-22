@@ -42,6 +42,9 @@ install -dm 755 $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d
 install -pm 644 %{SOURCE1}  \
     $RPM_BUILD_ROOT%{_sysconfdir}/yum.repos.d/edge.repo
 
+%post
+rpm --import %{_sysconfdir}/pki/rpm-gpg/EDGE-REPO-KEY
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
