@@ -25,7 +25,7 @@ Name:          gd
 Name:          gd-last
 %endif
 Version:       2.2.3
-Release:       %{rpmrel}%{?prever}%{?short}%{?dist}
+Release:       %{rpmrel}%{?dist}
 Group:         System Environment/Libraries
 License:       MIT
 URL:           http://libgd.github.io/
