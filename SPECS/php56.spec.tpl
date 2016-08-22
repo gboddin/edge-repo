@@ -34,6 +34,7 @@
 
 %bcond_with httpd24
 %bcond_with libgd
+%bcond_with oci8
 
 # Build for LiteSpeed Web Server (LSAPI)
 %global with_lsws     1
