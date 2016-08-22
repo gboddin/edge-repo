@@ -58,7 +58,9 @@ BuildRequires: perl
 BuildRequires: perl-generators
 
 %if "%{name}" != "gd-last"
-Obsoletes: gd-last <= %{version}, gd <= %{version}
+Obsoletes: gd-last <= %{version}
+%else
+Provides:  gd = %{version}-%{release}
 %endif
 
 
