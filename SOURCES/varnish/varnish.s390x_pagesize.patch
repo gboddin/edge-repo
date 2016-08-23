@@ -1,0 +1,15 @@
+diff -Naur ../varnish-2.0.3.orig/lib/libjemalloc/jemalloc_linux.c ./lib/libjemalloc/jemalloc_linux.c
+--- ../varnish-2.0.3.orig/lib/libjemalloc/jemalloc_linux.c	2009-02-12 12:15:24.000000000 +0100
++++ ./lib/libjemalloc/jemalloc_linux.c	2009-06-04 15:27:34.000000000 +0200
+@@ -272,6 +272,11 @@
+ #  define QUANTUM_2POW		4
+ #  define SIZEOF_PTR_2POW	2
+ #endif
++#ifdef __s390x__
++#  define PAGESIZE_2POW		12
++#  define QUANTUM_2POW		4
++#  define SIZEOF_PTR_2POW	3
++#endif
+ 
+ #define	QUANTUM			((size_t)(1U << QUANTUM_2POW))
+ #define	QUANTUM_MASK		(QUANTUM - 1)

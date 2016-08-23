@@ -1,0 +1,11 @@
+--- redhat/find-provides.orig	2015-10-04 16:55:34.057574682 +0200
++++ redhat/find-provides	2015-10-04 16:56:04.120280796 +0200
+@@ -9,8 +9,6 @@
+     /usr/lib/rpm/find-provides "$@"
+ fi
+ 
+-# We don't install vcs_version.h, so we can't use RPM_BUILD_ROOT directly.
+-cd /builddir/build/BUILD/varnish* || true
+ cd ${RPM_BUILD_ROOT}/../../BUILD/varnish* || true
+ 
+ printf '#include "vcs_version.h"\nVCS_Version\n' \

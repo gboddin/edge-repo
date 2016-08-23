@@ -1,0 +1,277 @@
+diff -Naur ../varnish-2.1.4/redhat/varnish.initrc ./redhat/varnish.initrc
+--- ../varnish-2.1.4/redhat/varnish.initrc	2010-11-04 13:57:41.208455907 +0100
++++ ./redhat/varnish.initrc	2010-11-04 14:00:14.516330982 +0100
+@@ -1,6 +1,6 @@
+ #! /bin/sh
+ #
+-# varnish Control the varnish HTTP accelerator
++# varnish Control the Varnish Cache
+ #
+ # chkconfig: - 90 10
+ # description: Varnish is a high-perfomance HTTP accelerator
+@@ -26,6 +26,7 @@
+ pidfile=/var/run/varnish.pid
+ 
+ exec="/usr/sbin/varnishd"
++reload_exec="/usr/bin/varnish_reload_vcl"
+ prog="varnishd"
+ config="/etc/sysconfig/varnish"
+ lockfile="/var/lock/subsys/varnish"
+@@ -47,7 +48,7 @@
+ 		echo $config not found
+ 		exit 6
+ 	fi
+-	echo -n "Starting varnish HTTP accelerator: "
++	echo -n "Starting Varnish Cache: "
+ 
+ 	# Open files (usually 1024, which is way too small for varnish)
+ 	ulimit -n ${NFILES:-131072}
+@@ -79,7 +80,7 @@
+ }
+ 
+ stop() {
+-	echo -n "Stopping varnish HTTP accelerator: "
++	echo -n "Stopping Varnish Cache: "
+ 	killproc -p $pidfile $prog
+ 	retval=$?
+ 	echo
+@@ -93,7 +94,12 @@
+ }
+ 
+ reload() {
+-	restart
++	if [ "$RELOAD_VCL" = "1" ]
++	then
++		$reload_exec
++	else
++		force_reload
++	fi
+ }
+ 
+ force_reload() {
+diff -Naur ../varnish-2.1.4/redhat/varnish_reload_vcl ./redhat/varnish_reload_vcl
+--- ../varnish-2.1.4/redhat/varnish_reload_vcl	1970-01-01 01:00:00.000000000 +0100
++++ ./redhat/varnish_reload_vcl	2010-11-04 13:58:14.708330664 +0100
+@@ -0,0 +1,114 @@
++#!/bin/bash
++#
++# reload vcl revisited
++# A script that loads new vcl based on data from /etc/sysconfig/varnish
++# Ingvar Hagelund <ingvar@redpill-linpro.com>
++#
++# This is free software, distributed under the standard 2 clause BSD license,
++# see the LICENSE file in the Varnish documentation directory
++#
++# The following environment variables have to be set:
++# RELOAD_VCL, VARNISH_VCL_CONF, VARNISH_ADMIN_LISTEN_PORT
++# The following are optional:
++# VARNISH_SECRET_FILE, VARNISH_ADMIN_LISTEN_ADDRESS
++#
++# Requires GNU bash and GNU date
++#
++
++debug=false
++
++missing() {
++	echo "Missing configuration variable: $1"
++	exit 2
++}
++
++print_debug() {
++	echo "
++Parsed configuration:
++RELOAD_VCL=\"$RELOAD_VCL\"
++VARNISH_VCL_CONF=\"$VARNISH_VCL_CONF\"
++VARNISH_ADMIN_LISTEN_ADDRESS=\"$VARNISH_ADMIN_LISTEN_ADDRESS\"
++VARNISH_ADMIN_LISTEN_PORT=\"$VARNISH_ADMIN_LISTEN_PORT\"
++VARNISH_SECRET_FILE=\"$VARNISH_SECRET_FILE\"
++"
++}
++
++# Read configuration
++. /etc/sysconfig/varnish
++
++$debug && print_debug
++
++# Check configuration
++if [ ! "$RELOAD_VCL" = "1" ]; then
++	echo "Error: RELOAD_VCL is not set to 1"
++	exit 2
++
++elif [ -z "$VARNISH_VCL_CONF" ]; then
++	echo "Error: VARNISH_VCL_CONF is not set"
++	exit 2
++
++elif [ ! -s "$VARNISH_VCL_CONF" ]; then
++	echo "Eror: VCL config $VARNISH_VCL_CONF is unreadable or empty"
++	exit 2
++
++elif [ -z "$VARNISH_ADMIN_LISTEN_ADDRESS" ]; then
++	echo "Warning: VARNISH_ADMIN_LISTEN_ADDRESS is not set, using 127.0.0.1"
++	VARNISH_ADMIN_LISTEN_ADDRESS="127.0.0.1"
++
++elif [ -z "$VARNISH_ADMIN_LISTEN_PORT" ]; then
++	echo "Error: VARNISH_ADMIN_LISTEN_PORT is not set"
++	exit 2
++
++elif [ -z "$VARNISH_SECRET_FILE" ]; then
++	echo "Warning: VARNISH_SECRET_FILE is not set"
++	secret=""
++
++elif [ ! -s "$VARNISH_SECRET_FILE" ]; then
++	echo "Error: varnish secret file $VARNISH_SECRET_FILE is unreadable or empty"
++	exit 2
++else
++	secret="-S $VARNISH_SECRET_FILE"
++fi
++
++# Done parsing, set up command
++VARNISHADM="varnishadm $secret -T $VARNISH_ADMIN_LISTEN_ADDRESS:$VARNISH_ADMIN_LISTEN_PORT"
++
++# Now do the real work
++new_config="reload_$(date +%FT%H:%M:%S)"
++
++# Check if we are able to connect at all
++if $VARNISHADM vcl.list > /dev/null; then
++	$debug && echo vcl.list succeeded
++else
++	echo "Unable to run $VARNISHADM vcl.list"
++	exit 1
++fi
++
++if $VARNISHADM vcl.list | awk ' { print $3 } ' | grep -q $new_config; then
++	echo Trying to use new config $new_config, but that is already in use
++	exit 2
++fi
++
++current_config=$( $VARNISHADM vcl.list | awk ' /^active/ { print $3 } ' )
++
++echo "Loading vcl from $VARNISH_VCL_CONF"
++echo "Current running config name is $current_config"
++echo "Using new config name $new_config"
++
++if $VARNISHADM vcl.load $new_config $VARNISH_VCL_CONF; then
++	$debug && echo "$VARNISHADM vcl.load succeded"
++else
++	echo "$VARNISHADM vcl.load failed"
++	exit 1
++fi
++
++if $VARNISHADM vcl.use $new_config; then
++	$debug && echo "$VARNISHADM vcl.use succeded"
++else
++	echo "$VARNISHADM vcl.use failed"
++	exit 1
++fi
++$VARNISHADM vcl.list
++echo Done
++exit 0
++
+diff -Naur ../varnish-2.1.4/redhat/varnish.sysconfig ./redhat/varnish.sysconfig
+--- ../varnish-2.1.4/redhat/varnish.sysconfig	2010-10-21 10:57:22.000000000 +0200
++++ ./redhat/varnish.sysconfig	2010-11-04 13:59:34.293455974 +0100
+@@ -14,6 +14,13 @@
+ # Maximum size of corefile (for ulimit -c). Default in Fedora is 0
+ # DAEMON_COREFILE_LIMIT="unlimited"
+ 
++# Set this to 1 to make init script reload try to switch vcl without restart.
++# To make this work, you need to set the following variables
++# explicit: VARNISH_VCL_CONF, VARNISH_ADMIN_LISTEN_ADDRESS,
++# VARNISH_ADMIN_LISTEN_PORT, VARNISH_SECRET_FILE, or in short,
++# use Alternative 3, Advanced configuration, below
++RELOAD_VCL=1
++
+ # This file contains 4 alternatives, please use only one.
+ 
+ ## Alternative 1, Minimal configuration, no VCL
+@@ -34,12 +41,12 @@
+ # one content server selected by the vcl file, based on the request.  Use a
+ # fixed-size cache file.
+ #
+-DAEMON_OPTS="-a :6081 \
+-             -T localhost:6082 \
+-             -f /etc/varnish/default.vcl \
+-             -u varnish -g varnish \
+-             -S /etc/varnish/secret \
+-             -s file,/var/lib/varnish/varnish_storage.bin,1G"
++#DAEMON_OPTS="-a :6081 \
++#             -T localhost:6082 \
++#             -f /etc/varnish/default.vcl \
++#             -u varnish -g varnish \
++#             -S /etc/varnish/secret \
++#             -s file,/var/lib/varnish/varnish_storage.bin,1G"
+ 
+ 
+ ## Alternative 3, Advanced configuration
+@@ -47,49 +54,53 @@
+ # See varnishd(1) for more information.
+ #
+ # # Main configuration file. You probably want to change it :)
+-# VARNISH_VCL_CONF=/etc/varnish/default.vcl
++VARNISH_VCL_CONF=/etc/varnish/default.vcl
+ #
+ # # Default address and port to bind to
+ # # Blank address means all IPv4 and IPv6 interfaces, otherwise specify
+ # # a host name, an IPv4 dotted quad, or an IPv6 address in brackets.
+ # VARNISH_LISTEN_ADDRESS=
+-# VARNISH_LISTEN_PORT=6081
++VARNISH_LISTEN_PORT=6081
+ #
+ # # Telnet admin interface listen address and port
+-# VARNISH_ADMIN_LISTEN_ADDRESS=127.0.0.1
+-# VARNISH_ADMIN_LISTEN_PORT=6082
++VARNISH_ADMIN_LISTEN_ADDRESS=127.0.0.1
++VARNISH_ADMIN_LISTEN_PORT=6082
++#
++# # Shared secret file for admin interface
++VARNISH_SECRET_FILE=/etc/varnish/secret
+ #
+ # # The minimum number of worker threads to start
+-# VARNISH_MIN_THREADS=1
++VARNISH_MIN_THREADS=1
+ #
+ # # The Maximum number of worker threads to start
+-# VARNISH_MAX_THREADS=1000
++VARNISH_MAX_THREADS=1000
+ #
+ # # Idle timeout for worker threads
+-# VARNISH_THREAD_TIMEOUT=120
++VARNISH_THREAD_TIMEOUT=120
+ #
+ # # Cache file location
+-# VARNISH_STORAGE_FILE=/var/lib/varnish/varnish_storage.bin
++VARNISH_STORAGE_FILE=/var/lib/varnish/varnish_storage.bin
+ #
+ # # Cache file size: in bytes, optionally using k / M / G / T suffix,
+ # # or in percentage of available disk space using the % suffix.
+-# VARNISH_STORAGE_SIZE=1G
++VARNISH_STORAGE_SIZE=1G
+ #
+ # # Backend storage specification
+-# VARNISH_STORAGE="file,${VARNISH_STORAGE_FILE},${VARNISH_STORAGE_SIZE}"
++VARNISH_STORAGE="file,${VARNISH_STORAGE_FILE},${VARNISH_STORAGE_SIZE}"
+ #
+ # # Default TTL used when the backend does not specify one
+-# VARNISH_TTL=120
++VARNISH_TTL=120
+ #
+ # # DAEMON_OPTS is used by the init script.  If you add or remove options, make
+ # # sure you update this section, too.
+-# DAEMON_OPTS="-a ${VARNISH_LISTEN_ADDRESS}:${VARNISH_LISTEN_PORT} \
+-#              -f ${VARNISH_VCL_CONF} \
+-#              -T ${VARNISH_ADMIN_LISTEN_ADDRESS}:${VARNISH_ADMIN_LISTEN_PORT} \
+-#              -t ${VARNISH_TTL} \
+-#              -w ${VARNISH_MIN_THREADS},${VARNISH_MAX_THREADS},${VARNISH_THREAD_TIMEOUT} \
+-#              -u varnish -g varnish \
+-#              -s ${VARNISH_STORAGE}"
++DAEMON_OPTS="-a ${VARNISH_LISTEN_ADDRESS}:${VARNISH_LISTEN_PORT} \
++             -f ${VARNISH_VCL_CONF} \
++             -T ${VARNISH_ADMIN_LISTEN_ADDRESS}:${VARNISH_ADMIN_LISTEN_PORT} \
++             -t ${VARNISH_TTL} \
++             -w ${VARNISH_MIN_THREADS},${VARNISH_MAX_THREADS},${VARNISH_THREAD_TIMEOUT} \
++             -u varnish -g varnish \
++             -S ${VARNISH_SECRET_FILE} \
++             -s ${VARNISH_STORAGE}"
+ #
+ 
+ 

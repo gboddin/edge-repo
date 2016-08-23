@@ -1,0 +1,11 @@
+--- bin/varnishtest/tests/c00031.vtc.orig	2010-08-24 12:33:29.062232351 +0200
++++ bin/varnishtest/tests/c00031.vtc	2010-08-24 12:31:57.804150780 +0200
+@@ -9,7 +9,7 @@
+ 	txresp
+ } -start
+ 
+-varnish v1 -arg "-p thread_pool_stack=131072" -vcl+backend {} -start
++varnish v1 -arg "-p thread_pool_stack=262144" -vcl+backend {} -start
+ 
+ client c1 {
+ 	txreq -url "/"

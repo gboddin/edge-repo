@@ -1,0 +1,170 @@
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/b00000.vtc ./bin/varnishtest/tests/b00000.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/b00000.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/b00000.vtc	2010-04-30 10:58:57.199838479 +0200
+@@ -9,7 +9,7 @@
+ 	txresp -body "012345\n"
+ } -start
+ 
+-varnish v1 -arg "-smalloc,1m" -vcl+backend {} -start
++varnish v1 -storage "-smalloc,1m" -vcl+backend {} -start
+ 
+ varnish v1 -cliok "param.set diag_bitmap 0x2"
+ 
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/p00000.vtc ./bin/varnishtest/tests/p00000.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/p00000.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/p00000.vtc	2010-04-30 10:58:57.150839765 +0200
+@@ -11,7 +11,8 @@
+ 
+ varnish v1 \
+ 	-arg "-pdiag_bitmap=0x20000" \
+-	-arg "-spersistent,${tmpdir}/_.per,10m" -vcl+backend { } -start 
++	-storage "-spersistent,${tmpdir}/_.per,10m" \
++	-vcl+backend { } -start 
+ 
+ varnish v1 -stop
+ 
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/p00001.vtc ./bin/varnishtest/tests/p00001.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/p00001.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/p00001.vtc	2010-04-30 11:05:26.478837801 +0200
+@@ -11,7 +11,8 @@
+ 
+ varnish v1 \
+ 	-arg "-pdiag_bitmap=0x20000" \
+-	-arg "-spersistent,${tmpdir}/_.per,10m" -vcl+backend { } -start 
++	-storage "-spersistent,${tmpdir}/_.per,10m" \
++	-vcl+backend { } -start
+ 
+ client c1 {
+ 	txreq -url "/"
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/p00002.vtc ./bin/varnishtest/tests/p00002.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/p00002.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/p00002.vtc	2010-04-30 10:58:57.151838730 +0200
+@@ -11,8 +11,8 @@
+ 
+ varnish v1 \
+ 	-arg "-pdiag_bitmap=0x20000" \
+-	-arg "-spersistent,${tmpdir}/_.per1,10m" \
+-	-arg "-spersistent,${tmpdir}/_.per2,10m" \
++	-storage "-spersistent,${tmpdir}/_.per1,10m" \
++	-storage "-spersistent,${tmpdir}/_.per2,10m" \
+ 	-vcl+backend { } -start 
+ 
+ client c1 {
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/p00003.vtc ./bin/varnishtest/tests/p00003.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/p00003.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/p00003.vtc	2010-04-30 11:06:28.054838375 +0200
+@@ -11,7 +11,7 @@
+ 
+ varnish v1 \
+ 	-arg "-pdiag_bitmap=0x20000" \
+-	-arg "-spersistent,${tmpdir}/_.per,10m" \
++	-storage "-spersistent,${tmpdir}/_.per,10m" \
+ 	-vcl+backend { } -start 
+ 
+ varnish v1 -cliok purge.list
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/p00004.vtc ./bin/varnishtest/tests/p00004.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/p00004.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/p00004.vtc	2010-04-30 11:03:35.717837935 +0200
+@@ -13,7 +13,7 @@
+ 
+ varnish v1 \
+ 	-arg "-pdiag_bitmap=0x20000" \
+-	-arg "-spersistent,${tmpdir}/_.per,10m" \
++	-storage "-spersistent,${tmpdir}/_.per,10m" \
+ 	-vcl+backend { } -start 
+ 
+ client c1 {
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/p00005.vtc ./bin/varnishtest/tests/p00005.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/p00005.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/p00005.vtc	2010-04-30 11:06:59.774838225 +0200
+@@ -11,7 +11,7 @@
+ 
+ varnish v1 \
+ 	-arg "-pdiag_bitmap=0x30000" \
+-	-arg "-spersistent,${tmpdir}/_.per,10m" \
++	-storage "-spersistent,${tmpdir}/_.per,10m" \
+ 	-vcl+backend { 
+ 		sub vcl_fetch {
+ 			set beresp.ttl = 3s;
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/p00006.vtc ./bin/varnishtest/tests/p00006.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/p00006.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/p00006.vtc	2010-04-30 11:04:20.310962837 +0200
+@@ -13,7 +13,7 @@
+ 
+ 
+ varnish v1 \
+-	-arg "-spersistent,${tmpdir}/_.per,10m" \
++	-storage "-spersistent,${tmpdir}/_.per,10m" \
+ 	-vcl+backend { } -start 
+ 
+ client c1 {
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/tests/v00010.vtc ./bin/varnishtest/tests/v00010.vtc
+--- ../varnish-2.1.1.orig/bin/varnishtest/tests/v00010.vtc	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/tests/v00010.vtc	2010-04-30 10:58:57.199838479 +0200
+@@ -13,7 +13,7 @@
+ 	txresp -hdr "Foo: foo" -body "abcdef\n"
+ } -start
+ 
+-varnish v1 -arg "-smalloc,1m" -vcl+backend {
++varnish v1 -storage "-smalloc,1m" -vcl+backend {
+ 
+ 	sub vcl_fetch {
+ 		if (beresp.http.panic) {
+diff -Naur ../varnish-2.1.1.orig/bin/varnishtest/vtc_varnish.c ./bin/varnishtest/vtc_varnish.c
+--- ../varnish-2.1.1.orig/bin/varnishtest/vtc_varnish.c	2010-04-26 10:50:52.000000000 +0200
++++ ./bin/varnishtest/vtc_varnish.c	2010-04-30 10:58:57.261838026 +0200
+@@ -33,6 +33,7 @@
+ 
+ #include <stdio.h>
+ 
++#include <limits.h>
+ #include <ctype.h>
+ #include <fcntl.h>
+ #include <stdlib.h>
+@@ -68,6 +69,8 @@
+ 
+ 	struct varnish_stats	*stats;
+ 
++	struct vsb		*storage;
++
+ 	struct vsb		*args;
+ 	int			fds[4];
+ 	pid_t			pid;
+@@ -171,9 +174,15 @@
+ 		vtc_log(v->vl, 0, "Varnish name must start with 'v'");
+ 
+ 	v->args = vsb_newauto();
++
++	v->storage = vsb_newauto();
++	vsb_printf(v->storage, "-sfile,%s,10M", v->workdir);
++	vsb_finish(v->storage);
++
+ 	v->cli_fd = -1;
+ 	VTAILQ_INSERT_TAIL(&varnishes, v, list);
+ 
++
+ 	return (v);
+ }
+ 
+@@ -269,6 +278,7 @@
+ 	vsb_printf(vsb, " -S %s/_S", v->workdir);
+ 	vsb_printf(vsb, " -M %s:%s", abuf, pbuf);
+ 	vsb_printf(vsb, " -P %s/varnishd.pid", v->workdir);
++	vsb_printf(vsb, " %s", vsb_data(v->storage));
+ 	vsb_printf(vsb, " %s", vsb_data(v->args));
+ 	vsb_finish(vsb);
+ 	AZ(vsb_overflowed(vsb));
+@@ -663,6 +673,13 @@
+ 	for (; *av != NULL; av++) {
+ 		if (vtc_error)
+ 			break;
++		if (!strcmp(*av, "-storage")) {
++			vsb_clear(v->storage);
++			vsb_cat(v->storage, av[1]);
++			vsb_finish(v->storage);
++			av++;
++			continue;
++		}
+ 		if (!strcmp(*av, "-arg")) {
+ 			AN(av[1]);
+ 			AZ(v->pid);

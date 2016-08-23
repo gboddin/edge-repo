@@ -1,0 +1,24 @@
+diff -Naur ../varnish-2.0-beta1.orig/redhat/varnish.initrc ./redhat/varnish.initrc
+--- ../varnish-2.0-beta1.orig/redhat/varnish.initrc	2008-08-27 09:45:40.000000000 +0200
++++ ./redhat/varnish.initrc	2008-08-29 22:52:23.000000000 +0200
+@@ -31,8 +31,6 @@
+ # Include varnish defaults
+ [ -e /etc/sysconfig/varnish ] && . /etc/sysconfig/varnish
+ 
+-lockfile=/var/lock/subsys/$prog
+-
+ start() {
+ 
+ 	if [ ! -x $exec ]
+diff -Naur ../varnish-2.0-beta1.orig/redhat/varnishlog.initrc ./redhat/varnishlog.initrc
+--- ../varnish-2.0-beta1.orig/redhat/varnishlog.initrc	2008-08-27 09:45:40.000000000 +0200
++++ ./redhat/varnishlog.initrc	2008-08-29 22:53:30.000000000 +0200
+@@ -32,8 +32,6 @@
+ # Include varnish defaults
+ [ -e /etc/sysconfig/varnishlog ] && . /etc/sysconfig/varnishlog
+ 
+-lockfile=/var/lock/subsys/$prog
+-
+ start() {
+ 
+ 	if [ ! -x $exec ]

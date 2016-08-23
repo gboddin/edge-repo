@@ -1,0 +1,10 @@
+--- doc/sphinx/Makefile.in.orig	2014-04-22 11:12:19.029824740 +0200
++++ doc/sphinx/Makefile.in	2014-04-22 11:14:09.493153140 +0200
+@@ -553,6 +553,7 @@
+ 	rm -rf $(BUILDDIR)
+ 
+ include/params.rst: $(top_builddir)/bin/varnishd/varnishd
++	LD_LIBRARY_PATH=$(top_builddir)/lib/libvarnish/.libs:$(top_builddir)/lib/libvarnishcompat/.libs:$(top_builddir)/lib/libvcc/.libs:$(top_builddir)/lib/libvgz/.libs \
+ 	$(top_builddir)/bin/varnishd/varnishd -x dumprstparam > include/params.rst
+ 
+ # XXX add varnishstat here when it's been _opt2rst'ed

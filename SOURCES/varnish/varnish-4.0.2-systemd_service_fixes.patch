@@ -1,0 +1,37 @@
+diff --git a/redhat/varnish.service b/redhat/varnish.service
+index 659dba2..a4f3355 100644
+--- a/redhat/varnish.service
++++ b/redhat/varnish.service
+@@ -27,6 +27,7 @@ EnvironmentFile=/etc/varnish/varnish.params
+ Type=forking
+ PIDFile=/var/run/varnish.pid
+ PrivateTmp=true
++ExecStartPre=/usr/sbin/varnishd -C -f $VARNISH_VCL_CONF
+ ExecStart=/usr/sbin/varnishd \
+ 	-P /var/run/varnish.pid \
+ 	-f $VARNISH_VCL_CONF \
+diff --git a/redhat/varnishlog.service b/redhat/varnishlog.service
+index 1e3e274..c7a0193 100644
+--- a/redhat/varnishlog.service
++++ b/redhat/varnishlog.service
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Varnish HTTP accelerator logging daemon
+-After=network.target
++After=varnish.service
+ 
+ [Service]
+ Type=forking
+diff --git a/redhat/varnishncsa.service b/redhat/varnishncsa.service
+index df5f19f..e2ebdcd 100644
+--- a/redhat/varnishncsa.service
++++ b/redhat/varnishncsa.service
+@@ -1,6 +1,6 @@
+ [Unit]
+-Description=Varnish NCSA logging
+-After=network.target
++Description=Varnish HTTP accelerator NCSA daemon
++After=varnish.service
+ 
+ [Service]
+ Type=forking

@@ -1,0 +1,12 @@
+Index: redhat/varnish.initrc
+===================================================================
+--- redhat/varnish.initrc	(revisjon 5498)
++++ redhat/varnish.initrc	(arbeidskopi)
+@@ -70,6 +70,7 @@
+ 			echo
+ 		else
+ 			echo_failure
++			echo
+ 		fi
+ 		return $retval
+ 	fi

@@ -1,0 +1,13 @@
+diff -Naur ../varnish-2.0-beta1.orig/redhat/varnish.sysconfig ./redhat/varnish.sysconfig
+--- ../varnish-2.0-beta1.orig/redhat/varnish.sysconfig	2008-06-18 12:59:41.000000000 +0200
++++ ./redhat/varnish.sysconfig	2008-09-02 14:50:51.000000000 +0200
+@@ -11,6 +11,9 @@
+ # Default log size is 82MB + header
+ MEMLOCK=82000
+ 
++# Maximum size of corefile (for ulimit -c). Default in Fedora is 0
++# DAEMON_COREFILE_LIMIT="unlimited"
++
+ # This file contains 4 alternatives, please use only one.
+ 
+ ## Alternative 1, Minimal configuration, no VCL

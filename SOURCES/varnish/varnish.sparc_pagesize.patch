@@ -1,0 +1,11 @@
+--- lib/libjemalloc/jemalloc_linux.c.old	2009-08-14 10:38:53.783906580 +0200
++++ lib/libjemalloc/jemalloc_linux.c	2009-08-14 10:39:04.215906982 +0200
+@@ -243,7 +243,7 @@
+ #  define SIZEOF_PTR_2POW	3
+ #  define NO_TLS
+ #endif
+-#ifdef __sparc64__
++#ifdef __sparc__
+ #  define PAGESIZE_2POW		13
+ #  define QUANTUM_2POW		4
+ #  define SIZEOF_PTR_2POW	3

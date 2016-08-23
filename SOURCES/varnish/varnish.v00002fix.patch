@@ -1,0 +1,13 @@
+Index: bin/varnishtest/tests/v00002.vtc
+===================================================================
+--- bin/varnishtest/tests/v00002.vtc	(revision 4730)
++++ bin/varnishtest/tests/v00002.vtc	(revision 4731)
+@@ -114,7 +114,7 @@
+ 
+ varnish v1 -badvcl {
+ 	/* too many IP numbers */
+-	backend b1 { .host = "cnn.com"; }
++	backend b1 { .host = "v00002.freebsd.dk"; }
+ }
+ 
+ varnish v1 -badvcl {

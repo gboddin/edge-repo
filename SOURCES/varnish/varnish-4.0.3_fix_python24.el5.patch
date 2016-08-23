@@ -1,0 +1,77 @@
+--- lib/libvcc/vmodtool.py.orig	2015-03-05 14:20:35.982791597 +0100
++++ lib/libvcc/vmodtool.py	2015-03-05 14:34:46.896115280 +0100
+@@ -33,8 +33,8 @@
+ 	vmod_${name}.rst -- Extracted documentation
+ """
+ 
+-# This script should work with both Python 2 and Python 3.
+-from __future__ import print_function
++## This script should work with both Python 2 and Python 3.
++#from __future__ import print_function
+ 
+ import sys
+ import re
+@@ -67,6 +67,15 @@
+ 
+ #######################################################################
+ 
++# __future__ print_function is not available on python2.4 in rhel5, so
++# make a local simple variant _print
++
++def _print(*objects, **kwargs):
++  sep = kwargs.get('sep', ' ')
++  end = kwargs.get('end', '\n')
++  out = kwargs.get('file', sys.stdout)
++  out.write(sep.join(objects) + end)
++
+ def write_file_warning(fo, a, b, c):
+ 	fo.write(a + "\n")
+ 	fo.write(b + " NB:  This file is machine generated, DO NOT EDIT!\n")
+@@ -741,8 +750,8 @@
+ 			if opts.strict:
+ 				raise FormatError(m, details)
+ 			else:
+-				print("WARNING: %s:" % m, file=sys.stderr)
+-				print(details, file=sys.stderr)
++				_print("WARNING: %s:" % m, file=sys.stderr)
++				_print(details, file=sys.stderr)
+ 		else:
+ 			for ln, i in self.l:
+ 				o.doc(i)
+@@ -784,9 +793,12 @@
+ def runmain(inputvcc, outputname="vcc_if"):
+ 	# Read the file in
+ 	lines = []
+-	with open(inputvcc, "r") as fp:
++	fp = open(inputvcc, "r")
++	try:
+ 		for i in fp:
+ 			lines.append(i.rstrip())
++	finally:
++		fp.close
+ 	ln = 0
+ 
+ 	#######################################################################
+@@ -839,11 +851,11 @@
+ 		for i in sl:
+ 			i.parse(vx)
+ 			assert len(i.tl) == 0
+-	except ParseError as e:
++	except ParseError, e:
+ 		print("ERROR: Parse error reading \"%s\":" % inputvcc)
+ 		pprint(str(e))
+ 		exit(-1)
+-	except FormatError as e:
++	except FormatError, e:
+ 		print("ERROR: Format error reading \"%s\": %s" %
+ 		    (inputvcc, pformat(e.msg)))
+ 		print(e.details)
+@@ -916,7 +928,7 @@
+ 		if not i_vcc:
+ 			i_vcc = "vmod.vcc"
+ 	else:
+-		print("ERROR: No vmod.vcc file supplied or found.",
++		_print("ERROR: No vmod.vcc file supplied or found.",
+ 		    file=sys.stderr)
+ 		oparser.print_help()
+ 		exit(-1)

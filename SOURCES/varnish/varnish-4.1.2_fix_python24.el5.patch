@@ -1,0 +1,111 @@
+--- lib/libvcc/vmodtool.py.orig	2016-03-29 11:16:00.534066134 +0200
++++ lib/libvcc/vmodtool.py	2016-03-29 12:11:54.571647851 +0200
+@@ -33,8 +33,8 @@
+ 	vmod_${name}.rst -- Extracted documentation
+ """
+ 
+-# This script should work with both Python 2 and Python 3.
+-from __future__ import print_function
++## This script should work with both Python 2 and Python 3.
++#from __future__ import print_function
+ 
+ import sys
+ import re
+@@ -45,6 +45,16 @@
+ from os.path import dirname, exists, join, realpath
+ from pprint import pprint, pformat
+ 
++# __future__ print_function is not available on python2.4 in rhel5, so
++# make a local simple variant _print
++
++def _print(*objects, **kwargs):
++  sep = kwargs.get('sep', ' ')
++  end = kwargs.get('end', '\n')
++  out = kwargs.get('file', sys.stdout)
++  out.write(sep.join(objects) + end)
++
++
+ ctypes = {
+ 	'ACL':		"VCL_ACL",
+ 	'BACKEND':	"VCL_BACKEND",
+@@ -728,7 +738,7 @@
+ 	def get_token(self):
+ 		while True:
+ 			if len(self.tl) > 0:
+-				# print("T\t", self.tl[0])
++				# _print("T\t", self.tl[0])
+ 				return self.tl.pop(0)
+ 			if len(self.l) == 0:
+ 				break
+@@ -796,7 +806,7 @@
+ 				raise FormatError("Unknown keyword: %s" %
+ 				    t.str, "")
+ 			else:
+-				print("WARNING: Unknown keyword: %s:" %
++				_print("WARNING: Unknown keyword: %s:" %
+ 				    t.str, file=sys.stderr)
+ 				o = None
+ 				while len(self.tl) > 0:
+@@ -809,8 +819,8 @@
+ 			if opts.strict:
+ 				raise FormatError(m, details)
+ 			else:
+-				print("WARNING: %s:" % m, file=sys.stderr)
+-				print(details, file=sys.stderr)
++				_print("WARNING: %s:" % m, file=sys.stderr)
++				_print(details, file=sys.stderr)
+ 		else:
+ 			for ln, i in self.l:
+ 				o.doc(i)
+@@ -852,9 +862,12 @@
+ def runmain(inputvcc, rstdir, outputprefix):
+ 	# Read the file in
+ 	lines = []
+-	with open(inputvcc, "r") as fp:
++	fp = open(inputvcc, "r")
++	try:
+ 		for i in fp:
+ 			lines.append(i.rstrip())
++	finally:
++		fp.close
+ 	ln = 0
+ 
+ 	#######################################################################
+@@ -874,7 +887,7 @@
+ 
+ 	if False:
+ 		for i in copy_right:
+-			print("(C)\t", i)
++			_print("(C)\t", i)
+ 
+ 	#######################################################################
+ 	# Break into sections
+@@ -899,14 +912,14 @@
+ 		for i in sl:
+ 			i.parse(vx)
+ 			assert len(i.tl) == 0
+-	except ParseError as e:
+-		print("ERROR: Parse error reading \"%s\":" % inputvcc)
++	except ParseError, e:
++		_print("ERROR: Parse error reading \"%s\":" % inputvcc)
+ 		pprint(str(e))
+ 		exit(-1)
+-	except FormatError as e:
+-		print("ERROR: Format error reading \"%s\": %s" %
++	except FormatError, e:
++		_print("ERROR: Format error reading \"%s\": %s" %
+ 		    (inputvcc, pformat(e.msg)))
+-		print(e.details)
++		_print(e.details)
+ 		exit(-2)
+ 
+ 	#######################################################################
+@@ -981,7 +994,7 @@
+ 		if not i_vcc:
+ 			i_vcc = "vmod.vcc"
+ 	else:
+-		print("ERROR: No vmod.vcc file supplied or found.",
++		_print("ERROR: No vmod.vcc file supplied or found.",
+ 		    file=sys.stderr)
+ 		oparser.print_help()
+ 		exit(-1)

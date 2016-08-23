@@ -1,0 +1,607 @@
+Index: include/libvarnish.h
+===================================================================
+--- include/libvarnish.h	(revision 3417)
++++ include/libvarnish.h	(working copy)
+@@ -63,6 +63,7 @@
+ void TCP_name(const struct sockaddr *addr, unsigned l, char *abuf, unsigned alen, char *pbuf, unsigned plen);
+ int TCP_connect(int s, const struct sockaddr *name, socklen_t namelen, int msec);
+ void TCP_close(int *s);
++void TCP_set_read_timeout(int socket, double seconds);
+ #endif
+ 
+ /* from libvarnish/time.c */
+Index: include/vrt_obj.h
+===================================================================
+--- include/vrt_obj.h	(revision 3417)
++++ include/vrt_obj.h	(working copy)
+@@ -28,6 +28,12 @@
+ void VRT_l_bereq_url(const struct sess *, const char *, ...);
+ const char * VRT_r_bereq_proto(const struct sess *);
+ void VRT_l_bereq_proto(const struct sess *, const char *, ...);
++double VRT_r_bereq_connect_timeout(struct sess *);
++void VRT_l_bereq_connect_timeout(struct sess *, double);
++double VRT_r_bereq_first_byte_timeout(struct sess *);
++void VRT_l_bereq_first_byte_timeout(struct sess *, double);
++double VRT_r_bereq_between_bytes_timeout(struct sess *);
++void VRT_l_bereq_between_bytes_timeout(struct sess *, double);
+ const char * VRT_r_obj_proto(const struct sess *);
+ void VRT_l_obj_proto(const struct sess *, const char *, ...);
+ int VRT_r_obj_status(const struct sess *);
+Index: include/vrt.h
+===================================================================
+--- include/vrt.h	(revision 3417)
++++ include/vrt.h	(working copy)
+@@ -69,6 +69,8 @@
+ 	const unsigned char		*ipv6_sockaddr;
+ 
+ 	double				connect_timeout;
++	double				first_byte_timeout;
++	double				between_bytes_timeout;
+ 	unsigned			max_connections;
+ 	struct vrt_backend_probe 	probe;
+ };
+Index: lib/libvarnish/tcp.c
+===================================================================
+--- lib/libvarnish/tcp.c	(revision 3417)
++++ lib/libvarnish/tcp.c	(working copy)
+@@ -47,6 +47,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <math.h>
+ 
+ #include "config.h"
+ #ifndef HAVE_STRLCPY
+@@ -209,3 +210,16 @@
+ 	    errno == ENOTCONN);
+ 	*s = -1;
+ }
++
++
++void
++TCP_set_read_timeout(int s, double seconds)
++{
++	struct timeval timeout;
++	timeout.tv_sec = floor(seconds);
++	timeout.tv_usec = 1e6 * (seconds - timeout.tv_sec);
++#ifdef SO_RCVTIMEO_WORKS
++	AZ(setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof timeout));
++#endif
++}
++
+Index: lib/libvcl/vcc_gen_obj.tcl
+===================================================================
+--- lib/libvcl/vcc_gen_obj.tcl	(revision 3417)
++++ lib/libvcl/vcc_gen_obj.tcl	(working copy)
+@@ -127,6 +127,22 @@
+ 	{     pipe pass      miss     fetch                        }
+ 	"const struct sess *"
+     }
++    { bereq.connect_timeout
++	RW TIME
++	{     pass      miss     }
++	"struct sess *"
++    }
++    { bereq.first_byte_timeout
++	RW TIME
++	{     pass      miss     }
++	"struct sess *"
++    }
++    { bereq.between_bytes_timeout
++	RW TIME
++	{     pass      miss     }
++	"struct sess *"
++    }
++ 
+ 
+     # The (possibly) cached object
+     { obj.proto
+Index: lib/libvcl/vcc_obj.c
+===================================================================
+--- lib/libvcl/vcc_obj.c	(revision 3417)
++++ lib/libvcl/vcc_obj.c	(working copy)
+@@ -123,6 +123,27 @@
+ 	    "HDR_BEREQ",
+ 	    VCL_MET_PIPE | VCL_MET_PASS | VCL_MET_MISS | VCL_MET_FETCH
+ 	},
++	{ "bereq.connect_timeout", TIME, 21,
++	    "VRT_r_bereq_connect_timeout(sp)",
++	    "VRT_l_bereq_connect_timeout(sp, ",
++	    V_RW,
++	    0,
++	    VCL_MET_PASS | VCL_MET_MISS
++	},
++	{ "bereq.first_byte_timeout", TIME, 24,
++	    "VRT_r_bereq_first_byte_timeout(sp)",
++	    "VRT_l_bereq_first_byte_timeout(sp, ",
++	    V_RW,
++	    0,
++	    VCL_MET_PASS | VCL_MET_MISS
++	},
++	{ "bereq.between_bytes_timeout", TIME, 27,
++	    "VRT_r_bereq_between_bytes_timeout(sp)",
++	    "VRT_l_bereq_between_bytes_timeout(sp, ",
++	    V_RW,
++	    0,
++	    VCL_MET_PASS | VCL_MET_MISS
++	},
+ 	{ "obj.proto", STRING, 9,
+ 	    "VRT_r_obj_proto(sp)",
+ 	    "VRT_l_obj_proto(sp, ",
+Index: lib/libvcl/vcc_backend.c
+===================================================================
+--- lib/libvcl/vcc_backend.c	(revision 3417)
++++ lib/libvcl/vcc_backend.c	(working copy)
+@@ -481,6 +481,8 @@
+ 	    "?port",
+ 	    "?host_header",
+ 	    "?connect_timeout",
++	    "?first_byte_timeout",
++	    "?between_bytes_timeout",
+ 	    "?probe",
+ 	    "?max_connections",
+ 	    NULL);
+@@ -545,6 +547,20 @@
+ 			Fb(tl, 0, ",\n");
+ 			ExpectErr(tl, ';');
+ 			vcc_NextToken(tl);
++		} else if (vcc_IdIs(t_field, "first_byte_timeout")) {
++			Fb(tl, 0, "\t.first_byte_timeout = ");
++			vcc_TimeVal(tl);
++			ERRCHK(tl);
++			Fb(tl, 0, ",\n");
++			ExpectErr(tl, ';');
++			vcc_NextToken(tl);
++		} else if (vcc_IdIs(t_field, "between_bytes_timeout")) {
++			Fb(tl, 0, "\t.between_bytes_timeout = ");
++			vcc_TimeVal(tl);
++			ERRCHK(tl);
++			Fb(tl, 0, ",\n");
++			ExpectErr(tl, ';');
++			vcc_NextToken(tl);
+ 		} else if (vcc_IdIs(t_field, "max_connections")) {
+ 			u = vcc_UintVal(tl);
+ 			vcc_NextToken(tl);
+Index: lib/libvcl/vcc_fixed_token.c
+===================================================================
+--- lib/libvcl/vcc_fixed_token.c	(revision 3417)
++++ lib/libvcl/vcc_fixed_token.c	(working copy)
+@@ -349,6 +349,8 @@
+ 	vsb_cat(sb, "	const unsigned char		*ipv6_sockaddr;\n");
+ 	vsb_cat(sb, "\n");
+ 	vsb_cat(sb, "	double				connect_timeout;\n");
++	vsb_cat(sb, "	double				first_byte_timeout;\n");
++	vsb_cat(sb, "	double				between_bytes_timeout;\n");
+ 	vsb_cat(sb, "	unsigned			max_connections;\n");
+ 	vsb_cat(sb, "	struct vrt_backend_probe 	probe;\n");
+ 	vsb_cat(sb, "};\n");
+@@ -488,6 +490,12 @@
+ 	vsb_cat(sb, "void VRT_l_bereq_url(const struct sess *, const char *, ...);\n");
+ 	vsb_cat(sb, "const char * VRT_r_bereq_proto(const struct sess *);\n");
+ 	vsb_cat(sb, "void VRT_l_bereq_proto(const struct sess *, const char *, ...);\n");
++	vsb_cat(sb, "double VRT_r_bereq_connect_timeout(struct sess *);\n");
++	vsb_cat(sb, "void VRT_l_bereq_connect_timeout(struct sess *, double);\n");
++	vsb_cat(sb, "double VRT_r_bereq_first_byte_timeout(struct sess *);\n");
++	vsb_cat(sb, "void VRT_l_bereq_first_byte_timeout(struct sess *, double);\n");
++	vsb_cat(sb, "double VRT_r_bereq_between_bytes_timeout(struct sess *);\n");
++	vsb_cat(sb, "void VRT_l_bereq_between_bytes_timeout(struct sess *, double);\n");
+ 	vsb_cat(sb, "const char * VRT_r_obj_proto(const struct sess *);\n");
+ 	vsb_cat(sb, "void VRT_l_obj_proto(const struct sess *, const char *, ...);\n");
+ 	vsb_cat(sb, "int VRT_r_obj_status(const struct sess *);\n");
+Index: bin/varnishd/mgt_param.c
+===================================================================
+--- bin/varnishd/mgt_param.c	(revision 3417)
++++ bin/varnishd/mgt_param.c	(working copy)
+@@ -98,6 +98,24 @@
+ 		cli_out(cli, "%u", *dst);
+ }
+ 
++static void
++tweak_generic_timeout_double(struct cli *cli, volatile double *dst, const char *arg)
++{
++	double u;
++
++	if (arg != NULL) {
++		u = strtod(arg, NULL);
++		if (u < 0) {
++			cli_out(cli, "Timeout must be greater or equal to zero\n");
++			cli_result(cli, CLIS_PARAM);
++			return;
++		}
++		*dst = u;
++	} else
++		cli_out(cli, "%f", *dst);
++}
++
++
+ /*--------------------------------------------------------------------*/
+ 
+ static void
+@@ -109,7 +127,15 @@
+ 	tweak_generic_timeout(cli, dest, arg);
+ }
+ 
++static void
++tweak_timeout_double(struct cli *cli, const struct parspec *par, const char *arg)
++{
++	volatile double *dest;
+ 
++	dest = par->priv;
++	tweak_generic_timeout_double(cli, dest, arg);
++}
++
+ /*--------------------------------------------------------------------*/
+ 
+ static void
+@@ -739,14 +765,33 @@
+ 		"Cache vbe_conn's or rely on malloc, that's the question.",
+ 		EXPERIMENTAL,
+ 		"off", "bool" },
+-	{ "connect_timeout", tweak_uint,
++	{ "connect_timeout", tweak_timeout_double,
+ 		&master.connect_timeout,0, UINT_MAX,
+-		"Default connection timeout for backend connections.  "
++		"Default connection timeout for backend connections. "
+ 		"We only try to connect to the backend for this many "
+-		"milliseconds before giving up.  "
+-		"VCL can override this default value for each backend.",
++		"seconds before giving up. "
++		"VCL can override this default value for each backend "
++		"and backend request.",
+ 		0,
+-		"400", "ms" },
++		"0.4", "s" },
++	{ "first_byte_timeout", tweak_timeout_double,
++		&master.first_byte_timeout,0, UINT_MAX,
++		"Default timeout for receiving first byte from backend. "
++		"We only wait for this many seconds for the first "
++		"byte before giving up. A value of 0 means it will never time out. "
++		"VCL can override this default value for each backend  and"
++		"backend request. This parameter does not apply to pipe.",
++		0,
++		"60", "s" },
++	{ "between_bytes_timeout", tweak_timeout_double,
++		&master.between_bytes_timeout,0, UINT_MAX,
++		"Default timeout between bytes when receiving data from backend. "
++		"We only wait for this many seconds between bytes "
++		"before giving up. A value of 0 means it will never time out. "
++		"VCL can override this default value for each backend and "
++		"backend request. This parameter does not apply to pipe.",
++		0,
++		"60", "s" },
+ 	{ "accept_fd_holdoff", tweak_timeout,
+ 		&master.accept_fd_holdoff, 0,  3600*1000,
+ 		"If we run out of file descriptors, the accept thread will "
+Index: bin/varnishd/cache_backend_cfg.c
+===================================================================
+--- bin/varnishd/cache_backend_cfg.c	(revision 3417)
++++ bin/varnishd/cache_backend_cfg.c	(working copy)
+@@ -222,6 +222,8 @@
+ 	REPLACE(b->hosthdr, vb->hosthdr);
+ 
+ 	b->connect_timeout = vb->connect_timeout;
++	b->first_byte_timeout = vb->first_byte_timeout;
++	b->between_bytes_timeout = vb->between_bytes_timeout;
+ 	b->max_conn = vb->max_connections;
+ 
+ 	/*
+Index: bin/varnishd/varnishd.1
+===================================================================
+--- bin/varnishd/varnishd.1	(revision 3417)
++++ bin/varnishd/varnishd.1	(working copy)
+@@ -387,6 +387,15 @@
+ .Pp
+ The default is
+ .Dv off .
++.It Va between_bytes_timeout
++Default timeout between bytes when receiving data from backend.
++We only wait for this many seconds between bytes before giving up.
++A value of 0 means it will never time out.
++VCL can override this default value for each backend and backend request.
++This parameter does not apply to pipe.
++.Pp
++The default is
++.Dv 60 seconds
+ .It Va client_http11
+ Whether to force the use of HTTP/1.1 when responding to client
+ requests, or just use the same protocol version as that used by the
+@@ -394,6 +403,13 @@
+ .Pp
+ The default is
+ .Dv off .
++.It Va connect_timeout
++Default connection timeout for backend connections.
++We only try to connect to the backend for this many seconds before giving up.
++VCL can override this default value for each backend and backend request.
++.Pp
++The default is
++.Dv 0.4 seconds
+ .It Va default_ttl
+ The default time-to-live assigned to objects if neither the backend
+ nor the configuration assign one.
+@@ -409,6 +425,15 @@
+ backend server does not specify a content length.
+ .Pp
+ The default is 128 kilobytes.
++.It Va first_byte_timeout
++Default timeout for receiving first byte from backend.
++We only wait for this many seconds for the first byte before giving up.
++A value of 0 means it will never time out.
++VCL can override this default value for each backend and backend request.
++This parameter does not apply to pipe.
++.Pp
++The default is
++.Dv 60 seconds
+ .It Va group
+ The name of an unprivileged group to which the child process should
+ switch before it starts accepting connections.
+Index: bin/varnishd/cache_backend.c
+===================================================================
+--- bin/varnishd/cache_backend.c	(revision 3417)
++++ bin/varnishd/cache_backend.c	(working copy)
+@@ -94,7 +94,7 @@
+ 	if (s < 0) 
+ 		return (s);
+ 
+-	tmo = params->connect_timeout;
++	tmo = (int)(sp->connect_timeout * 1000);
+ 	if (bp->connect_timeout > 10e-3)
+ 		tmo = (int)(bp->connect_timeout * 1000);
+ 
+Index: bin/varnishd/cache_fetch.c
+===================================================================
+--- bin/varnishd/cache_fetch.c	(revision 3417)
++++ bin/varnishd/cache_fetch.c	(working copy)
+@@ -336,6 +336,8 @@
+ 	if (sp->vbe == NULL)
+ 		return (__LINE__);
+ 	vc = sp->vbe;
++	/* Inherit the backend timeouts from the selected backend */
++	SES_InheritBackendTimeouts(sp);
+ 
+ 	/*
+ 	 * Now that we know our backend, we can set a default Host:
+@@ -369,8 +371,12 @@
+ 	VSL_stats->backend_req++;
+ 
+ 	HTC_Init(htc, bereq->ws, vc->fd);
+-	do
+-		i = HTC_Rx(htc);
++	TCP_set_read_timeout(vc->fd, sp->first_byte_timeout);
++	do {
++ 		i = HTC_Rx(htc);
++		TCP_set_read_timeout(vc->fd, sp->between_bytes_timeout);
++	}
++
+ 	while (i == 0);
+ 
+ 	if (i < 0) {
+Index: bin/varnishd/cache_backend.h
+===================================================================
+--- bin/varnishd/cache_backend.h	(revision 3417)
++++ bin/varnishd/cache_backend.h	(working copy)
+@@ -104,6 +104,8 @@
+ 	char			*ident;
+ 	char			*vcl_name;
+ 	double			connect_timeout;
++	double			first_byte_timeout;
++	double			between_bytes_timeout;
+ 
+ 	uint32_t		hash;
+ 
+Index: bin/varnishd/cache_vrt.c
+===================================================================
+--- bin/varnishd/cache_vrt.c	(revision 3417)
++++ bin/varnishd/cache_vrt.c	(working copy)
+@@ -288,6 +288,49 @@
+ 	return (atoi(sp->http->hd[HTTP_HDR_STATUS].b));
+ }
+ 
++void
++VRT_l_bereq_connect_timeout(struct sess *sp, double num)
++{
++	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
++	sp->connect_timeout = (num > 0 ? num : 0);
++}
++
++double
++VRT_r_bereq_connect_timeout(struct sess *sp)
++{
++	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
++	return sp->connect_timeout;
++}
++
++void
++VRT_l_bereq_first_byte_timeout(struct sess *sp, double num)
++{
++	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
++	sp->first_byte_timeout = (num > 0 ? num : 0);
++}
++
++double
++VRT_r_bereq_first_byte_timeout(struct sess *sp)
++{
++	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
++	return sp->first_byte_timeout;
++}
++
++void
++VRT_l_bereq_between_bytes_timeout(struct sess *sp, double num)
++{
++	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
++	sp->between_bytes_timeout = (num > 0 ? num : 0);
++}
++
++double
++VRT_r_bereq_between_bytes_timeout(struct sess *sp)
++{
++	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
++	return sp->between_bytes_timeout;
++}
++
++
+ /*--------------------------------------------------------------------*/
+ 
+ void
+Index: bin/varnishd/cache_center.c
+===================================================================
+--- bin/varnishd/cache_center.c	(revision 3417)
++++ bin/varnishd/cache_center.c	(working copy)
+@@ -851,6 +851,8 @@
+ 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
+ 	AZ(sp->obj);
+ 
++	SES_ResetBackendTimeouts(sp);
++
+ 	/* By default we use the first backend */
+ 	AZ(sp->director);
+ 	sp->director = sp->vcl->director[0];
+Index: bin/varnishd/cache_session.c
+===================================================================
+--- bin/varnishd/cache_session.c	(revision 3417)
++++ bin/varnishd/cache_session.c	(working copy)
+@@ -58,6 +58,7 @@
+ 
+ #include "shmlog.h"
+ #include "cache.h"
++#include "cache_backend.h"
+ 
+ /*--------------------------------------------------------------------*/
+ 
+@@ -316,6 +317,8 @@
+ 	sp->http = &sm->http[0];
+ 	sp->http0 = &sm->http[1];
+ 
++	SES_ResetBackendTimeouts(sp);
++
+ 	return (sp);
+ }
+ 
+@@ -367,3 +370,37 @@
+ 	MTX_INIT(&stat_mtx);
+ 	MTX_INIT(&ses_mem_mtx);
+ }
++
++void
++SES_ResetBackendTimeouts(struct sess *sp)
++{
++	sp->connect_timeout = params->connect_timeout;
++	sp->first_byte_timeout = params->first_byte_timeout;
++	sp->between_bytes_timeout = params->between_bytes_timeout;
++}
++
++void
++SES_InheritBackendTimeouts(struct sess *sp)
++{
++	struct backend *be = NULL;
++
++	AN(sp);
++	AN(sp->vbe);
++	AN(sp->vbe->backend);
++
++	be = sp->vbe->backend;
++	/* 
++	 * We only inherit the backend's timeout if the session timeout
++	 * has not already been set in the VCL, as the order of precedence
++	 * is parameter < backend definition < VCL.
++	 */
++	if (be->connect_timeout > 1e-3 && 
++			sp->connect_timeout == params->connect_timeout)
++		sp->connect_timeout = be->connect_timeout;
++	if (be->first_byte_timeout > 1e-3 && 
++			sp->first_byte_timeout == params->first_byte_timeout)
++		sp->first_byte_timeout = be->first_byte_timeout;
++	if (be->between_bytes_timeout > 1e-3 
++			&& sp->between_bytes_timeout == params->between_bytes_timeout)
++		sp->between_bytes_timeout = be->between_bytes_timeout;
++}
+Index: bin/varnishd/cache.h
+===================================================================
+--- bin/varnishd/cache.h	(revision 3417)
++++ bin/varnishd/cache.h	(working copy)
+@@ -344,6 +344,12 @@
+ 	double			t_resp;
+ 	double			t_end;
+ 
++	/* Timeouts */
++	double connect_timeout;
++	double first_byte_timeout;
++	double between_bytes_timeout;
++ 
++
+ 	/* Acceptable grace period */
+ 	double			grace;
+ 
+@@ -529,6 +535,8 @@
+ void SES_Delete(struct sess *sp);
+ void SES_RefSrcAddr(struct sess *sp);
+ void SES_Charge(struct sess *sp);
++void SES_ResetBackendTimeouts(struct sess *sp);
++void SES_InheritBackendTimeouts(struct sess *sp);
+ 
+ /* cache_shmlog.c */
+ void VSL_Init(void);
+Index: bin/varnishd/heritage.h
+===================================================================
+--- bin/varnishd/heritage.h	(revision 3417)
++++ bin/varnishd/heritage.h	(working copy)
+@@ -154,8 +154,12 @@
+ 	unsigned		cache_vbe_conns;
+ 
+ 	/* Default connection_timeout */
+-	unsigned		connect_timeout;
++	double			connect_timeout;
+ 
++	/* Read timeouts for backend */
++	double			first_byte_timeout;
++	double	 		between_bytes_timeout;
++
+ 	/* How long to linger on sessions */
+ 	unsigned		session_linger;
+ 
+Index: man/vcl.7so
+===================================================================
+--- man/vcl.7so	(revision 3417)
++++ man/vcl.7so	(working copy)
+@@ -92,6 +92,26 @@
+     set req.backend = www;
+ }
+ .Ed
++.Pp
++The timeout parameters can be overridden in the backend declaration.
++The timeout parameters are
++.Fa .connect_timeout
++for the time to wait for a backend connection,
++.Fa .first_byte_timeout
++for the time to wait for the first byte from the backend and
++.Fa .between_bytes_timeout
++for time to wait between each received byte.
++.Pp
++These can be set in the declaration like this:
++.Bd -literal -offset 4n
++backend www {
++    .host = "www.example.com";
++    .port = "http";
++    .connect_timeout = 1s;
++    .first_byte_timeout = 5s;
++    .between_bytes_timeout = 2s;
++}
++.Ed
+ .Ss Directors
+ Directors choose from different backends based on health status and a
+ per-director algorithm.
+@@ -484,6 +504,14 @@
+ .It Va req.http. Ns Ar header
+ The corresponding HTTP
+ .Ar header .
++.It Va bereq.connect_timeout
++The time in seconds to wait for a backend connection.
++.It Va bereq.first_byte_timeout
++The time in seconds to wait for the first byte from the backend.
++Not available in pipe mode.
++.It Va bereq.between_bytes_timeout
++The time in seconds to wait between each received byte from the backend.
++Not available in pipe mode.
+ .El
+ .Pp
+ The following variables are available while preparing a backend
