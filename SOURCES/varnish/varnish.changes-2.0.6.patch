@@ -1,9 +1,0 @@
---- doc/changes-2.0.5-2.0.6.xml.orig	2009-12-23 11:42:58.168643121 +0100
-+++ doc/changes-2.0.5-2.0.6.xml	2009-12-23 11:43:05.827643574 +0100
-@@ -49,5 +49,5 @@
-       <para>Document the <code>-C</code> option
-       to <code>varnishd</code>.</para>
-     </change>
--  <subsystem>
-+  </subsystem>
- </group>
