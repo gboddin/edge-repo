@@ -936,9 +936,6 @@ support for using the enchant library to PHP.
 %prep
 echo CIBLE = %{name}-%{version}-%{release} oci8=%{with oci8} libzip=%{with_libzip}
 
-# ensure than current httpd use prefork MPM.
-httpd -V  | grep -q 'threaded:.*yes' && exit 1
-
 %setup -q -n php-%{version}%{?rcver}
 
 %patch5 -p1 -b .includedir

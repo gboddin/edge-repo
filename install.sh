@@ -5,4 +5,6 @@ rpm -ivh http://repo.siwhine.net/${DISTRO}/edge-repo-latest.rpm
 
 echo Downloading common deps :
 yum install wget git tar rpm-build rpmdevtools make -y
-[ ! -z ${ORACLE_OCI_RPM} ] && yum -y --nogpgcheck install ${ORACLE_OCI_RPM}
+[ ! -z "${THIRD_PARTY_RPMS}" ] && for RPM in ${THIRD_PARTY_RPMS} ; do
+  yum -y --nogpgcheck install ${RPM}
+done
