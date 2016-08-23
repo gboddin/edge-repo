@@ -1,4 +1,4 @@
-# remirepo spec file for gd
+# remirepo spec file for gd-last
 # renamed for parallel installation, from:
 #
 # Fedora spec file for gd
@@ -19,7 +19,11 @@
 %endif
 
 Summary:       A graphics library for quick creation of PNG or JPEG images
+%if 0%{?fedora} >= 20
 Name:          gd
+%else
+Name:          gd-last
+%endif
 Version:       2.2.3
 Release:       %{rpmrel}%{?dist}
 Group:         System Environment/Libraries
@@ -52,7 +56,13 @@ BuildRequires: pkgconfig
 BuildRequires: libtool
 BuildRequires: perl
 BuildRequires: perl-generators
+
+%if "%{name}" != "gd-last"
+Obsoletes: gd-last <= %{version}
+%else
 Provides:  gd = %{version}-%{release}
+%endif
+
 
 %description
 The gd graphics library allows your code to quickly draw images
@@ -67,7 +77,12 @@ browsers. Note that gd is not a paint program.
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Summary:        Utility programs that use libgd
 Group:          Applications/Multimedia
+%if "%{name}" == "gd-last"
+Conflicts:      gd-progs < %{version}
+Provides:       gd-progs = %{version}-%{release}
+%else
 Obsoletes:      gd-last-progs <= %{version}
+%endif
 
 %description progs
 The gd-progs package includes utility programs supplied with gd, a
@@ -89,7 +104,13 @@ Requires: libwebp-devel%{?_isa}
 Requires: libX11-devel%{?_isa}
 Requires: libXpm-devel%{?_isa}
 Requires: zlib-devel%{?_isa}
+
+%if "%{name}" == "gd-last"
+Conflicts: gd-devel < %{version}
+Provides:  gd-devel = %{version}-%{release}
+%else
 Obsoletes: gd-last-devel <= %{version}
+%endif
 
 
 %description devel
