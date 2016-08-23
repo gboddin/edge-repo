@@ -642,7 +642,7 @@ Summary:        A module for PHP applications that use OCI8 databases
 Group:          Development/Languages
 # All files licensed under PHP version 3.01
 License:        PHP
-BuildRequires:  oracle-instantclient-devel >= %{oraclever}
+BuildRequires:  oracle-instantclient12.1-devel >= %{oraclever}
 Requires:       php-pdo%{?_isa} = %{version}-%{release}
 Provides:       php_database
 Provides:       php-pdo_oci, php-pdo_oci%{?_isa}

@@ -8,11 +8,14 @@ fi
 # Replaces version tokens if needed :
 [ -f SPECS/${PACKAGE}.spec.tpl ] && sed "s/TPL_PACKAGE_VERSION/${PACKAGE_VERSION}/g" SPECS/${PACKAGE}.spec.tpl > SPECS/${PACKAGE}.spec
 
+# If SOURCES dir is not there, create it
+[ ! -d `pwd`/SOURCES/${PACKAGE} ] && mkdir -p `pwd`/SOURCES/${PACKAGE}
+
 # Install sources :
-spectool -g -C SOURCES SPECS/${PACKAGE}.spec
+spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
 
 # Install build depedencies :
 ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec 
 
 # Build the package :
-rpmbuild  --quiet --define "rpmrel ${RPM_RELEASE}" --define "_topdir `pwd`" -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
+rpmbuild  --quiet --define "rpmrel ${RPM_RELEASE}" --define "_sourcedir `pwd`/SOURCES/${PACKAGE}" --define "_topdir `pwd`" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
