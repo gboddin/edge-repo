@@ -102,7 +102,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  emacs
 BuildRequires:  expat-devel
 BuildRequires:  gettext
-BuildRequires:  gnupg2
+BuildRequires:  gnupg2, gcc-c++, make
 BuildRequires:  %{libcurl_devel}
 %if %{gnome_keyring}
 BuildRequires:  libgnome-keyring-devel
