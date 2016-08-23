@@ -37,7 +37,7 @@
 %bcond_with oci8
 
 # Build for LiteSpeed Web Server (LSAPI)
-%global with_lsws     1
+%global with_lsws    0 
 
 # Regression tests take a long time, you can skip 'em with this
 %global runselftest 0
@@ -65,7 +65,7 @@
 %endif
 
 # Build ZTS extension or only NTS
-%global with_zts      1
+%global with_zts      0
 
 # Debuild build
 %global with_debug    %{?_with_debug:1}%{!?_with_debug:0}
