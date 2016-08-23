@@ -15,4 +15,4 @@ spectool -g -C SOURCES SPECS/${PACKAGE}.spec
 ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec 
 
 # Build the package :
-rpmbuild  --quiet --define "rpmrel ${RPM_RELEASE}" --define "_topdir `pwd`" -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
+rpmbuild  --quiet --define "rpmrel ${RPM_RELEASE}" --define "_topdir `pwd`" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
