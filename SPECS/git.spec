@@ -10,6 +10,7 @@ License:        GPLv2
 Group:          Development/Tools
 URL:            http://git-scm.com/
 Source0:        https://github.com/git/git/archive/v2.9.3.tar.gz
+Source1:        git-gui.desktop
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  desktop-file-utils
@@ -281,8 +282,9 @@ popd > /dev/null
 # install git-gui .desktop file
 desktop-file-install \
 %if 0%{?rhel} && 0%{?rhel} <= 5
-    --vendor fedora 
+    --vendor fedora \
 %endif
+    --dir=%{buildroot}%{_datadir}/applications %{SOURCE5}/git-gui.desktop
 
 # quiet some rpmlint complaints
 chmod -R g-w %{buildroot}
