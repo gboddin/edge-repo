@@ -6,7 +6,7 @@ Summary: High-performance HTTP accelerator
 Name: varnish
 Version: 4.1.3
 #Release: 0.20140328%{?v_rc}%{?dist}
-Release: %{rpmrel}%{?v_rc}%{?dist}
+Release: 2%{?v_rc}%{?dist}
 License: BSD
 Group: System Environment/Daemons
 URL: https://www.varnish-cache.org/
@@ -35,6 +35,7 @@ BuildRequires: pcre-devel
 BuildRequires: pkgconfig
 BuildRequires: python-docutils >= 0.6
 BuildRequires: python-sphinx
+BuildRequires: graphviz 
 Requires: jemalloc
 Requires: libedit
 Requires: logrotate
