@@ -42,6 +42,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  %{?scl_prefix}php-devel > 5.2
 BuildRequires:  %{?scl_prefix}php-pear
 BuildRequires:  oracle-instantclient12.1-devel >= %{oraclever}
+BuildRequires: gcc-c++, make
 %if %{with_dtrace}
 BuildRequires:  systemtap-sdt-devel
 %endif
