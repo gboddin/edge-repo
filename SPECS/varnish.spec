@@ -1,4 +1,3 @@
-%define v_rc beta1
 %define vd_rc %{?v_rc:-%{?v_rc}}
 %define    _use_internal_dependency_generator 0
 %define __find_provides %{_builddir}/../SOURCES/find-provides
