@@ -65,7 +65,7 @@
 %endif
 
 # Build ZTS extension or only NTS
-%global with_zts      0
+%global with_zts      1 
 
 # Debuild build
 %global with_debug    %{?_with_debug:1}%{!?_with_debug:0}
