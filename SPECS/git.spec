@@ -55,7 +55,7 @@
 
 Name:           git
 Version:        2.9.3
-Release:        1%{?dist}
+Release:        %{rpmrel}%{?dist}
 Summary:        Fast Version Control System
 License:        GPLv2
 Group:          Development/Tools
