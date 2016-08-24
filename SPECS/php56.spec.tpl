@@ -749,7 +749,7 @@ License: PHP and BSD
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: t1lib-devel
 %if %{with_libgd}
-BuildRequires: gd-devel >= 2.0
+BuildRequires: gd-devel >= 2.2
 %if 0%{?fedora} <= 19 && 0%{?rhel} <= 7
 Requires: gd-last%{?_isa} >= 2.1.1
 %else
