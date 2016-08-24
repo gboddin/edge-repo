@@ -65,7 +65,7 @@
 %endif
 
 # Build ZTS extension or only NTS
-%global with_zts      1 
+%global with_zts      1
 
 # Debuild build
 %global with_debug    %{?_with_debug:1}%{!?_with_debug:0}
@@ -140,12 +140,8 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
-Version: TPL_PACKAGE_VERSION 
-%if 0%{?rcver:1}
-Release: 0.%{rpmrel}.%{rcver}%{?dist}
-%else
-Release: %{rpmrel}%{?dist}
-%endif
+Version: 5.6.25 
+Release: 3%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -156,7 +152,7 @@ URL: http://www.php.net/
 # Need to download official tarball and strip non-free stuff
 # wget http://www.php.net/distributions/php-%%{version}%%{?rcver}.tar.xz
 # ./strip.sh %%{version}
-Source0: http://www.php.net/distributions/php-TPL_PACKAGE_VERSION.tar.xz
+Source0: http://www.php.net/distributions/php-%{version}.tar.xz
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
@@ -1993,7 +1989,7 @@ fi
 
 %changelog
 
-* Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> TPL_PACKAGE_VERSION-3
+* Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-3
 - PHP is now using jsond, no need to skip packaging for licensing reasons anymore.
 
 * Fri Aug 19 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-1

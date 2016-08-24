@@ -2,11 +2,11 @@
 Summary: Distributed SSL session cache
 Name: distcache
 Version: 1.4.5
-Release: %{rpmrel}%{?dist} 
+Release: 4%{?dist} 
 License: LGPLv2
 Group: System Environment/Daemons
 URL: http://www.distcache.org/
-Source0: http://downloads.sourceforge.net/distcache/distcache-1.4.5.tar.bz2
+Source0: http://downloads.sourceforge.net/distcache/distcache-%{version}.tar.bz2
 Patch0: distcache-1.4.5-setuid.patch
 Patch1: distcache-1.4.5-libdeps.patch
 Patch2: distcache-1.4.5-limits.patch
