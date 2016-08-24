@@ -6,9 +6,6 @@
 *.key
 BUILD
 RPMS
-SPECS/httpd.spec
-SPECS/php56.spec
-SPECS/redis.spec
 BUILDROOT
 deploy.key
 .idea

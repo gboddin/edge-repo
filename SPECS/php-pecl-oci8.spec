@@ -28,7 +28,7 @@
 Summary:        Extension for Oracle Database
 Name:           %{?scl_prefix}php-pecl-%{pecl_name}
 Version:        2.0.11
-Release:        %{rpmrel}%{?dist}%{!?nophptag:%(%{__php} -r 'echo ".".PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')}
+Release:        3%{?dist}%{!?nophptag:%(%{__php} -r 'echo ".".PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')}
 
 License:        PHP
 Group:          Development/Languages
