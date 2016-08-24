@@ -37,7 +37,7 @@
 %bcond_with oci8
 
 # Build for LiteSpeed Web Server (LSAPI)
-%global with_lsws     1
+%global with_lsws    0 
 
 # Regression tests take a long time, you can skip 'em with this
 %global runselftest 0
@@ -140,12 +140,8 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
-Version: TPL_PACKAGE_VERSION 
-%if 0%{?rcver:1}
-Release: 0.%{rpmrel}.%{rcver}%{?dist}
-%else
-Release: %{rpmrel}%{?dist}
-%endif
+Version: 5.6.25 
+Release: 3%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -156,7 +152,7 @@ URL: http://www.php.net/
 # Need to download official tarball and strip non-free stuff
 # wget http://www.php.net/distributions/php-%%{version}%%{?rcver}.tar.xz
 # ./strip.sh %%{version}
-Source0: http://www.php.net/distributions/php-TPL_PACKAGE_VERSION.tar.xz
+Source0: http://www.php.net/distributions/php-%{version}.tar.xz
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
@@ -214,7 +210,7 @@ Patch301: php-5.6.0-oldpcre.patch
 
 BuildRequires: bzip2-devel, curl-devel >= 7.9
 BuildRequires: httpd-devel >= 2.0.46-1, pam-devel
-BuildRequires: gd-devel >= 2.0
+BuildRequires: gd-devel >= 2.2, bison, re2c
 %if %{with_httpd24}
 # to ensure we are using httpd with filesystem feature (see #1081453)
 BuildRequires: httpd-filesystem
@@ -642,7 +638,7 @@ Summary:        A module for PHP applications that use OCI8 databases
 Group:          Development/Languages
 # All files licensed under PHP version 3.01
 License:        PHP
-BuildRequires:  oracle-instantclient-devel >= %{oraclever}
+BuildRequires:  oracle-instantclient12.1-devel >= %{oraclever}
 Requires:       php-pdo%{?_isa} = %{version}-%{release}
 Provides:       php_database
 Provides:       php-pdo_oci, php-pdo_oci%{?_isa}
@@ -749,7 +745,7 @@ License: PHP and BSD
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: t1lib-devel
 %if %{with_libgd}
-BuildRequires: gd-devel >= 2.0
+BuildRequires: gd-devel >= 2.2
 %if 0%{?fedora} <= 19 && 0%{?rhel} <= 7
 Requires: gd-last%{?_isa} >= 2.1.1
 %else
@@ -1993,7 +1989,7 @@ fi
 
 %changelog
 
-* Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> TPL_PACKAGE_VERSION-3
+* Sun Aug 21 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-3
 - PHP is now using jsond, no need to skip packaging for licensing reasons anymore.
 
 * Fri Aug 19 2016 Gregory Boddin <gregory@siwhine.net> 5.6.25-1

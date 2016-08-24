@@ -4,16 +4,16 @@
 
 Summary: Apache HTTP Server
 Name: httpd
-Version: TPL_PACKAGE_VERSION 
-Release: %{rpmrel}%{?dist} 
+Version: 2.4.23 
+Release: 2%{?dist} 
 URL: http://httpd.apache.org/
 Vendor: Apache Software Foundation
-Source0: http://www.apache.org/dist/httpd/httpd-TPL_PACKAGE_VERSION.tar.bz2
+Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 License: Apache License, Version 2.0
 Group: System Environment/Daemons
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: autoconf, perl, pkgconfig, findutils
 BuildRequires: gcc-c++, make
+BuildRequires: autoconf, perl, pkgconfig, findutils
 BuildRequires: zlib-devel, libselinux-devel, libuuid-devel
 BuildRequires: apr-devel >= 1.4.0, apr-util-devel >= 1.4.0, pcre-devel >= 5.0
 Requires: initscripts >= 8.36, /etc/mime.types

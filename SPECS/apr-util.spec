@@ -4,11 +4,11 @@
 Summary: Apache Portable Runtime Utility library
 Name: apr-util
 Version: 1.5.4
-Release: %{rpmrel}%{?dist} 
+Release: 2%{?dist} 
 License: Apache Software License
 Group: System Environment/Libraries
 URL: http://apr.apache.org/
-Source0: http://www.apache.org/dist/apr/apr-util-1.5.4.tar.bz2
+Source0: http://www.apache.org/dist/apr/apr-util-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: autoconf, libtool, doxygen, apr-devel >= 1.4.0
 BuildRequires: expat-devel, libuuid-devel
