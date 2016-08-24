@@ -1,6 +1,5 @@
 %define vd_rc %{?v_rc:-%{?v_rc}}
 %define    _use_internal_dependency_generator 0
-%define __find_provides %{_builddir}/../SOURCES/find-provides
 
 Summary: High-performance HTTP accelerator
 Name: varnish
@@ -22,7 +21,6 @@ Source7: varnishlog.initrc
 Source8: varnishlog.service
 Source9: varnishncsa.initrc
 Source10: varnishncsa.service
-Source11: find-provides
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: automake
@@ -102,7 +100,7 @@ Documentation files for %name
 %setup -n varnish-%{version}%{?vd_rc}
 #%setup -q -n varnish-trunk
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} %{SOURCE5} .
-cp %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} %{SOURCE11} .
+cp %{SOURCE6} %{SOURCE7} %{SOURCE8} %{SOURCE9} %{SOURCE10} .
 
 %build
 # No pkgconfig/libpcre.pc in rhel4
