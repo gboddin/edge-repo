@@ -37,7 +37,7 @@
 %bcond_with oci8
 
 # Build for LiteSpeed Web Server (LSAPI)
-%global with_lsws     1
+%global with_lsws    0 
 
 # Regression tests take a long time, you can skip 'em with this
 %global runselftest 0
@@ -65,7 +65,7 @@
 %endif
 
 # Build ZTS extension or only NTS
-%global with_zts      1
+%global with_zts      1 
 
 # Debuild build
 %global with_debug    %{?_with_debug:1}%{!?_with_debug:0}
@@ -214,7 +214,7 @@ Patch301: php-5.6.0-oldpcre.patch
 
 BuildRequires: bzip2-devel, curl-devel >= 7.9
 BuildRequires: httpd-devel >= 2.0.46-1, pam-devel
-BuildRequires: gd-devel >= 2.0
+BuildRequires: gd-devel >= 2.2, bison, re2c
 %if %{with_httpd24}
 # to ensure we are using httpd with filesystem feature (see #1081453)
 BuildRequires: httpd-filesystem
@@ -749,7 +749,7 @@ License: PHP and BSD
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: t1lib-devel
 %if %{with_libgd}
-BuildRequires: gd-devel >= 2.0
+BuildRequires: gd-devel >= 2.2
 %if 0%{?fedora} <= 19 && 0%{?rhel} <= 7
 Requires: gd-last%{?_isa} >= 2.1.1
 %else
