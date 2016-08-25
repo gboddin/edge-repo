@@ -4,19 +4,19 @@
 
 echo Enabling third-party repos :
 [ ! -z ${EPEL} ] && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-${EPEL}.noarch.rpm
-rpm -ivh http://repo.siwhine.net/${DISTRO}/edge-repo-latest.rpm
+rpm -ivh http://repo.siwhine.net/${DISTRO}/edge-repo-latest.rpm || exit 1
 
 
 # Install some basic stuff :
 
 echo Downloading common deps :
-yum install wget git tar rpm-build rpmdevtools make -y
+yum install wget git tar rpm-build rpmdevtools make -y || exit 1
 
 
 # Install proprietary depedencies :
 
 [ ! -z "${THIRD_PARTY_RPMS}" ] && for RPM in ${THIRD_PARTY_RPMS} ; do
-  yum -y --nogpgcheck install ${RPM}
+  yum -y --nogpgcheck install ${RPM} || exit 1
 
   # Fix Oracle instant client missing link
 
@@ -26,3 +26,5 @@ yum install wget git tar rpm-build rpmdevtools make -y
    ) || /bin/true
 
 done
+
+exit 0
