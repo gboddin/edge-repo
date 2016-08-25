@@ -160,7 +160,7 @@ rm -rf doc/sphinx/build
 	%endif
 %endif
 
-make check %{?_smp_mflags}
+make check %{?_smp_mflags} || cat bin/varnishtest/test-suite.log && exit 1
 # LD_LIBRARY_PATH="../../lib/libvarnish/.libs:../../lib/libvarnishcompat/.libs:../../lib/libvarnishapi/.libs:../../lib/libvcc/.libs:../../lib/libvgz/.libs" VERBOSE=1
 
 %install
