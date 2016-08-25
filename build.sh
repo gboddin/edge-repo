@@ -18,4 +18,4 @@ spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
 ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec 
 
 # Build the package :
-rpmbuild  ${RPMBUILD_FLAGS} --define "_sourcedir `pwd`/SOURCES/${PACKAGE}" --define "_topdir `pwd`" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec
+rpmbuild  ${RPMBUILD_FLAGS} --define "_sourcedir `pwd`/SOURCES/${PACKAGE}" --define "_topdir `pwd`" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
