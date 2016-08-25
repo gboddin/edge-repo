@@ -2,7 +2,6 @@ sudo: required
 dist: trusty
 env:
   global:
-    - THIRD_PARTY_RPMS="oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm oracle-instantclient12.1-devel-12.1.0.2.0-1.x86_64.rpm oracle-instantclient12.1-devel-12.1.0.2.0-1.i386.rpm"
     - ENC_REPO=http://repo.siwhine.net/encrypted/ ORACLE_OCI_RPM=oracle-instantclient12.1-basic-12.1.0.2.0-1.x86_64.rpm
     - secure: "euLxEEQY12f5ckbS9vt6byTHpCTMjkuSqcjj6L1r8UVO3SF/g9wxksvgbSO0ruwttzPZ8jzQtunK+TEB8yKvwrdbD/I6tL042yq6bcdM1vnWP1Y3Rnb4tb7IA0Ff5K5LsSUm2EW4IijJtnxTMhX+2U9rjbOO9OzjjJ7Gl1WdOy5MBqYm2kOXOZDI4Slez04IAnoV0N/TXQTedVl4EVMO9Y8OAVd13a+DzrvF1suhyF0neU9ksn0BfZy7qedgQ4sXOlObdrk/FY3k6FOuCwwlP+9KpNFp3AYy45keCjKT1bugpIrYQjv4/4KNPQVIiUVPXrUszkR35WjBPw85pSulQ3yNY6AlWup/1A6Xla2v9iEm5UZgnc4cjxmH9Mx2JKP9HMWc2JJXJp30Jy6bA1bRlERN7leC4WPPUgjnUtcbobbPoBWxAadjNnF4hg7Su4zzVZN31Lm+s7TTId0NXLjN4e7aGAcMcdepkFGDJXLEMME7X2Nz/Qg8VOcyYQkxVyNrpw2eaaHss7EH2P3IL1foSKPGQJ3w3xHkGiIG+1HUdtYR/euI6CNQ57epNp9CTL0W/P+7ofSux8WliZDqLTEIZ9Z2Uk5H4yXMNcqBIu0a1F7lkz1VLH9snToMjkknzC1qxLBFGzVUMJNv3Hm7mhslX4SsnVB5LsQTih+lWVFUJok="
   matrix:
@@ -12,6 +11,7 @@ env:
     - DISTRO=fedora-24
 before_install:
   - source common.env
+  - [ -f SOURCES/${PACKAGE}.env ] && source SOURCES/${PACKAGE}.env
   - openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in deploy.key.enc -out deploy.key -d
   - chmod 600 deploy.key
   - for RPM in ${THIRD_PARTY_RPMS}; do wget ${ENC_REPO}${RPM}.enc && openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in ${RPM}.enc -out ${RPM} -d ; done
