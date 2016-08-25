@@ -22,6 +22,8 @@ install:
   - ${PROOT} /bin/bash -x /root/build/install.sh
 script:
   - ${PROOT} /bin/bash -x /root/build/build.sh
+after_failure:
+  - cat /root/el6-lamp-last/BUILD/varnish-4.1.3/bin/varnishtest/test-suite.log
 before_deploy:
   - export RELEASE_PKG_FILE=$(ls RPMS/`uname -m`/*.rpm SRPMS/*.rpm)
   - echo "deploying $RELEASE_PKG_FILE to GitHub releases"
