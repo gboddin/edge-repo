@@ -1,6 +1,6 @@
 Name:           edge-release
 Version:        24
-Release:        %{rpmrel}%{?dist} 
+Release:        4%{?dist} 
 Summary:        Edge Packages for Fedora Linux repository configuration
 
 Group:          System Environment/Base
