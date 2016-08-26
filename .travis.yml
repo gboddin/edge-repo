@@ -1,6 +1,4 @@
 language: generic
-sudo: required
-dist: trusty
 env:
   global:
     - ENC_REPO=http://repo.siwhine.net/encrypted/
