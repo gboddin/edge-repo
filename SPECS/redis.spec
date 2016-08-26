@@ -28,7 +28,7 @@
 
 Name:             redis
 Version:          3.2.3 
-Release:          %{rpmrel}%{?dist} 
+Release:          3%{?dist} 
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
