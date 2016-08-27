@@ -19,5 +19,4 @@ rpm -ivh http://repo.siwhine.net/${DISTRO}/edge-repo-latest.rpm || exit 1
    ) || /bin/true
 
 done
-
-exit 0
+echo installed > /rootfs-installed
