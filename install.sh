@@ -9,6 +9,7 @@ rpm -ivh http://repo.siwhine.net/${DISTRO}/edge-repo-latest.rpm || exit 1
 # Install proprietary depedencies :
 
 [ ! -z "${THIRD_PARTY_RPMS}" ] && for RPM in ${THIRD_PARTY_RPMS} ; do
+  [ -f "$RPM" ] || continue
   yum -y --nogpgcheck install ${RPM} || exit 1
 
   # Fix Oracle instant client missing link

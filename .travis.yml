@@ -14,9 +14,9 @@ env:
 before_install:
   - source common.env
   - if [ -f SOURCES/${PACKAGE}.env ] ; then source SOURCES/${PACKAGE}.env ; fi
-  - openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in deploy.key.enc -out deploy.key -d
-  - chmod 600 deploy.key
-  - for RPM in ${THIRD_PARTY_RPMS}; do wget ${ENC_REPO}${RPM}.enc && openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in ${RPM}.enc -out ${RPM} -d ; done
+  - if [ ! -z $encrypted_ddd175810ce0_key ]; then openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in deploy.key.enc -out deploy.key -d; fi
+  - if [ ! -z $encrypted_ddd175810ce0_key ]; then chmod 600 deploy.key ; fi
+  - if [ ! -z $encrypted_ddd175810ce0_key ]; then for RPM in ${THIRD_PARTY_RPMS}; do wget ${ENC_REPO}${RPM}.enc && openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in ${RPM}.enc -out ${RPM} -d ; done; fi
   - export MAKEFLAGS=-j$(cat /proc/cpuinfo|grep bogomips|wc -l)
   - export PROOT="./${DISTRO}/proot -b $(pwd):/root/build -b /etc/mtab -b /etc/hosts -b /etc/hostname -b /proc -b /sys -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0"
 install:
