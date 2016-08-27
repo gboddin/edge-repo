@@ -19,9 +19,9 @@ before_install:
   - export MAKEFLAGS=-j$(cat /proc/cpuinfo|grep bogomips|wc -l)
   - export PROOT="./${DISTRO}/proot -b $(pwd):/root/build -b /etc/mtab -b /etc/hosts -b /etc/hostname -b /proc -b /sys -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0"
 install:
-  - wget "https://github.com/gboddin/upsalter/releases/download/0.3/${DISTRO}-rootfs-salted.tar.bz2"
+  - wget "https://github.com/gboddin/upsalter/releases/download/0.4/${DISTRO}-rootfs-buildenv.tar.bz2"
   - mkdir ${DISTRO} 
-  - tar -C ${DISTRO} -xjf ${DISTRO}-rootfs-salted.tar.bz2
+  - tar -C ${DISTRO} -xjf ${DISTRO}-rootfs-buildenv.tar.bz2
   - ${PROOT} /bin/bash -x /root/build/install.sh
 script:
   - ${PROOT} /bin/bash -x /root/build/build.sh
