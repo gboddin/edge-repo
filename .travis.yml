@@ -33,4 +33,5 @@ deploy:
     script: ./sync_repo.sh 
     skip_cleanup: true
     on:
+      repo: gboddin/edge-repo
       all_branches: true
