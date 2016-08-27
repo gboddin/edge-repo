@@ -6,13 +6,6 @@ echo Enabling third-party repos :
 [ ! -z ${EPEL} ] && rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-${EPEL}.noarch.rpm
 rpm -ivh http://repo.siwhine.net/${DISTRO}/edge-repo-latest.rpm || exit 1
 
-
-# Install some basic stuff :
-
-echo Downloading common deps :
-yum install wget git tar rpm-build rpmdevtools make -y || exit 1
-
-
 # Install proprietary depedencies :
 
 [ ! -z "${THIRD_PARTY_RPMS}" ] && for RPM in ${THIRD_PARTY_RPMS} ; do
