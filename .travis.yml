@@ -1,7 +1,7 @@
 language: generic
 cache:
   directories:
-    - rootfs
+    - ${DISTRO} 
 env:
   global:
     - ENC_REPO=http://repo.siwhine.net/encrypted/
@@ -18,12 +18,12 @@ before_install:
   - chmod 600 deploy.key
   - for RPM in ${THIRD_PARTY_RPMS}; do wget ${ENC_REPO}${RPM}.enc && openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in ${RPM}.enc -out ${RPM} -d ; done
   - export MAKEFLAGS=-j$(cat /proc/cpuinfo|grep bogomips|wc -l)
-  - export PROOT="./rootfs/proot -b $(pwd):/root/build -b /etc/mtab -b /etc/hosts -b /etc/hostname -b /proc -b /sys -b /etc/resolv.conf -b /dev -w /root/build -r rootfs -0"
+  - export PROOT="./${DISTRO}/proot -b $(pwd):/root/build -b /etc/mtab -b /etc/hosts -b /etc/hostname -b /proc -b /sys -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0"
 install:
-  - if [ ! -f rootfs/installed ] ; then wget "https://github.com/gboddin/upsalter/releases/download/0.4/${DISTRO}-rootfs-buildenv.tar.bz2"; fi
-  - if [ ! -f rootfs/installed ] ; then mkdir rootfs ; fi
-  - if [ ! -f rootfs/installed ] ; then tar -C rootfs -xjf ${DISTRO}-rootfs-buildenv.tar.bz2 ; fi
-  - if [ ! -f rootfs/installed ] ; then ${PROOT} /bin/bash -x /root/build/install.sh ; fi
+  - if [ ! -f ${DISTRO}/installed ] ; then wget "https://github.com/gboddin/upsalter/releases/download/0.4/${DISTRO}-rootfs-buildenv.tar.bz2"; fi
+  - if [ ! -f ${DISTRO}/installed ] ; then mkdir ${DISTRO} ; fi
+  - if [ ! -f ${DISTRO}/installed ] ; then tar -C ${DISTRO} -xjf ${DISTRO}-rootfs-buildenv.tar.bz2 ; fi
+  - if [ ! -f ${DISTRO}/installed ] ; then ${PROOT} /bin/bash -x /root/build/install.sh ; fi
 script:
   - ${PROOT} /bin/bash -x /root/build/build.sh
 before_deploy:
