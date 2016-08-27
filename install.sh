@@ -8,7 +8,7 @@ rpm -ivh http://repo.siwhine.net/${DISTRO}/edge-repo-latest.rpm || exit 1
 
 # Install proprietary depedencies :
 
-[ ! -z "${THIRD_PARTY_RPMS}" ] && for RPM in ${THIRD_PARTY_RPMS} ; doi
+[ ! -z "${THIRD_PARTY_RPMS}" ] && for RPM in ${THIRD_PARTY_RPMS} ; do
   echo "Checking if $RPM exists ..."
   [ ! -f "$RPM" ] && continue
   echo "Installing $RPM"
