@@ -52,6 +52,7 @@ BuildRequires:  gperf
 BuildRequires:  mysql-devel
 BuildRequires:  postgresql-devel
 BuildRequires:  zlib-devel
+BuildRequires:  gcc-c++, make
 
 %if 0%{?_with_systemd}
 BuildRequires: systemd-units
