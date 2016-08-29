@@ -12,7 +12,7 @@
 
 Name:		php-pecl-gearman
 Version:	1.1.2
-Release:	4%{?dist}
+Release:	4%{?dist}%{!?nophptag:%(%{__php} -r 'echo ".".PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')}
 Summary:	PHP wrapper to libgearman
 
 Group:		Development/Tools
