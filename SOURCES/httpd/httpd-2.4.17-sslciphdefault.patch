@@ -1,0 +1,33 @@
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1109119
+
+Don't prepend !aNULL etc if PROFILE= is used with SSLCipherSuite.
+
+--- httpd-2.4.17/modules/ssl/ssl_engine_config.c.sslciphdefault
++++ httpd-2.4.17/modules/ssl/ssl_engine_config.c
+@@ -708,8 +708,10 @@ const char *ssl_cmd_SSLCipherSuite(cmd_p
+     SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
+     SSLDirConfigRec *dc = (SSLDirConfigRec *)dcfg;
+ 
+-    /* always disable null and export ciphers */
+-    arg = apr_pstrcat(cmd->pool, arg, ":!aNULL:!eNULL:!EXP", NULL);
++    /* Disable null and export ciphers by default, except for PROFILE=
++     * configs where the parser doesn't cope. */
++    if (strncmp(arg, "PROFILE=", 8) != 0)
++        arg = apr_pstrcat(cmd->pool, arg, ":!aNULL:!eNULL:!EXP", NULL);
+ 
+     if (cmd->path) {
+         dc->szCipherSuite = arg;
+@@ -1428,8 +1430,10 @@ const char *ssl_cmd_SSLProxyCipherSuite(
+ {
+     SSLSrvConfigRec *sc = mySrvConfig(cmd->server);
+ 
+-    /* always disable null and export ciphers */
+-    arg = apr_pstrcat(cmd->pool, arg, ":!aNULL:!eNULL:!EXP", NULL);
++    /* Disable null and export ciphers by default, except for PROFILE=
++     * configs where the parser doesn't cope. */
++    if (strncmp(arg, "PROFILE=", 8) != 0)
++        arg = apr_pstrcat(cmd->pool, arg, ":!aNULL:!eNULL:!EXP", NULL);
+ 
+     sc->proxy->auth.cipher_suite = arg;
+ 
