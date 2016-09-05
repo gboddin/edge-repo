@@ -71,7 +71,7 @@ Patch100: httpd-2.4.18-CVE-2016-5387.patch
 License: ASL 2.0
 Group: System Environment/Daemons
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: autoconf, perl, perl-generators, pkgconfig, findutils, xmlto
+BuildRequires: gcc-c++, autoconf, perl, perl-generators, pkgconfig, findutils, xmlto
 BuildRequires: zlib-devel, libselinux-devel, lua-devel
 BuildRequires: apr-devel >= 1.5.0, apr-util-devel >= 1.5.0, pcre-devel >= 5.0
 %if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
