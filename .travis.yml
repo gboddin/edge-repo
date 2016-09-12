@@ -20,7 +20,7 @@ before_install:
   - export MAKEFLAGS=-j$(cat /proc/cpuinfo|grep bogomips|wc -l)
   - export PROOT="./${DISTRO}/proot -b $(pwd):/root/build -b /etc/mtab -b /etc/hosts -b /etc/hostname -b /proc -b /sys -b /etc/resolv.conf -b /dev -w /root/build -r ${DISTRO} -0"
 install:
-  - if [ ! -f ${DISTRO}/rootfs-installed ] ; then wget "https://github.com/gboddin/upsalter/releases/download/0.4/${DISTRO}-rootfs-buildenv.tar.bz2"; fi
+  - if [ ! -f ${DISTRO}/rootfs-installed ] ; then wget "https://github.com/gboddin/upsalter/releases/download/0.4.1/${DISTRO}-rootfs-buildenv.tar.bz2"; fi
   - if [ ! -f ${DISTRO}/rootfs-installed ] && [ ! -d ${DISTRO} ] ; then mkdir ${DISTRO} ; fi
   - if [ ! -f ${DISTRO}/rootfs-installed ] ; then tar -C ${DISTRO} -xjf ${DISTRO}-rootfs-buildenv.tar.bz2 ; fi
   - if [ ! -f ${DISTRO}/rootfs-installed ] ; then ${PROOT} /bin/bash -x /root/build/install.sh ; fi
