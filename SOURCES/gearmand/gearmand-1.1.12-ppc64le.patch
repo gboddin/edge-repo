@@ -1,0 +1,21 @@
+diff -up gearmand-1.1.12/configure.ppc64le gearmand-1.1.12/configure
+--- gearmand-1.1.12/configure.ppc64le	2014-09-09 17:12:22.368039057 +0200
++++ gearmand-1.1.12/configure	2014-09-09 17:11:49.584039857 +0200
+@@ -16219,7 +16219,7 @@ $as_echo_n "checking for boostlib >= $bo
+                         libsubdirs="lib"
+     ax_arch=`uname -m`
+     case $ax_arch in
+-      x86_64|ppc64|s390x|sparc64|aarch64)
++      x86_64|ppc64*|s390x|sparc64|aarch64)
+         libsubdirs="lib64 lib lib64"
+         ;;
+     esac
+@@ -26051,7 +26051,7 @@ if ac_fn_c_try_compile "$LINENO"; then :
+ 	for ac_word in $CC $CFLAGS $CPPFLAGS $LDFLAGS; do
+ 	 if test -n "$ac_prev"; then
+ 	   case $ac_word in
+-	     i?86 | x86_64 | ppc | ppc64)
++	     i?86 | x86_64 | ppc | ppc64*)
+ 	       if test -z "$ac_arch" || test "$ac_arch" = "$ac_word"; then
+ 		 ac_arch=$ac_word
+ 	       else

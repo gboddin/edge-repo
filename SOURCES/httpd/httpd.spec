@@ -71,13 +71,10 @@ Patch100: httpd-2.4.18-CVE-2016-5387.patch
 License: ASL 2.0
 Group: System Environment/Daemons
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-BuildRequires: gcc-c++, autoconf, perl, perl-generators, pkgconfig, findutils, xmlto
+BuildRequires: autoconf, perl, perl-generators, pkgconfig, findutils, xmlto
 BuildRequires: zlib-devel, libselinux-devel, lua-devel
 BuildRequires: apr-devel >= 1.5.0, apr-util-devel >= 1.5.0, pcre-devel >= 5.0
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
-BuildRequires: systemd-devel
-%endif
-BuildRequires: libnghttp2-devel
+BuildRequires: systemd-devel, libnghttp2-devel
 Requires: /etc/mime.types, system-logos-httpd
 Obsoletes: httpd-suexec
 Provides: webserver
@@ -86,11 +83,9 @@ Provides: httpd-mmn = %{mmn}, httpd-mmn = %{mmnisa}
 Requires: httpd-tools = %{version}-%{release}
 Requires: httpd-filesystem = %{version}-%{release}
 Requires(pre): httpd-filesystem
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 Requires(preun): systemd-units
 Requires(postun): systemd-units
 Requires(post): systemd-units
-%endif
 Conflicts: apr < 1.5.0-1
 
 %description
@@ -295,14 +290,12 @@ rm -rf $RPM_BUILD_ROOT
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 # Install systemd service files
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 for s in httpd.service htcacheclean.service httpd.socket; do
   install -p -m 644 $RPM_SOURCE_DIR/${s} \
                     $RPM_BUILD_ROOT%{_unitdir}/${s}
 done
-%endif
 
 # install conf file/directory
 mkdir $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d \
@@ -313,10 +306,7 @@ install -m 644 $RPM_SOURCE_DIR/README.confmod \
     $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.modules.d/README
 for f in 00-base.conf 00-mpm.conf 00-lua.conf 01-cgi.conf 00-dav.conf \
          00-proxy.conf 00-ssl.conf 01-ldap.conf 00-proxyhtml.conf \
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
-         00-systemd.conf \
-%endif
-         01-ldap.conf 01-session.conf 00-optional.conf; do
+         01-ldap.conf 00-systemd.conf 01-session.conf 00-optional.conf; do
   install -m 644 -p $RPM_SOURCE_DIR/$f \
         $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.modules.d/$f
 done
@@ -324,10 +314,8 @@ done
 # install systemd override drop directory
 # Web application packages can drop snippets into this location if
 # they need ExecStart[pre|post].
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 mkdir $RPM_BUILD_ROOT%{_unitdir}/httpd.service.d
 mkdir $RPM_BUILD_ROOT%{_unitdir}/httpd.socket.d
-%endif
 
 install -m 644 -p $RPM_SOURCE_DIR/10-listen443.conf \
       $RPM_BUILD_ROOT%{_unitdir}/httpd.socket.d/10-listen443.conf
@@ -482,21 +470,14 @@ getent passwd apache >/dev/null || \
 exit 0
 
 %post
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 %systemd_post httpd.service htcacheclean.service httpd.socket
-%endif
 
 %preun
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 %systemd_preun httpd.service htcacheclean.service httpd.socket
-%endif
 
 %postun
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 %systemd_postun
-%endif
 
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 # Trigger for conversion from SysV, per guidelines at:
 # https://fedoraproject.org/wiki/Packaging:ScriptletSnippets#Systemd
 %triggerun -- httpd < 2.2.21-5
@@ -507,7 +488,6 @@ exit 0
 
 # Run these because the SysV package being removed won't do them
 /sbin/chkconfig --del httpd >/dev/null 2>&1 || :
-%endif
 
 %posttrans
 test -f /etc/sysconfig/httpd-disable-posttrans || \
