@@ -12,7 +12,7 @@
 
 Name:		php-pecl-redis
 Version:	2.2.8
-Release:	`%{?dist}%{!?nophptag:%(%{__php} -r 'echo ".".PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')}
+Release:	1%{?dist}%{!?nophptag:%(%{__php} -r 'echo ".".PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')}
 Summary:	PHP wrapper to redis
 
 Group:		Development/Tools
