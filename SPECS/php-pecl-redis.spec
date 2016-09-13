@@ -137,7 +137,7 @@ fi
 
 
 %files
-%{?_licensedir:%license NTS/LICENSE}
+%{?_licensedir:%license NTS/COPYING}
 %doc %{pecl_docdir}/%{pecl_name}
 %{pecl_xmldir}/%{name}.xml
 
