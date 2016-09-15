@@ -932,7 +932,7 @@ support for using the enchant library to PHP.
 %prep
 echo CIBLE = %{name}-%{version}-%{release} oci8=%{with oci8} libzip=%{with_libzip}
 
-%setup -q -n php-%{version}%{?rcver}
+%setup -q -n php-src-%{version}%{?rcver}
 
 %patch5 -p1 -b .includedir
 %patch6 -p1 -b .embed
