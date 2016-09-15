@@ -7,7 +7,7 @@ Packager: Edge Repo
 License: GPL 
 Requires: varnish-libs >= 4.1
 BuildRequires: autoconf, varnish-libs-devel >= 4.1
-BuildRequires: libtool, make, gcc-c++
+BuildRequires: python-docutils, libtool, make, gcc-c++
 BuildRoot:     %{_tmppath}/%{name}-%{version}-%{release}-root
 Source0:       https://github.com/varnish/varnish-modules/archive/varnish-modules-%{version}.tar.gz
 Patch0:        libtoolize-configure-fix.patch
