@@ -152,7 +152,7 @@ URL: http://www.php.net/
 # Need to download official tarball and strip non-free stuff
 # wget http://www.php.net/distributions/php-%%{version}%%{?rcver}.tar.xz
 # ./strip.sh %%{version}
-Source0: http://www.php.net/distributions/php-%{version}.tar.xz
+Source0: https://github.com/php/php-src/archive/php-%{version}.tar.gz 
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
