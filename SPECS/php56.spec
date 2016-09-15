@@ -16,7 +16,7 @@
 # Extension version
 %global fileinfover 1.0.5
 %global opcachever  7.0.6-dev
-%global oci8ver     2.0.11
+%global oci8ver     2.0.12
 
 # Adds -z now to the linker flags
 %global _hardened_build 1
