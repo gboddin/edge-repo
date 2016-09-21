@@ -17,6 +17,7 @@ Packager: Bade Iriabho
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: flex
+BuildRequires: net-tools
 BuildRequires: bison
 BuildRequires: gperf
 BuildRequires: gawk
