@@ -18,10 +18,13 @@ set -e
 [ ! -d `pwd`/${DISTRO}/SOURCES/${PACKAGE} ] && mkdir -p `pwd`/${DISTRO}/SOURCES/${PACKAGE}
 
 # Install sources :
+echo "Downloading sources for ${PACKAGE}..."
 ${CMD_PROOT} spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
 
 # Install build depedencies :
+echo "Install build depedencies for ${PACKAGE}..."
 ${CMD_PROOT} ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec 
 
 # Build the package :
+echo "Building ${PACKAGE} RPM..."
 ${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir /root/build/SOURCES/${PACKAGE}" --define "_topdir /root/build" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
