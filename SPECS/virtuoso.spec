@@ -89,7 +89,7 @@ mv %{buildroot}%{_bindir}/{inifile,isql-v,isql-vw} \
 ## unpackaged files
 rm -vf %{buildroot}%{_libdir}/*.{la,a}
 rm -vf %{buildroot}%{_libdir}/virtuoso/hosting/*.la
-rm -vf  %{buildroot}%{_libdir}/{hibernate,jdbc-?.?,jena,jena2}/*.jar
+rm -vf  %{buildroot}%{_libdir}/{hibernate,jdbc-?.?,jena,jena2,jena3}/*.jar
 rm -rvf %{buildroot}%{_libdir}/sesame
 
 %clean
