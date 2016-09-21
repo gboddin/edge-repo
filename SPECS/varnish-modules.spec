@@ -46,8 +46,10 @@ find %{buildroot}/%{_libdir}/ -name '*.la' -exec rm -f {} ';'
 
 %files 
 %doc docs/* 
+%{_mandir}/man3/vmod_*
 %{_libdir}/varnish/vmods/*.so
 %{_docdir}/*
+
 
 %clean
 
