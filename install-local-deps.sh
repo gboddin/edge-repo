@@ -3,6 +3,8 @@
 # Quit on fail :
 set -e
 
+echo ${PACKAGE} $2
+
 : ${DISTRO:="$1"} 
 [ -z ${DISTRO} ] && echo "Please speecify a distro" && exit 1
 : ${PACKAGE:="$2"} 
