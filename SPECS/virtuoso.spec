@@ -104,10 +104,10 @@ rm -rf %{buildroot}
 %{_bindir}/virtuoso-t
 %dir %{_datadir}/virtuoso/
 %dir %{_datadir}/virtuoso/vad/
-%dir %{_libdir}/virtuoso/
+#%dir %{_libdir}/virtuoso/
 %dir %{_libexecdir}/virtuoso/
 %dir %{_var}/lib/virtuoso
-%{_libdir}/virtuoso/hosting/
+#%{_libdir}/virtuoso/hosting/
 %{_libexecdir}/virtuoso/*
 %{_datadir}/virtuoso/vad/*.vad
 %{_var}/lib/virtuoso/db/
