@@ -24,7 +24,7 @@ Collection of Varnish Cache 5.0 modules (VMODs) by Varnish Software
  - vmod_xkey
 
 %prep
-%setup -q -n varnish-modules-varnish-modules-%{commit}
+%setup -q -n varnish-modules-%{commit}
 libtoolize -cfi 
 [ ! -d m4 ] && mkdir m4
 aclocal -I m4 -I $(pkg-config --variable=datarootdir varnishapi 2>/dev/null)/aclocal
