@@ -12,7 +12,7 @@ Tired sysadmins not hoping for their **** datacenter to upgrade their OS anytime
 
 ### Why
 
-Because no repo is currently building publicly on travis-ci for 4 major linux distribution.
+Because no repo is currently building publicly on travis-ci for EL distributions.
 
 #### Redhat/Centos/SL/Oracle Linux 6 :
 
@@ -21,14 +21,6 @@ Because no repo is currently building publicly on travis-ci for 4 major linux di
 #### Redhat/Centos/SL/Oracle Linux 7 :
 
 ```rpm -ivh http://repo.siwhine.net/el/7/edge-repo-latest.rpm```
-
-#### Fedora 23 :
-
-```rpm -ivh http://repo.siwhine.net/fedora/23/edge-repo-latest.rpm```
-
-#### Fedora 24 :
-
-```rpm -ivh http://repo.siwhine.net/fedora/24/edge-repo-latest.rpm```
 
 ## GPG
 
