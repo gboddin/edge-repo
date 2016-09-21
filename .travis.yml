@@ -1,3 +1,5 @@
+sudo: required
+dist: trusty
 language: generic
 env:
   global:
@@ -7,8 +9,6 @@ env:
   matrix:
     - EPEL=6 DISTRO=centos-6 
     - EPEL=7 DISTRO=centos-7
-    - DISTRO=fedora-23
-    - DISTRO=fedora-24
 before_install:
   - source common.env
   - if [ -f SOURCES/${PACKAGE}.env ] ; then source SOURCES/${PACKAGE}.env ; fi

@@ -16,7 +16,7 @@
 # Extension version
 %global fileinfover 1.0.5
 %global opcachever  7.0.6-dev
-%global oci8ver     2.0.11
+%global oci8ver     2.0.12
 
 # Adds -z now to the linker flags
 %global _hardened_build 1
@@ -140,7 +140,7 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
-Version: 5.6.25 
+Version: 5.6.26 
 Release: 3%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
@@ -152,7 +152,7 @@ URL: http://www.php.net/
 # Need to download official tarball and strip non-free stuff
 # wget http://www.php.net/distributions/php-%%{version}%%{?rcver}.tar.xz
 # ./strip.sh %%{version}
-Source0: http://www.php.net/distributions/php-%{version}.tar.xz
+Source0: https://github.com/php/php-src/archive/php-%{version}.tar.gz 
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
@@ -932,7 +932,7 @@ support for using the enchant library to PHP.
 %prep
 echo CIBLE = %{name}-%{version}-%{release} oci8=%{with oci8} libzip=%{with_libzip}
 
-%setup -q -n php-%{version}%{?rcver}
+%setup -q -n php-src-php-%{version}%{?rcver}
 
 %patch5 -p1 -b .includedir
 %patch6 -p1 -b .embed
@@ -1084,18 +1084,6 @@ fi
 
 
 %build
-%if 0%{?fedora} >= 11 || 0%{?rhel} >= 6
-# aclocal workaround - to be improved
-cat `aclocal --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >>aclocal.m4
-%endif
-
-# Force use of system libtool:
-libtoolize --force --copy
-%if 0%{?fedora} >= 11 || 0%{?rhel} >= 6
-cat `aclocal --print-ac-dir`/{libtool,ltoptions,ltsugar,ltversion,lt~obsolete}.m4 >build/libtool.m4
-%else
-cat `aclocal --print-ac-dir`/libtool.m4 > build/libtool.m4
-%endif
 
 # Regenerate configure scripts (patches change config.m4's)
 touch configure.in
