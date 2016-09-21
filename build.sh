@@ -15,7 +15,7 @@ set -e
 . common.env
 
 # If SOURCES dir is not there, create it
-[ ! -d `pwd`/${DISTRO}/SOURCES/${PACKAGE} ] && mkdir -p `pwd`/${DISTRO}/SOURCES/${PACKAGE}
+[ ! -d ${DISTRO}/SOURCES/${PACKAGE} ] && mkdir -p ${DISTRO}/SOURCES/${PACKAGE}
 
 # Install sources :
 echo "Downloading sources for ${PACKAGE}..."
