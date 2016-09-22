@@ -26,6 +26,6 @@ echo "Installing local depedencies for ${PACKAGE}..."
 
   echo $RPM|grep -q "^oracle-instantclient12.1-devel" && ( \
     ${CMD_PROOT} ln -s /usr/lib/oracle/12.1/client64/lib/libnnz12.so /usr/lib/oracle/12.1/client64/lib/libnnz.so && \
-    ln -s /usr/lib/oracle  /usr/lib64/oracle
+    ${CMD_PROOT} ln -s /usr/lib/oracle  /usr/lib64/oracle
    ) || /bin/true
 done
