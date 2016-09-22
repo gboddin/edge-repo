@@ -27,4 +27,4 @@ ${CMD_PROOT} ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec
 
 # Build the package :
 echo "Building ${PACKAGE} RPM..."
-${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir /root/build/SOURCES/${PACKAGE}" --define "_topdir /root/build" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
+${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir SOURCES/${PACKAGE}" --define "_topdir /root/build" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
