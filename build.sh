@@ -15,10 +15,12 @@ set -e
 . common.env
 
 # If SOURCES dir is not there, create it
-[ ! -d ${DISTRO}/SOURCES/${PACKAGE} ] && mkdir -p ${DISTRO}/SOURCES/${PACKAGE}
+[ ! -d SOURCES/${PACKAGE} ] && mkdir -p SOURCES/${PACKAGE}
 
 # Install sources :
 echo "Downloading sources for ${PACKAGE}..."
+${CMD_PROOT} ls -lha
+${CMD_PROOT} ls SOURCES -lha
 ${CMD_PROOT} spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
 
 # Install build depedencies :
@@ -27,4 +29,4 @@ ${CMD_PROOT} ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec
 
 # Build the package :
 echo "Building ${PACKAGE} RPM..."
-${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir /root/build/SOURCES/${PACKAGE}" --define "_topdir /root/build" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
+${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir /root/build/SOURCES/${PACKAGE}" --define "_topdir /root/build" -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
