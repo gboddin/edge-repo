@@ -54,8 +54,8 @@
 %endif
 
 Name:           git
-Version:        2.9.3
-Release:        2%{?dist}
+Version:        2.10.0
+Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        GPLv2
 Group:          Development/Tools
