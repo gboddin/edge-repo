@@ -10,7 +10,6 @@ set -e
 : ${PACKAGE:="$2"} 
 [ -z ${PACKAGE} ] && echo "Please speecify a package" && exit 1
 
-
 # Common env
 . common.env
 
@@ -19,8 +18,6 @@ set -e
 
 # Install sources :
 echo "Downloading sources for ${PACKAGE}..."
-${CMD_PROOT} ls -lha
-${CMD_PROOT} ls SOURCES -lha
 ${CMD_PROOT} spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
 
 # Install build depedencies :
