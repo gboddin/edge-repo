@@ -19,6 +19,8 @@ set -e
 
 # Install sources :
 echo "Downloading sources for ${PACKAGE}..."
+${CMD_PROOT} ls -lha
+${CMD_PROOT} ls root/SOURCES -lha
 ${CMD_PROOT} spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
 
 # Install build depedencies :
@@ -27,4 +29,4 @@ ${CMD_PROOT} ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec
 
 # Build the package :
 echo "Building ${PACKAGE} RPM..."
-${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir SOURCES/${PACKAGE}" --define "_topdir /root/build" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
+${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir /root/build/SOURCES/${PACKAGE}" --define "_topdir /root/build" -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
