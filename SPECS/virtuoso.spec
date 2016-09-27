@@ -78,7 +78,7 @@ rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
 mkdir -p %{buildroot}/etc/init.d/
-cp %{buildroot}/../../SOURCES/virtuoso %{buildroot}/etc/init.d/
+cp %{buildroot}/../../SOURCES/virtuoso/virtuoso %{buildroot}/etc/init.d/
 chmod a+x %{buildroot}/etc/init.d/virtuoso
 
 mkdir -p %{buildroot}%{_sysconfdir}/virtuoso
