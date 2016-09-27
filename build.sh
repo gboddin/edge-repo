@@ -1,18 +1,32 @@
 #!/bin/bash
-if [ -z $PACKAGE ] && [ -z $1 ] ; then
-  echo "Either need to specify package as argument or set the $PACKAGE environment variable"
-  exit 1
-fi
-[ -z $PACKAGE ] && PACKAGE=$1
+
+# Stop on error :
+set -e
+
+# Parse arguments :
+
+: ${DISTRO:="$1"} 
+[ -z ${DISTRO} ] && echo "Please speecify a distro" && exit 1
+: ${PACKAGE:="$2"} 
+[ -z ${PACKAGE} ] && echo "Please speecify a package" && exit 1
+
+
+# Common env
+. common.env
 
 # If SOURCES dir is not there, create it
-[ ! -d `pwd`/SOURCES/${PACKAGE} ] && mkdir -p `pwd`/SOURCES/${PACKAGE}
+[ ! -d SOURCES/${PACKAGE} ] && mkdir -p SOURCES/${PACKAGE}
 
 # Install sources :
-spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
+echo "Downloading sources for ${PACKAGE}..."
+${CMD_PROOT} ls -lha
+${CMD_PROOT} ls SOURCES -lha
+${CMD_PROOT} spectool -g -C SOURCES/${PACKAGE} SPECS/${PACKAGE}.spec
 
 # Install build depedencies :
-${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec 
+echo "Install build depedencies for ${PACKAGE}..."
+${CMD_PROOT} ${CMD_BUILD_DEP} -y --nogpgcheck SPECS/${PACKAGE}.spec 
 
 # Build the package :
-rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir `pwd`/SOURCES/${PACKAGE}" --define "_topdir `pwd`" ${CONFIG_FLAGS} -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
+echo "Building ${PACKAGE} RPM..."
+${CMD_PROOT} rpmbuild  ${CONFIG_FLAGS} --define "_sourcedir /root/build/SOURCES/${PACKAGE}" --define "_topdir /root/build" -ba SPECS/${PACKAGE}.spec > ${LOGFILE}
