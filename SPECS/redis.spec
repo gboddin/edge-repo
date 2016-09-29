@@ -27,8 +27,8 @@
 %global gh_project   redis
 
 Name:             redis
-Version:          3.2.3 
-Release:          3%{?dist} 
+Version:          3.2.1
+Release:          1%{?dist} 
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases
