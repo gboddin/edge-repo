@@ -17,7 +17,7 @@
 %endif
 
 # Tests fail in mock, not in local build.
-%global with_tests   %{?_with_tests:1}%{!?_with_tests:0}
+%global with_tests   1 
 
 # Pre-version are only available in github
 #global prever       rc3
