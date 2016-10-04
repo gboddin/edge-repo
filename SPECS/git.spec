@@ -54,7 +54,7 @@
 %endif
 
 Name:           git
-Version:        2.10.0
+Version:        2.10.1
 Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        GPLv2
