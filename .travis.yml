@@ -15,6 +15,7 @@ env:
 before_install:
   - export PACKAGE=${TRAVIS_BRANCH}
   - if [ "${PACKAGE}" == "master" ]; then export PACKAGE=${DISTRO}-repo ; fi
+  - if [ ! -d SOURCES/${PACKAGE} ] ; then mkdir SOURCES/${PACKAGE} ; fi
   - if [ -f SOURCES/${PACKAGE}.env ] ; then source SOURCES/${PACKAGE}.env ; fi
   - docker pull centos:latest
   - docker create --privileged=true --name centos_build -v $(pwd):/mock/build centos:latest bash -c 'while /bin/true ; do sleep 10 ; uptime ; done'
