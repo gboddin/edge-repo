@@ -17,7 +17,7 @@
 %endif
 
 # Tests fail in mock, not in local build.
-%global with_tests   %{?_with_tests:1}%{!?_with_tests:0}
+%global with_tests   1 
 
 # Pre-version are only available in github
 #global prever       rc3
@@ -27,8 +27,8 @@
 %global gh_project   redis
 
 Name:             redis
-Version:          3.2.3 
-Release:          3%{?dist} 
+Version:          3.2.1
+Release:          1%{?dist} 
 Summary:          A persistent key-value database
 
 Group:            Applications/Databases

@@ -12,7 +12,7 @@ set -e
 # Prepare proot environment
 
 if [ ! -d ${DISTRO} ] ; then 
-  wget -c "https://github.com/gboddin/upsalter/releases/download/0.4.1/${DISTRO}-rootfs-buildenv.tar.bz2" 
+  wget -c "https://github.com/gboddin/upsalter/releases/download/0.6.0-alpha1/${DISTRO}-rootfs-buildenv.tar.bz2" 
   mkdir -p ${DISTRO}
   tar -C ${DISTRO} -xjf ${DISTRO}-rootfs-buildenv.tar.bz2 || exit 1
 fi

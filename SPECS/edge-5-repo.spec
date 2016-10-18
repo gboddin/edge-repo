@@ -1,6 +1,6 @@
 Name:           edge-release
-Version:        7 
-Release:        %{rpmrel}%{?dist} 
+Version:        5
+Release:        1%{?dist} 
 Summary:        Edge Packages for Enterprise Linux repository configuration
 
 Group:          System Environment/Base
@@ -11,7 +11,7 @@ License:        GPLv2
 # within this srpm.
 URL:            https://github.com/gboddin/el6-lamp-stack 
 Source0:        https://repo.siwhine.net/EDGE-REPO-KEY.pub
-Source1:        https://repo.siwhine.net/el/el7.repo
+Source1:        https://repo.siwhine.net/el/el5.repo
 Source2:        https://www.gnu.org/licenses/gpl.txt
 
 BuildArch:     noarch
@@ -55,9 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 /etc/pki/rpm-gpg/*
 
 %changelog
-* Mon Aug 22 2016 Gregory Boddin <gregory@siwhine.net> - 7-1
+* Mon Aug 22 2016 Gregory Boddin <gregory@siwhine.net> - 5-1
 - Created package for easy install on RHELs
  
-* Mon Dec 16 2013 Dennis Gilmore <dennis@ausil.us> - 7-0.1
-- initial epel 7 build. 
+* Mon Dec 16 2013 Dennis Gilmore <dennis@ausil.us> - 6-0.1
+- initial epel 6 build. 
 
