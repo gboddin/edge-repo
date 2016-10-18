@@ -19,7 +19,7 @@ before_install:
   - if [ -f SOURCES/${PACKAGE}.env ] ; then source SOURCES/${PACKAGE}.env ; fi
   - docker pull centos:latest
   - docker create --privileged=true --name centos_build -v $(pwd):/mock/build centos:latest bash -c 'while /bin/true ; do sleep 10 ; uptime ; done'
-  - docker start centos_build
+  - docker start -a centos_build &
   - docker exec centos_build yum install -y mock spectool 
   - docker exec centos_build useradd mock -g mock -u ${UID}
   - if [ ! -z $encrypted_ddd175810ce0_key ]; then openssl aes-256-cbc -K $encrypted_ddd175810ce0_key -iv $encrypted_ddd175810ce0_iv -in deploy.key.enc -out deploy.key -d; fi

@@ -31,9 +31,11 @@ BuildRequires: libtool
 BuildRequires: ncurses-devel
 BuildRequires: pcre-devel
 BuildRequires: pkgconfig
-BuildRequires: python-docutils >= 0.6
-BuildRequires: python-sphinx
+BuildRequires: python-docutils >= 0.5
 BuildRequires: graphviz 
+%if 0%{?rhel} >= 6
+BuildRequires: python-sphinx
+%endif
 Requires: jemalloc
 Requires: libedit
 Requires: logrotate
