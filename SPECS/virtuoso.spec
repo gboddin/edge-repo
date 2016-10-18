@@ -77,14 +77,20 @@ touch %{_builddir}/%{name}-%{version}/docsrc/html_virt/test.html
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
+mkdir -p %{buildroot}/etc/init.d/
+cp %{buildroot}/../../SOURCES/virtuoso/virtuoso %{buildroot}/etc/init.d/
+chmod a+x %{buildroot}/etc/init.d/virtuoso
+
 mkdir -p %{buildroot}%{_sysconfdir}/virtuoso
 mv %{buildroot}%{_var}/lib/virtuoso/db/virtuoso.ini %{buildroot}%{_sysconfdir}/virtuoso/
 ln -s ../../../..%{_sysconfdir}/virtuoso/virtuoso.ini %{buildroot}%{_var}/lib/virtuoso/db/virtuoso.ini
+
 
 # generic'ish binaries, hide them away safely
 mkdir -p %{buildroot}%{_libexecdir}/virtuoso/
 mv %{buildroot}%{_bindir}/{inifile,isql-v,isql-vw} \
    %{buildroot}%{_libexecdir}/virtuoso/
+ln -s ../../../../%{_libexecdir}/virtuoso/isql-v %{buildroot}%{_bindir}/isql
 
 ## unpackaged files
 rm -vf %{buildroot}%{_libdir}/*.{la,a}
@@ -113,6 +119,8 @@ rm -rf %{buildroot}
 %{_var}/lib/virtuoso/db/
 %{_var}/lib/virtuoso/vsp/
 %{_bindir}/virt_mail
+/etc/init.d/virtuoso
+%{_bindir}/isql
 
 %files drivers
 %defattr(-,root,root,-)
