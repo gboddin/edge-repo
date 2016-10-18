@@ -28,7 +28,7 @@ before_install:
 script:
   - docker exec centos_build spectool -g -C /mock/build/SOURCES/${PACKAGE} /mock/build/SPECS/${PACKAGE}.spec
   - docker exec -u ${UID} centos_build /usr/bin/mock --configdir=/mock/build/conf -r ${DISTRO}-x86_64 --spec=/mock/build/SPECS/${PACKAGE}.spec --sources=/mock/build/SOURCES/${PACKAGE} --resultdir=/mock/build/SRPMS --buildsrpm
-  - travis_wait 50 docker exec -u ${UID} centos_build /usr/bin/mock --clean --configdir=/mock/build/conf -r ${DISTRO}-x86_64  -D "dist .${DIST}" --resultdir=/mock/build/RPMS --rebuild /mock/build/SRPMS/$(ls -1 SRPMS/|grep src\.rpm$|head -1)
+  - travis_wait 50 "docker exec -u ${UID} centos_build /usr/bin/mock --clean --configdir=/mock/build/conf -r ${DISTRO}-x86_64  -D \"dist .${DIST}\" --resultdir=/mock/build/RPMS --rebuild /mock/build/SRPMS/$(ls -1 SRPMS/|grep src\.rpm$|head -1)"
 after_script:
   - docker stop centos_build
   - ls -lha SRPMS/ RPMS/*
