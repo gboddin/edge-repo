@@ -1,6 +1,6 @@
 Name:           edge-release
 Version:        7 
-Release:        %{rpmrel}%{?dist} 
+Release:        1%{?dist} 
 Summary:        Edge Packages for Enterprise Linux repository configuration
 
 Group:          System Environment/Base
