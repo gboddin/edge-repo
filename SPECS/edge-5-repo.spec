@@ -12,7 +12,6 @@ License:        GPLv2
 URL:            https://github.com/gboddin/el6-lamp-stack 
 Source0:        https://repo.siwhine.net/EDGE-REPO-KEY.pub
 Source1:        https://repo.siwhine.net/el/el5.repo
-Source2:        https://www.gnu.org/licenses/gpl.txt
 
 BuildArch:     noarch
 Requires:      redhat-release >=  l
@@ -45,7 +44,6 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc gpl.txt 
 %config(noreplace) %{_sysconfdir}/yum.repos.d/edge.repo
 %{_sysconfdir}/pki/rpm-gpg/EDGE-REPO-KEY
 
