@@ -25,6 +25,7 @@ Tools and utilities for developing with icu.
 
 %package -n lib%{name}
 Summary: International Components for Unicode - libraries
+Group:     System Environment/Libraries
 
 %description -n lib%{name}
 The International Components for Unicode (ICU) libraries provide
@@ -40,6 +41,7 @@ customize the supplied services.
 
 %package  -n lib%{name}-devel
 Summary:  Development files for International Components for Unicode
+Group:     System Environment/Libraries
 Requires: lib%{name}%{?_isa} = %{version}-%{release}
 Requires: pkgconfig
 
@@ -48,6 +50,7 @@ Includes and definitions for developing with icu.
 
 %package -n lib%{name}-doc
 Summary: Documentation for International Components for Unicode
+Group:     System Environment/Libraries
 BuildArch: noarch
 
 %description -n lib%{name}-doc
