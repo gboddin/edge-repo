@@ -46,7 +46,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc gpl.txt 
-%config(noreplace) %{_sysconfdir}/etc/yum.repos.d/*
+%config(noreplace) %{_sysconfdir}/yum.repos.d/*
 %{_sysconfdir}/pki/rpm-gpg/*
 
 %changelog

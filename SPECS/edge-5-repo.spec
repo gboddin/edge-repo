@@ -46,8 +46,8 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc gpl.txt 
-%config(noreplace) %{_sysconfdir}/etc/yum.repos.d/*
-%{_sysconfdir}/pki/rpm-gpg/*
+%config(noreplace) %{_sysconfdir}/yum.repos.d/edge.repo
+%{_sysconfdir}/pki/rpm-gpg/EDGE-REPO-KEY
 
 %changelog
 * Wed Oct 19 2016 Gregory Boddin <gregory@siwhine.net> - 5-2
