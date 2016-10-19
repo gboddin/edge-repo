@@ -50,6 +50,7 @@ All hosted software remain in their original license. This repository itself and
 * All of CentOS developers [CentOS website](https://www.centos.org/)
 * The Fedora developers for taking care of backporting in their spec files [Fedora website](https://getfedora.org/)
 * Remirepo for the php spec file [Remirepo blog](https://blog.remirepo.net/)
+* Docker [Docker](https://www.docker.com/)
 * All other open-source projects involved
 * Oracle, for screwing up the 1 closed-source RPM we use from them [Oracle site](http://eelslap.com/)
 
