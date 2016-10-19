@@ -4,7 +4,7 @@ Name:      icu
 Version:   57.1
 Release:   1%{?dist}
 Summary:   International Components for Unicode
-
+Group:     System Environment/Libraries
 License:   MIT and UCD and Public Domain
 URL:       http://www.icu-project.org/
 Source0:   http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz
