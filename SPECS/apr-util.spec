@@ -11,7 +11,12 @@ URL: http://apr.apache.org/
 Source0: http://www.apache.org/dist/apr/apr-util-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: autoconf, libtool, doxygen, apr-devel >= 1.4.0
-BuildRequires: expat-devel, libuuid-devel
+BuildRequires: expat-devel
+%if 0%{?rhel} >= 6
+BuildRequires: libuuid-devel
+%else
+BuildRequires: uuid-devel
+%endif
 %if 0%{?fedora} >= 15 || 0%{?rhel} >= 7 
 BuildRequires : libdb-devel
 %else
