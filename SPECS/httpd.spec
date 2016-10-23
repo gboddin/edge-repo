@@ -73,7 +73,7 @@ Group: System Environment/Daemons
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: gcc-c++, autoconf, perl, perl-generators, pkgconfig, findutils, xmlto
 BuildRequires: zlib-devel, libselinux-devel, lua-devel
-BuildRequires: apr-devel >= 1.5.0, apr-util-devel >= 1.5.0, pcre-devel >= 5.0
+BuildRequires: apr-devel >= 1.5.0, apr-util-devel >= 1.5.0, pcre-devel >= 5.0, openldap-devel
 %if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 BuildRequires: systemd-devel
 %endif
@@ -101,7 +101,7 @@ web server.
 Group: Development/Libraries
 Summary: Development interfaces for the Apache HTTP server
 Obsoletes: secureweb-devel, apache-devel, stronghold-apache-devel
-Requires: apr-devel, apr-util-devel, pkgconfig
+Requires: apr-devel, apr-util-devel, pkgconfig, openldap-devel
 Requires: httpd = %{version}-%{release}
 
 %description devel
@@ -177,7 +177,7 @@ transform and modify HTML and XML content.
 Group: System Environment/Daemons
 Summary: LDAP authentication modules for the Apache HTTP Server
 Requires: httpd = 0:%{version}-%{release}, httpd-mmn = %{mmnisa}
-Requires: apr-util-ldap
+Requires: openldap
 
 %description -n mod_ldap
 The mod_ldap and mod_authnz_ldap modules add support for LDAP
