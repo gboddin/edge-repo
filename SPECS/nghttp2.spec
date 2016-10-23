@@ -6,13 +6,15 @@ License: MIT
 Group: Applications/Internet
 URL: https://nghttp2.org/
 Source0: https://github.com/tatsuhiro-t/nghttp2/releases/download/v%{version}/nghttp2-%{version}.tar.xz
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
-# prevent nghttpx from crashing on armv7hl (#1358845)
-
+%if 0%{?rhel} >= 6
 BuildRequires: CUnit-devel
-BuildRequires: libev-devel
+%endif
+BuildRequires: libev-devel, automake
 BuildRequires: openssl-devel
 BuildRequires: zlib-devel
+BuildRequires: libxml2-devel
 
 Requires: libnghttp2%{?_isa} = %{version}-%{release}
 
@@ -43,9 +45,9 @@ for building applications with libnghttp2.
 %prep
 %setup -q
 
-
 %build
 %configure                                  \
+    --enable-app
     --disable-python-bindings               \
     --disable-static                        \
     --without-libxml2                       \
@@ -56,28 +58,25 @@ sed -i libtool                              \
     -e 's/^runpath_var=.*/runpath_var=/'    \
     -e 's/^hardcode_libdir_flag_spec=".*"$/hardcode_libdir_flag_spec=""/'
 
-make %{?_smp_mflags} V=1
+make %{?_smp_mflags} 
+find .
+%check
+# test the just built library instead of the system one, without using rpath
+export "LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}:$LD_LIBRARY_PATH"
 
+%if 0%{?rhel} >= 6
+make %{?_smp_mflags} check
+%endif
 
 %install
-%make_install
+make install DESTDIR=$RPM_BUILD_ROOT
 
 # not needed on Fedora/RHEL
 rm -f "$RPM_BUILD_ROOT%{_libdir}/libnghttp2.la"
 
-# will be installed via %%doc
-rm -f "$RPM_BUILD_ROOT%{_datadir}/doc/nghttp2/README.rst"
-
 %post -n libnghttp2 -p /sbin/ldconfig
 
 %postun -n libnghttp2 -p /sbin/ldconfig
-
-
-%check
-# test the just built library instead of the system one, without using rpath
-export "LD_LIBRARY_PATH=$RPM_BUILD_ROOT%{_libdir}:$LD_LIBRARY_PATH"
-make %{?_smp_mflags} check
-
 
 %files
 %{_bindir}/h2load
@@ -91,16 +90,13 @@ make %{?_smp_mflags} check
 %{_mandir}/man1/nghttpx.1*
 
 %files -n libnghttp2
+%doc COPYING README.rst
 %{_libdir}/libnghttp2.so.*
-%{!?_licensedir:%global license %%doc}
-%license COPYING
 
 %files -n libnghttp2-devel
 %{_includedir}/nghttp2
 %{_libdir}/pkgconfig/libnghttp2.pc
 %{_libdir}/libnghttp2.so
-%doc README.rst
-
 
 %changelog
 * Mon Sep 26 2016 Kamil Dudka <kdudka@redhat.com> 1.15.0-1
