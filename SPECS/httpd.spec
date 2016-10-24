@@ -82,7 +82,9 @@ BuildRequires: apr-devel >= 1.5.0, apr-util-devel >= 1.5.0, pcre-devel >= 5.0
 %if %{with_systemd}
 BuildRequires: systemd-devel
 %endif
+%if 0%{?rhel} >= 6
 BuildRequires: libnghttp2-devel
+%endif
 Requires: /etc/mime.types, system-logos-httpd
 Obsoletes: httpd-suexec
 Provides: webserver
