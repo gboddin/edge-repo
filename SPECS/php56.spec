@@ -130,6 +130,7 @@ BuildRequires: zlib-devel, smtpdaemon, libedit-devel
 BuildRequires: pcre-devel >= 6.6
 BuildRequires: bzip2, perl, libtool >= 1.4.3, gcc-c++
 BuildRequires: libtool-ltdl-devel
+BuildRequires: bison, re2c
 %if %{with_libzip}
 BuildRequires: libzip-devel >= 0.11
 %endif
