@@ -48,7 +48,12 @@
 
 %global with_dtrace 1
 
+# build with system libgd
+%if 0%{?fedora} < 20
+%global  with_libgd 0
+%else
 %global  with_libgd 1
+%endif
 
 %global with_zip     0
 %global with_libzip  0
@@ -59,10 +64,17 @@
 %global db_devel  libdb-devel
 %endif
 
+#global rcver  RC1
+%global rpmrel 1
+
 Summary: PHP scripting language for creating dynamic web sites
-Name: php56
+Name: php
 Version: 5.6.28
-Release: 1%{?dist}
+%if 0%{?rcver:1}
+Release: 0.%{rpmrel}.%{rcver}%{?dist}
+%else
+Release: %{rpmrel}%{?dist}
+%endif
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -144,7 +156,6 @@ Provides: php-zts%{?_isa} = %{version}-%{release}
 
 Requires: httpd-mmn = %{_httpd_mmn}
 Provides: mod_php = %{version}-%{release}
-Provides: php
 Requires: php-common%{?_isa} = %{version}-%{release}
 # For backwards-compatibility, require php-cli for the time being:
 Requires: php-cli%{?_isa} = %{version}-%{release}
