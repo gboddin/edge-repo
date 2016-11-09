@@ -983,7 +983,7 @@ without_shared="--without-gd \
 
 # Build Apache module, and the CLI SAPI, /usr/bin/php
 pushd build-apache
-build --with-apxs2=%{_httpd_apxs} \
+build --with-apxs2=/usr/bin/apxs \
       --libdir=%{_libdir}/php \
       --without-mysql \
       --disable-pdo \
@@ -1097,7 +1097,7 @@ popd
 
 # Build a special thread-safe Apache SAPI
 pushd build-zts
-build --with-apxs2=%{_httpd_apxs} \
+build --with-apxs2=/usr/bin/apxs \
       --includedir=%{_includedir}/php-zts \
       --libdir=%{_libdir}/php-zts \
       --enable-maintainer-zts \
