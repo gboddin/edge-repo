@@ -43,6 +43,10 @@
 %global isasuffix %nil
 %endif
 
+global _httpd_modconfdir %{_sysconfdir}/httpd/conf.modules.d
+global _httpd_confdir    %{_sysconfdir}/httpd/conf.d
+global _httpd_moddir     %{_libdir}/httpd/modules
+
 # needed at srpm build time, when httpd-devel not yet installed
 %{!?_httpd_mmn:        %{expand: %%global _httpd_mmn        %%(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}}
 
@@ -119,7 +123,7 @@ Patch300: php-5.6.3-datetests.patch
 
 
 BuildRequires: bzip2-devel, curl-devel >= 7.9
-BuildRequires: httpd-devel >= 2.0.46-1, pam-devel
+BuildRequires: httpd-devel >= 2.4.10, pam-devel
 # to ensure we are using httpd with filesystem feature (see #1081453)
 BuildRequires: httpd-filesystem
 # to ensure we are using nginx with filesystem feature (see #1142298)
@@ -140,6 +144,7 @@ BuildRequires: systemtap-sdt-devel
 
 %if %{with_zts}
 Obsoletes: php-zts < 5.3.7
+Conflicts: php70-zts php71-zts
 Provides: php-zts = %{version}-%{release}
 Provides: php-zts%{?_isa} = %{version}-%{release}
 %endif
@@ -147,6 +152,7 @@ Provides: php-zts%{?_isa} = %{version}-%{release}
 Requires: httpd-mmn = %{_httpd_mmn}
 Provides: mod_php = %{version}-%{release}
 Provides: php
+Conflicts: php70, php71
 Requires: php-common%{?_isa} = %{version}-%{release}
 # For backwards-compatibility, require php-cli for the time being:
 Requires: php-cli%{?_isa} = %{version}-%{release}
