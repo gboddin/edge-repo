@@ -1214,10 +1214,10 @@ install -m 644 %{SOURCE6} $RPM_BUILD_ROOT%{_unitdir}/
 %else
 # Service
 install -m 755 -d $RPM_BUILD_ROOT%{_initrddir}
-install -m 755 %{SOURCE6} $RPM_BUILD_ROOT%{_initrddir}/php-fpm
+install -m 755 %{SOURCE15} $RPM_BUILD_ROOT%{_initrddir}/php-fpm
 # Environment file
 install -m 755 -d $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
-install -m 644 %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/php-fpm
+install -m 644 %{SOURCE16} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/php-fpm
 %endif
 
 # LogRotate
