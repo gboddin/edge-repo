@@ -841,9 +841,6 @@ PEAR_INSTALLDIR=%{_datadir}/pear; export PEAR_INSTALLDIR
 
 # Shell function to configure and build a PHP tree.
 build() {
-# Old/recent bison version seems to produce a broken parser;
-# upstream uses GNU Bison 2.3. Workaround:
-mkdir Zend && cp ../Zend/zend_{language,ini}_{parser,scanner}.[ch] Zend
 
 # Always static:
 # date, ereg, filter, libxml, reflection, spl: not supported
