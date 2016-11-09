@@ -4,6 +4,11 @@
 %define mmn 20120211
 %define mmnisa %{mmn}%{__isa_name}%{__isa_bits}
 %define vstring %(source /etc/os-release; echo ${REDHAT_SUPPORT_PRODUCT})
+%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%define with_systemd 1
+%else
+%define with_systemd 0
+%endif
 
 Summary: Apache HTTP Server
 Name: httpd
@@ -72,12 +77,14 @@ License: ASL 2.0
 Group: System Environment/Daemons
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildRequires: gcc-c++, autoconf, perl, perl-generators, pkgconfig, findutils, xmlto
-BuildRequires: zlib-devel, libselinux-devel, lua-devel
+BuildRequires: zlib-devel, libselinux-devel, lua-devel, openldap-devel
 BuildRequires: apr-devel >= 1.5.0, apr-util-devel >= 1.5.0, pcre-devel >= 5.0
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
 BuildRequires: systemd-devel
 %endif
+%if 0%{?rhel} >= 6
 BuildRequires: libnghttp2-devel
+%endif
 Requires: /etc/mime.types, system-logos-httpd
 Obsoletes: httpd-suexec
 Provides: webserver
@@ -86,7 +93,7 @@ Provides: httpd-mmn = %{mmn}, httpd-mmn = %{mmnisa}
 Requires: httpd-tools = %{version}-%{release}
 Requires: httpd-filesystem = %{version}-%{release}
 Requires(pre): httpd-filesystem
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
 Requires(preun): systemd-units
 Requires(postun): systemd-units
 Requires(post): systemd-units
@@ -177,7 +184,7 @@ transform and modify HTML and XML content.
 Group: System Environment/Daemons
 Summary: LDAP authentication modules for the Apache HTTP Server
 Requires: httpd = 0:%{version}-%{release}, httpd-mmn = %{mmnisa}
-Requires: apr-util-ldap
+Requires: openldap
 
 %description -n mod_ldap
 The mod_ldap and mod_authnz_ldap modules add support for LDAP
@@ -295,7 +302,7 @@ rm -rf $RPM_BUILD_ROOT
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
 # Install systemd service files
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 for s in httpd.service htcacheclean.service httpd.socket; do
@@ -313,7 +320,7 @@ install -m 644 $RPM_SOURCE_DIR/README.confmod \
     $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.modules.d/README
 for f in 00-base.conf 00-mpm.conf 00-lua.conf 01-cgi.conf 00-dav.conf \
          00-proxy.conf 00-ssl.conf 01-ldap.conf 00-proxyhtml.conf \
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
          00-systemd.conf \
 %endif
          01-ldap.conf 01-session.conf 00-optional.conf; do
@@ -324,13 +331,13 @@ done
 # install systemd override drop directory
 # Web application packages can drop snippets into this location if
 # they need ExecStart[pre|post].
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
 mkdir $RPM_BUILD_ROOT%{_unitdir}/httpd.service.d
 mkdir $RPM_BUILD_ROOT%{_unitdir}/httpd.socket.d
-%endif
 
 install -m 644 -p $RPM_SOURCE_DIR/10-listen443.conf \
       $RPM_BUILD_ROOT%{_unitdir}/httpd.socket.d/10-listen443.conf
+%endif
 
 for f in welcome.conf ssl.conf manual.conf userdir.conf; do
   install -m 644 -p $RPM_SOURCE_DIR/$f \
@@ -482,21 +489,19 @@ getent passwd apache >/dev/null || \
 exit 0
 
 %post
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
 %systemd_post httpd.service htcacheclean.service httpd.socket
 %endif
 
 %preun
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
 %systemd_preun httpd.service htcacheclean.service httpd.socket
 %endif
 
 %postun
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
+%if %{with_systemd}
 %systemd_postun
-%endif
 
-%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 # Trigger for conversion from SysV, per guidelines at:
 # https://fedoraproject.org/wiki/Packaging:ScriptletSnippets#Systemd
 %triggerun -- httpd < 2.2.21-5
@@ -510,8 +515,10 @@ exit 0
 %endif
 
 %posttrans
+%if %{with_systemd}
 test -f /etc/sysconfig/httpd-disable-posttrans || \
   /bin/systemctl try-restart httpd.service htcacheclean.service >/dev/null 2>&1 || :
+%endif
 
 %define sslcert %{_sysconfdir}/pki/tls/certs/localhost.crt
 %define sslkey %{_sysconfdir}/pki/tls/private/localhost.key
@@ -640,10 +647,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %{_mandir}/man8/*
 
+%if %{with_systemd}
 %{_unitdir}/*.service
 %{_unitdir}/*.socket
 %attr(755,root,root) %dir %{_unitdir}/httpd.service.d
 %attr(755,root,root) %dir %{_unitdir}/httpd.socket.d
+%endif
+
 
 %files filesystem
 %dir %{_sysconfdir}/httpd
@@ -675,7 +685,9 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ssl.conf
 %attr(0700,apache,root) %dir %{_localstatedir}/cache/httpd/ssl
 %{_libexecdir}/httpd-ssl-pass-dialog
+%if %{with_systemd}
 %{_unitdir}/httpd.socket.d/10-listen443.conf
+%endif
 
 %files -n mod_proxy_html
 %defattr(-,root,root)
