@@ -109,7 +109,7 @@
 %if 0%{?fedora} >= 21 || %{with httpd24}
 %global with_httpd24 1
 %else
-%global with_httpd24 0
+%global with_httpd24 1 
 %endif
 # nginx 1.6 with nginx-filesystem
 %if 0%{?fedora} >= 21
