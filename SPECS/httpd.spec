@@ -85,7 +85,7 @@ BuildRequires: systemd-devel
 %if 0%{?rhel} >= 6
 BuildRequires: libnghttp2-devel
 %endif
-Requires: /etc/mime.types, system-logos-httpd
+Requires: /etc/mime.types
 Obsoletes: httpd-suexec
 Provides: webserver
 Provides: mod_dav = %{version}-%{release}, httpd-suexec = %{version}-%{release}
@@ -885,9 +885,6 @@ rm -rf $RPM_BUILD_ROOT
 
 * Wed Nov 27 2013 Joe Orton <jorton@redhat.com> - 2.4.7-1
 - update to 2.4.7 (#1034071)
-
-* Fri Nov 22 2013 Joe Orton <jorton@redhat.com> - 2.4.6-10
-- switch to requiring system-logos-httpd (#1031288)
 
 * Tue Nov 12 2013 Joe Orton <jorton@redhat.com> - 2.4.6-9
 - change mmnisa to drop "-" altogether
