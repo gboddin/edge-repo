@@ -55,8 +55,10 @@
 
 %if 0%{?fedora} < 18 && 0%{?rhel} < 7
 %global db_devel  db4-devel
+%global with_systemd 0
 %else
 %global db_devel  libdb-devel
+%global with_systemd 1
 %endif
 
 Summary: PHP scripting language for creating dynamic web sites
@@ -82,6 +84,9 @@ Source9: php.modconf
 Source10: php.ztsmodconf
 Source13: nginx-fpm.conf
 Source14: nginx-php.conf
+Source15: php-fpm.init
+Source16: php-fpm.sysconfig
+
 # Configuration files for some extensions
 Source50: opcache.ini
 Source51: opcache-default.blacklist
@@ -193,12 +198,16 @@ License: PHP and Zend and BSD
 BuildRequires: libacl-devel
 Requires: php-common%{?_isa} = %{version}-%{release}
 Requires(pre): /usr/sbin/useradd
+
+%if %{with_systemd}
 BuildRequires: systemd-units
 BuildRequires: systemd-devel
 Requires: systemd-units
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
+%endif
+
 # To ensure correct /var/lib/php/session ownership:
 Requires(pre): httpd-filesystem
 # For php.conf in /etc/httpd/conf.d
@@ -987,7 +996,9 @@ popd
 pushd build-fpm
 build --enable-fpm \
       --with-fpm-acl \
+%if %{with_systemd}
       --with-fpm-systemd \
+%endif
       --libdir=%{_libdir}/php \
       --without-mysql \
       --disable-pdo \
@@ -1196,10 +1207,21 @@ mv $RPM_BUILD_ROOT%{_sysconfdir}/php-fpm.conf.default .
 # tmpfiles.d
 install -m 755 -d $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d
 install -m 644 php-fpm.tmpfiles $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d/php-fpm.conf
+
+%if %{with_systemd}
 # install systemd unit files and scripts for handling server startup
 install -m 755 -d $RPM_BUILD_ROOT%{_sysconfdir}/systemd/system/php-fpm.service.d
 install -m 755 -d $RPM_BUILD_ROOT%{_unitdir}
 install -m 644 %{SOURCE6} $RPM_BUILD_ROOT%{_unitdir}/
+%else
+# Service
+install -m 755 -d $RPM_BUILD_ROOT%{_initrddir}
+install -m 755 %{SOURCE6} $RPM_BUILD_ROOT%{_initrddir}/php-fpm
+# Environment file
+install -m 755 -d $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig
+install -m 644 %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/php-fpm
+%endif
+
 # LogRotate
 install -m 755 -d $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
 install -m 644 %{SOURCE7} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/php-fpm
@@ -1322,6 +1344,7 @@ rm -rf $RPM_BUILD_ROOT%{_libdir}/php/modules/*.a \
 rm -f README.{Zeus,QNX,CVS-RULES}
 
 
+%if %{with_systemd}
 %post fpm
 %systemd_post php-fpm.service
 
@@ -1330,6 +1353,17 @@ rm -f README.{Zeus,QNX,CVS-RULES}
 
 %postun fpm
 %systemd_postun_with_restart php-fpm.service
+%else
+%post fpm
+/sbin/chkconfig --add php-fpm
+
+%preun fpm
+if [ "$1" = 0 ] ; then
+    /sbin/service php-fpm stop >/dev/null 2>&1
+    /sbin/chkconfig --del php-fpm
+fi
+%endif
+
 
 %post embedded -p /sbin/ldconfig
 %postun embedded -p /sbin/ldconfig
@@ -1402,9 +1436,16 @@ rm -f README.{Zeus,QNX,CVS-RULES}
 %config(noreplace) %{_sysconfdir}/nginx/conf.d/php-fpm.conf
 %config(noreplace) %{_sysconfdir}/nginx/default.d/php.conf
 %{_prefix}/lib/tmpfiles.d/php-fpm.conf
-%{_unitdir}/php-fpm.service
 %{_sbindir}/php-fpm
+
+%if %{with_systemd}
+%{_unitdir}/php-fpm.service
 %dir %{_sysconfdir}/systemd/system/php-fpm.service.d
+%else
+%{_initrddir}/php-fpm
+%config(noreplace) %{_sysconfdir}/sysconfig/php-fpm
+%endif
+
 %dir %{_sysconfdir}/php-fpm.d
 # log owned by apache for log
 %attr(770,apache,root) %dir %{_localstatedir}/log/php-fpm
