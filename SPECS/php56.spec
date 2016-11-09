@@ -70,10 +70,7 @@ License: PHP and Zend and BSD
 Group: Development/Languages
 URL: http://www.php.net/
 
-# Need to download official tarball and strip non-free stuff
-# wget http://www.php.net/distributions/php-%%{version}%%{?rcver}.tar.xz
-# ./strip.sh %%{version}
-Source0: php-%{version}%{?rcver}-strip.tar.xz
+Source0: https://github.com/php/php-src/archive/php-%{version}.tar.gz 
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
@@ -83,7 +80,6 @@ Source6: php-fpm.service
 Source7: php-fpm.logrotate
 Source9: php.modconf
 Source10: php.ztsmodconf
-Source11: strip.sh
 Source13: nginx-fpm.conf
 Source14: nginx-php.conf
 # Configuration files for some extensions
@@ -691,7 +687,7 @@ support for using the enchant library to PHP.
 
 
 %prep
-%setup -q -n php-%{version}%{?rcver}
+%setup -q -n php-src-php-%{version}%{?rcver}
 
 # ensure than current httpd use prefork MPM.
 httpd -V  | grep -q 'threaded:.*yes' && exit 1
