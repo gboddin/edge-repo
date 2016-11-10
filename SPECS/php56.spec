@@ -46,6 +46,7 @@
 %global _httpd_modconfdir %{_sysconfdir}/httpd/conf.modules.d
 %global _httpd_confdir    %{_sysconfdir}/httpd/conf.d
 %global _httpd_moddir     %{_libdir}/httpd/modules
+%global _httpd_contentdir %{_datadir}/httpd
 
 # needed at srpm build time, when httpd-devel not yet installed
 %{!?_httpd_mmn:        %{expand: %%global _httpd_mmn        %%(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}}
