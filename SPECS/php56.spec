@@ -167,6 +167,7 @@ which adds support for the PHP language to Apache HTTP Server.
 Group: Development/Languages
 Summary: Command-line interface for PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-cli = %{version}-%{release}
 Provides: php-cgi = %{version}-%{release}, php-cgi%{?_isa} = %{version}-%{release}
 Provides: php-pcntl, php-pcntl%{?_isa}
 Provides: php-readline, php-readline%{?_isa}
@@ -180,6 +181,7 @@ executing PHP scripts, /usr/bin/php, and the CGI interface.
 Group: Development/Languages
 Summary: The interactive PHP debugger
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-dbg
 
 %description dbg
 The php-dbg package contains the interactive PHP debugger.
@@ -195,6 +197,7 @@ License: PHP and Zend and BSD
 BuildRequires: libacl-devel
 Requires: php-common%{?_isa} = %{version}-%{release}
 Requires(pre): /usr/sbin/useradd
+Provides: php-fpm
 
 %if %{with_systemd}
 BuildRequires: systemd-units
@@ -263,7 +266,7 @@ Provides: php-json, php-json%{?_isa}
 Provides: php-zip, php-zip%{?_isa}
 Obsoletes: php-pecl-zip < 1.11
 %endif
-Provides: php-zlib, php-zlib%{?_isa}
+Provides: php-common, php-zlib, php-zlib%{?_isa}
 Obsoletes: php-pecl-phar < 1.2.4
 Obsoletes: php-pecl-Fileinfo < 1.0.5
 Obsoletes: php-mhash < 5.3.0
@@ -278,6 +281,7 @@ Group: Development/Libraries
 Summary: Files needed for building PHP extensions
 Requires: php-cli%{?_isa} = %{version}-%{release}, autoconf, automake
 Requires: pcre-devel%{?_isa}
+Provides: php-devel = %{version}-%{release}
 %if %{with_zts}
 Provides: php-zts-devel = %{version}-%{release}
 Provides: php-zts-devel%{?_isa} = %{version}-%{release}
@@ -295,9 +299,11 @@ License:   PHP
 Requires:  php-common%{?_isa} = %{version}-%{release}
 Obsoletes: php-pecl-zendopcache
 Provides:  php-pecl-zendopcache = %{opcachever}
+Provides:  php-pecl-zendopcache = %{opcachever}
 Provides:  php-pecl-zendopcache%{?_isa} = %{opcachever}
 Provides:  php-pecl(opcache) = %{opcachever}
 Provides:  php-pecl(opcache)%{?_isa} = %{opcachever}
+Provides:  php-opcache
 
 %description opcache
 The Zend OPcache provides faster PHP execution through opcode caching and
@@ -313,6 +319,7 @@ Group: Development/Languages
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: krb5-devel, openssl-devel, libc-client-devel
+Provides: php-imap
 
 %description imap
 The php-imap module will add IMAP (Internet Message Access Protocol)
@@ -326,6 +333,7 @@ Group: Development/Languages
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: cyrus-sasl-devel, openldap-devel, openssl-devel
+Provides: php-ldap
 
 %description ldap
 The php-ldap adds Lightweight Directory Access Protocol (LDAP)
@@ -340,6 +348,7 @@ Group: Development/Languages
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 # ABI/API check - Arch specific
+Provides: php-pdo = %{version}-%{release}
 Provides: php-pdo-abi  = %{pdover}%{isasuffix}
 Provides: php(pdo-abi) = %{pdover}%{isasuffix}
 Provides: php-sqlite3, php-sqlite3%{?_isa}
@@ -357,6 +366,7 @@ Group: Development/Languages
 # All files licensed under PHP version 3.01
 License: PHP
 Requires: php-pdo%{?_isa} = %{version}-%{release}
+Provides: php-mysqlnd = %{version}-%{release}
 Provides: php_database
 Provides: php-mysql = %{version}-%{release}
 Provides: php-mysql%{?_isa} = %{version}-%{release}
@@ -380,7 +390,7 @@ Group: Development/Languages
 # All files licensed under PHP version 3.01
 License: PHP
 Requires: php-pdo%{?_isa} = %{version}-%{release}
-Provides: php_database
+Provides: php_database, php-pgsql
 Provides: php-pdo_pgsql, php-pdo_pgsql%{?_isa}
 BuildRequires: krb5-devel, openssl-devel, postgresql-devel
 
@@ -398,6 +408,7 @@ Group: Development/Languages
 # All files licensed under PHP version 3.01
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-process = %{version}-%{release}
 Provides: php-posix, php-posix%{?_isa}
 Provides: php-shmop, php-shmop%{?_isa}
 Provides: php-sysvsem, php-sysvsem%{?_isa}
@@ -416,7 +427,7 @@ Group: Development/Languages
 # pdo_odbc is licensed under PHP version 3.0
 License: PHP
 Requires: php-pdo%{?_isa} = %{version}-%{release}
-Provides: php_database
+Provides: php_database, php-odbc
 Provides: php-pdo_odbc, php-pdo_odbc%{?_isa}
 BuildRequires: unixODBC-devel
 
@@ -435,6 +446,7 @@ Group: Development/Languages
 # All files licensed under PHP version 3.01
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-soap
 BuildRequires: libxml2-devel
 
 %description soap
@@ -448,7 +460,7 @@ Group: Development/Languages
 License: PHP
 BuildRequires:  firebird-devel
 Requires: php-pdo%{?_isa} = %{version}-%{release}
-Provides: php_database
+Provides: php_database, php-interbase
 Provides: php-firebird, php-firebird%{?_isa}
 Provides: php-pdo_firebird, php-pdo_firebird%{?_isa}
 
@@ -471,6 +483,7 @@ Group: Development/Languages
 # All files licensed under PHP version 3.01
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}, net-snmp
+Provides: php-snmp
 BuildRequires: net-snmp-devel
 
 %description snmp
@@ -485,6 +498,7 @@ Group: Development/Languages
 # All files licensed under PHP version 3.01
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-xml
 Provides: php-dom, php-dom%{?_isa}
 Provides: php-domxml, php-domxml%{?_isa}
 Provides: php-simplexml, php-simplexml%{?_isa}
@@ -506,6 +520,7 @@ Group: Development/Languages
 # libXMLRPC is licensed under BSD
 License: PHP and BSD
 Requires: php-xml%{?_isa} = %{version}-%{release}
+Provides: php-xmlrpc
 
 %description xmlrpc
 The php-xmlrpc package contains a dynamic shared object that will add
@@ -520,6 +535,7 @@ Group: Development/Languages
 # ucgendat is licensed under OpenLDAP
 License: PHP and LGPLv2 and BSD and OpenLDAP
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-mbstring
 
 %description mbstring
 The php-mbstring package contains a dynamic shared object that will add
@@ -547,6 +563,7 @@ BuildRequires: freetype-devel
 BuildRequires: libXpm-devel
 BuildRequires: libvpx-devel
 %endif
+Provides: php-gd
 
 %description gd
 The php-gd package contains a dynamic shared object that will add
@@ -559,6 +576,7 @@ Group: Development/Languages
 # libbcmath is licensed under LGPLv2+
 License: PHP and LGPLv2+
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-bcmath
 
 %description bcmath
 The php-bcmath package contains a dynamic shared object that will add
@@ -571,6 +589,7 @@ Group: Development/Languages
 License: PHP
 BuildRequires: gmp-devel
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-gmp
 
 %description gmp
 These functions allow you to work with arbitrary-length integers
@@ -583,6 +602,7 @@ Group: Development/Languages
 License: PHP
 BuildRequires: %{db_devel}, tokyocabinet-devel
 Requires: php-common%{?_isa} = %{version}-%{release}
+Provides: php-dba
 
 %description dba
 The php-dba package contains a dynamic shared object that will add
@@ -595,6 +615,7 @@ Group: Development/Languages
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: libmcrypt-devel
+Provides: php-mcryt
 
 %description mcrypt
 The php-mcrypt package contains a dynamic shared object that will add
@@ -607,6 +628,7 @@ Group: Development/Languages
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: libtidy-devel
+Provides: php-tidy
 
 %description tidy
 The php-tidy package contains a dynamic shared object that will add
@@ -620,6 +642,7 @@ License: PHP
 Requires: php-pdo%{?_isa} = %{version}-%{release}
 BuildRequires: freetds-devel
 Provides: php-pdo_dblib, php-pdo_dblib%{?_isa}
+Provides: php-mssql
 
 %description mssql
 The php-mssql package contains a dynamic shared object that will
@@ -634,6 +657,7 @@ Requires: php-common%{?_isa} = %{version}-%{release}
 # doing a real -devel package for just the .so symlink is a bit overkill
 Provides: php-embedded-devel = %{version}-%{release}
 Provides: php-embedded-devel%{?_isa} = %{version}-%{release}
+Provides: php-embedded
 
 %description embedded
 The php-embedded package contains a library which can be embedded
@@ -646,6 +670,7 @@ Group: System Environment/Libraries
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: aspell-devel >= 0.50.0
+Provides: php-pspell
 
 %description pspell
 The php-pspell package contains a dynamic shared object that will add
@@ -658,6 +683,8 @@ Group: System Environment/Libraries
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: recode-devel
+Provides: php-recode
+
 
 %description recode
 The php-recode package contains a dynamic shared object that will add
@@ -670,6 +697,7 @@ Group: System Environment/Libraries
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: libicu-devel >= 4.0
+Provides: php-intl
 
 %description intl
 The php-intl package contains a dynamic shared object that will add
@@ -682,7 +710,7 @@ Group: System Environment/Libraries
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 BuildRequires: enchant-devel >= 1.2.4
-
+Provides: php-enchant
 %description enchant
 The php-enchant package contains a dynamic shared object that will add
 support for using the enchant library to PHP.
