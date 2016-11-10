@@ -53,11 +53,9 @@
 %if 0%{?fedora} < 18 && 0%{?rhel} < 7
 %global db_devel  db4-devel
 %global with_systemd 0
-%global with_libzip  0 
 %else
 %global db_devel  libdb-devel
 %global with_systemd 1
-%global with_libzip  1 
 %endif
 
 Summary: PHP scripting language for creating dynamic web sites
@@ -130,9 +128,6 @@ BuildRequires: pcre-devel >= 6.6
 BuildRequires: bzip2, perl, libtool >= 1.4.3, gcc-c++
 BuildRequires: libtool-ltdl-devel
 BuildRequires: bison, re2c
-%if %{with_libzip}
-BuildRequires: libzip-devel >= 0.11
-%endif
 %if %{with_dtrace}
 BuildRequires: systemtap-sdt-devel
 %endif
@@ -945,9 +940,6 @@ build --libdir=%{_libdir}/php \
       --with-sqlite3=shared,%{_prefix} \
 %if %{with_zip}
       --enable-zip=shared \
-%if %{with_libzip}
-      --with-libzip \
-%endif
 %endif
       --without-readline \
       --with-libedit \
@@ -1072,9 +1064,6 @@ build --includedir=%{_includedir}/php-zts \
       --with-sqlite3=shared,%{_prefix} \
 %if %{with_zip}
       --enable-zip=shared \
-%if %{with_libzip}
-      --with-libzip \
-%endif
 %endif
       --without-readline \
       --with-libedit \
