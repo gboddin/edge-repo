@@ -12,9 +12,6 @@
 # Extension version
 %global opcachever  7.0.6-dev
 
-# Use for first build of PHP (before pecl/zip and pecl/jsonc)
-%global php_bootstrap   0
-
 # Adds -z now to the linker flags
 %global _hardened_build 1
 
@@ -24,11 +21,7 @@
 %global mysql_sock %(mysql_config --socket 2>/dev/null || echo /var/lib/mysql/mysql.sock)
 
 # Regression tests take a long time, you can skip 'em with this
-%if %{php_bootstrap}
-%global runselftest 0
-%else
-%{!?runselftest: %global runselftest 1}
-%endif
+%global runselftest 1 
 
 # Use the arch-specific mysql_config binary to avoid mismatch with the
 # arch detection heuristic used by bindir/mysql_config.
@@ -55,8 +48,8 @@
 
 %global  with_libgd 1
 
-%global with_zip     0
-%global with_libzip  0
+%global with_zip     1 
+%global with_libzip  1 
 
 %if 0%{?fedora} < 18 && 0%{?rhel} < 7
 %global db_devel  db4-devel
@@ -269,9 +262,7 @@ Provides: php-sockets, php-sockets%{?_isa}
 Provides: php-spl, php-spl%{?_isa}
 Provides: php-standard = %{version}, php-standard%{?_isa} = %{version}
 Provides: php-tokenizer, php-tokenizer%{?_isa}
-%if ! %{php_bootstrap}
-Requires: php-pecl-jsonc%{?_isa}
-%endif
+Provides: php-json, php-json%{?_isa}
 %if %{with_zip}
 Provides: php-zip, php-zip%{?_isa}
 Obsoletes: php-pecl-zip < 1.11
@@ -280,6 +271,7 @@ Provides: php-zlib, php-zlib%{?_isa}
 Obsoletes: php-pecl-phar < 1.2.4
 Obsoletes: php-pecl-Fileinfo < 1.0.5
 Obsoletes: php-mhash < 5.3.0
+Obsoletes: php-pecl-json
 
 %description common
 The php-common package contains files used by both the php
@@ -293,9 +285,6 @@ Requires: pcre-devel%{?_isa}
 %if %{with_zts}
 Provides: php-zts-devel = %{version}-%{release}
 Provides: php-zts-devel%{?_isa} = %{version}-%{release}
-%endif
-%if ! %{php_bootstrap}
-Requires: php-pecl-jsonc-devel%{?_isa}
 %endif
 
 %description devel
@@ -927,6 +916,7 @@ build --libdir=%{_libdir}/php \
       --with-iconv=shared \
       --enable-sockets=shared \
       --enable-tokenizer=shared \
+      --enable-json \
       --with-xmlrpc=shared \
       --with-ldap=shared --with-ldap-sasl \
       --enable-mysqlnd=shared \
@@ -1042,6 +1032,7 @@ build --includedir=%{_includedir}/php-zts \
       --with-gmp=shared \
       --enable-calendar=shared \
       --enable-bcmath=shared \
+      --enable-json \
       --with-bz2=shared \
       --enable-ctype=shared \
       --enable-dba=shared --with-db4=%{_prefix} \
