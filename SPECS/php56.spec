@@ -49,14 +49,15 @@
 %global  with_libgd 1
 
 %global with_zip     1 
-%global with_libzip  1 
 
 %if 0%{?fedora} < 18 && 0%{?rhel} < 7
 %global db_devel  db4-devel
 %global with_systemd 0
+%global with_libzip  0 
 %else
 %global db_devel  libdb-devel
 %global with_systemd 1
+%global with_libzip  1 
 %endif
 
 Summary: PHP scripting language for creating dynamic web sites
