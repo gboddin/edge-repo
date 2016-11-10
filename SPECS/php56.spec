@@ -61,7 +61,7 @@
 Summary: PHP scripting language for creating dynamic web sites
 Name: php56
 Version: 5.6.28
-Release: 2%{?dist}
+Release: 3%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
