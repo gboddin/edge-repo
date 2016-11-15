@@ -134,15 +134,12 @@ BuildRequires: systemtap-sdt-devel
 
 %if %{with_zts}
 Obsoletes: php-zts < 5.3.7
-Conflicts: php70-zts php71-zts
 Provides: php-zts = %{version}-%{release}
 Provides: php-zts%{?_isa} = %{version}-%{release}
 %endif
 
 Requires: httpd-mmn = %{_httpd_mmn}
 Provides: mod_php = %{version}-%{release}
-Provides: php
-Conflicts: php70, php71
 Requires: php-common%{?_isa} = %{version}-%{release}
 # For backwards-compatibility, require php-cli for the time being:
 Requires: php-cli%{?_isa} = %{version}-%{release}
@@ -266,7 +263,7 @@ Provides: php-json, php-json%{?_isa}
 Provides: php-zip, php-zip%{?_isa}
 Obsoletes: php-pecl-zip < 1.11
 %endif
-Provides: php-common, php-zlib, php-zlib%{?_isa}
+Provides: php-zlib, php-zlib%{?_isa}
 Obsoletes: php-pecl-phar < 1.2.4
 Obsoletes: php-pecl-Fileinfo < 1.0.5
 Obsoletes: php-mhash < 5.3.0
