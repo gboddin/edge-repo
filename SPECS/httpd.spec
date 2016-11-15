@@ -71,6 +71,7 @@ Patch35: httpd-2.4.17-sslciphdefault.patch
 Patch55: httpd-2.4.4-malformed-host.patch
 Patch56: httpd-2.4.4-mod_unique_id.patch
 Patch57: httpd-2.4.10-sigint.patch
+Patch90: httpd-2.4-proxy-name-256.patch
 # Security fixes
 Patch100: httpd-2.4.18-CVE-2016-5387.patch
 License: ASL 2.0
@@ -223,6 +224,7 @@ interface for storing and accessing per-user session data.
 %patch55 -p1 -b .malformedhost
 %patch56 -p1 -b .uniqueid
 %patch57 -p1 -b .sigint
+%patch90 -p1 -b .proxysize
 
 %patch100 -p1 -b .cve5387
 
