@@ -59,7 +59,7 @@
 %endif
 
 Summary: PHP scripting language for creating dynamic web sites
-Name: php56
+Name: php
 Version: 5.6.28
 Release: 4%{?dist}
 # All files licensed under PHP version 3.01, except
