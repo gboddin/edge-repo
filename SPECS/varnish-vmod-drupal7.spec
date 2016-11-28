@@ -34,6 +34,7 @@ Drupal 7 VMOD provides Drupal-related functions within Varnish.
 %defattr(-,root,root,-)
 %{_libdir}/varnis*/vmods/
 %doc /usr/share/doc/lib%{name}/*
+%doc LICENSE
 %{_mandir}/man?/*
 
 %changelog
