@@ -13,7 +13,7 @@
 Summary: Apache HTTP Server
 Name: httpd
 Version: 2.4.23
-Release: 4%{?dist}
+Release: 6%{?dist}
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: index.html
@@ -71,6 +71,7 @@ Patch35: httpd-2.4.17-sslciphdefault.patch
 Patch55: httpd-2.4.4-malformed-host.patch
 Patch56: httpd-2.4.4-mod_unique_id.patch
 Patch57: httpd-2.4.10-sigint.patch
+Patch90: httpd-2.4-proxy-name-256.patch
 # Security fixes
 Patch100: httpd-2.4.18-CVE-2016-5387.patch
 License: ASL 2.0
@@ -85,7 +86,7 @@ BuildRequires: systemd-devel
 %if 0%{?rhel} >= 6
 BuildRequires: libnghttp2-devel
 %endif
-Requires: /etc/mime.types, system-logos-httpd
+Requires: /etc/mime.types
 Obsoletes: httpd-suexec
 Provides: webserver
 Provides: mod_dav = %{version}-%{release}, httpd-suexec = %{version}-%{release}
@@ -223,6 +224,7 @@ interface for storing and accessing per-user session data.
 %patch55 -p1 -b .malformedhost
 %patch56 -p1 -b .uniqueid
 %patch57 -p1 -b .sigint
+%patch90 -p1 -b .proxysize
 
 %patch100 -p1 -b .cve5387
 
@@ -885,9 +887,6 @@ rm -rf $RPM_BUILD_ROOT
 
 * Wed Nov 27 2013 Joe Orton <jorton@redhat.com> - 2.4.7-1
 - update to 2.4.7 (#1034071)
-
-* Fri Nov 22 2013 Joe Orton <jorton@redhat.com> - 2.4.6-10
-- switch to requiring system-logos-httpd (#1031288)
 
 * Tue Nov 12 2013 Joe Orton <jorton@redhat.com> - 2.4.6-9
 - change mmnisa to drop "-" altogether
