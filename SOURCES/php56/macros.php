@@ -18,4 +18,4 @@
 %__php         %{_bindir}/php
 %__ztsphp      %{_bindir}/zts-php
 
-
+%pecl_xmldir   %{_sharedstatedir}/php/peclxml
