@@ -896,6 +896,7 @@ ln -sf ../configure
     --with-libxml-dir=%{_prefix} \
     --with-system-tzdata \
     --with-mhash \
+    --with-sybase \
 %if %{with_dtrace}
     --enable-dtrace \
 %endif
