@@ -61,7 +61,7 @@
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
 Version: 5.6.29
-Release: 4%{?dist}
+Release: 1%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -1523,6 +1523,9 @@ fi
 
 
 %changelog
+* Sun Dec 11 2016 Gregory Boddin <gregory@siwhine.net> 5.6.29-1
+- Update to 5.6.29 - http://www.php.net/releases/5_6_29.php
+
 * Wed Nov  9 2016 Remi Collet <remi@fedoraproject.org> 5.6.28-1
 - Update to 5.6.28 - http://www.php.net/releases/5_6_28.php
 
