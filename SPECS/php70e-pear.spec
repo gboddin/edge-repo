@@ -30,7 +30,7 @@
 Summary: PHP Extension and Application Repository framework
 Name: %{php_base}-pear
 Version: 1.10.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
 # Structures_Graph is LGPLv3+
@@ -59,6 +59,7 @@ BuildRequires: gnupg
 BuildRequires:  %{_bindir}/phpunit
 %endif
 
+Provides: php-pear
 Provides: php-pear(Console_Getopt) = %{getoptver}
 Provides: php-pear(Archive_Tar) = %{arctarver}
 Provides: php-pear(PEAR) = %{version}
