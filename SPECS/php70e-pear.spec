@@ -339,6 +339,9 @@ fi
 
 
 %changelog
+* Sun Dec 11 2016 Gregory Boddin <gregory@siwhine.net> - 1:1.10.1-2
+- Import from ius
+
 * Thu Feb 04 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
 - Remove release from virtual provides of stock package
 
