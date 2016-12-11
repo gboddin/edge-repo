@@ -80,8 +80,8 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php%{?ius_suffix}
-Version: 7.0.13
-Release: 2%{?dist}
+Version: 7.0.14
+Release: 1%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -1799,6 +1799,9 @@ fi
 
 
 %changelog
+* Sun Dec 11 2016 Gregory Boddin <gregory@siwhine.net> - 7.0.14-1
+- Upgrade from upstream
+
 * Sun Dec 4 2016 Gregory Boddin <gregory@siwhine.net> - 7.0.13-2
 - Import from ius as php70e
 - Require httpd >= 2.4.10
