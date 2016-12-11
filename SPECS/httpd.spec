@@ -719,6 +719,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_rpmconfigdir}/macros.d/macros.httpd
 
 %changelog
+* Tue Jul 19 2016 Gregory Boddin <gregory@siwhine.net> - 2.4.23-6
+- added patch to allow long proxy path (httpd-2.4-proxy-name-256.patch)
+- imported
+
 * Mon Jul 18 2016 Joe Orton <jorton@redhat.com> - 2.4.23-4
 - add security fix for CVE-2016-5387
 
