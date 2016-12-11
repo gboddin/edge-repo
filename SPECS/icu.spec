@@ -10,7 +10,7 @@ URL:       http://www.icu-project.org/
 Source0:   http://download.icu-project.org/files/icu4c/57.1/icu4c-57_1-src.tgz
 Source1:   icu-config.sh
 
-BuildRequires: doxygen, autoconf >= 2.69, python
+BuildRequires: doxygen, python
 Requires: lib%{name}%{?_isa} = %{version}-%{release}
 
 Patch1: icu.8198.revert.icu5431.patch
@@ -74,7 +74,6 @@ BuildArch: noarch
 
 %build
 pushd source
-autoconf
 CFLAGS='%optflags -fno-strict-aliasing'
 CXXFLAGS='%optflags -fno-strict-aliasing'
 # Endian: BE=0 LE=1
