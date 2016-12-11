@@ -59,6 +59,7 @@ BuildRequires: gnupg
 BuildRequires:  %{_bindir}/phpunit
 %endif
 
+Provides: php-pear
 Provides: php-pear(Console_Getopt) = %{getoptver}
 Provides: php-pear(Archive_Tar) = %{arctarver}
 Provides: php-pear(PEAR) = %{version}
