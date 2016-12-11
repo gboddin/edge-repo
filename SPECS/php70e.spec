@@ -1,3 +1,4 @@
+# edge spec file for php70e, forket from
 # IUS spec file for php70u, forked from
 #
 # Fedora spec file for php
@@ -80,7 +81,7 @@
 Summary: PHP scripting language for creating dynamic web sites
 Name: php%{?ius_suffix}
 Version: 7.0.13
-Release: 1%{?dist}
+Release: 2%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -1800,6 +1801,8 @@ fi
 %changelog
 * Sun Dec 4 2016 Gregory Boddin <gregory@siwhine.net> - 7.0.13-2
 - Import from ius as php70e
+- Require httpd >= 2.4.10
+- Require gd >= 2.2
 
 * Thu Nov 10 2016 Ben Harper <ben.harper@rackspace.com> - 7.0.13-1.ius
 - Latest upstream
