@@ -1,6 +1,8 @@
-diff -up ./deps/geohash-int/Makefile.pic ./deps/geohash-int/Makefile
---- ./deps/geohash-int/Makefile.pic	2016-01-15 16:47:38.818294577 +0100
-+++ ./deps/geohash-int/Makefile	2016-01-15 16:48:23.641486461 +0100
+Based on Fedora patch 0002-redis-2.8.18-deps-library-fPIC-performance-tuning.patch, rebased for 3.2.0.
+
+diff -Naurp a/deps/geohash-int/Makefile b/deps/geohash-int/Makefile
+--- a/deps/geohash-int/Makefile	2016-05-06 02:11:36.000000000 -0500
++++ b/deps/geohash-int/Makefile	2016-06-01 18:06:58.691789064 -0500
 @@ -2,7 +2,7 @@ STD=
  WARN= -Wall
  OPT= -O2
@@ -10,9 +12,9 @@ diff -up ./deps/geohash-int/Makefile.pic ./deps/geohash-int/Makefile
  R_LDFLAGS= $(LDFLAGS)
  DEBUG= -g
  
-diff -up ./deps/linenoise/Makefile.pic ./deps/linenoise/Makefile
---- ./deps/linenoise/Makefile.pic	2015-12-23 13:35:32.000000000 +0100
-+++ ./deps/linenoise/Makefile	2016-01-15 16:44:52.561582851 +0100
+diff -Naurp a/deps/linenoise/Makefile b/deps/linenoise/Makefile
+--- a/deps/linenoise/Makefile	2016-05-06 02:11:36.000000000 -0500
++++ b/deps/linenoise/Makefile	2016-06-01 18:06:58.691789064 -0500
 @@ -2,7 +2,7 @@ STD=
  WARN= -Wall
  OPT= -Os
@@ -22,9 +24,9 @@ diff -up ./deps/linenoise/Makefile.pic ./deps/linenoise/Makefile
  R_LDFLAGS= $(LDFLAGS)
  DEBUG= -g
  
-diff -up ./deps/Makefile.pic ./deps/Makefile
---- ./deps/Makefile.pic	2015-12-23 13:35:32.000000000 +0100
-+++ ./deps/Makefile	2016-01-15 16:44:52.561582851 +0100
+diff -Naurp a/deps/Makefile b/deps/Makefile
+--- a/deps/Makefile	2016-05-06 02:11:36.000000000 -0500
++++ b/deps/Makefile	2016-06-01 18:06:58.691789064 -0500
 @@ -59,7 +59,7 @@ ifeq ($(uname_S),SunOS)
  	LUA_CFLAGS= -D__C99FEATURES__=1
  endif
