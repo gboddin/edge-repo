@@ -87,11 +87,7 @@
 %global with_litespeed 1
 
 # build with system libgd
-%if 0%{?fedora} >= 20
 %global  with_libgd 1
-%else
-%global  with_libgd 0
-%endif
 
 %global with_zip     1
 %global with_libzip  0
