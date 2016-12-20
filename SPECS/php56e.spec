@@ -757,16 +757,8 @@ Requires: %{name}-common%{?_isa} = %{version}-%{release}
 Provides: config(%{real_name}-gd) = %{version}-%{release}
 Provides: %{real_name}-gd = %{version}-%{release}, %{real_name}-gd%{?_isa} = %{version}-%{release}
 BuildRequires: t1lib-devel
-%if %{with_libgd}
-BuildRequires: gd-devel >= 2.1.0
-%else
+BuildRequires: gd-devel >= 2.2
 # Required to build the bundled GD library
-BuildRequires: libjpeg-devel
-BuildRequires: libpng-devel
-BuildRequires: freetype-devel
-BuildRequires: libXpm-devel
-BuildRequires: libvpx-devel
-%endif
 Conflicts: %{real_name}-gd < %{base_ver}
 
 %description gd
