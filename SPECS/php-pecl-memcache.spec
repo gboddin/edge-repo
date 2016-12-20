@@ -21,7 +21,7 @@ URL:		https://pecl.php.net/package/memcache
 Source0:	http://pecl.php.net/get/%{pecl_name}-%{version}.tgz
 
 BuildRequires:	gcc-c++
-BuildRequires:	php-devel
+BuildRequires:	php-devel >= 5.6, php-devel < 5.7
 BuildRequires:	php-pear
 # Required by phpize
 BuildRequires:	autoconf, automake, libtool
