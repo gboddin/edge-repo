@@ -177,6 +177,7 @@ BuildRequires: bzip2-devel, curl-devel >= 7.9
 BuildRequires: pam-devel
 BuildRequires: httpd-devel < 2.4.10
 BuildRequires: libstdc++-devel, openssl-devel
+BuildRequires: bison
 %if 0%{?with_sqlite3}
 # This is the first Fedora version that sqlite was built with the
 # --enable-load-extension flag.
