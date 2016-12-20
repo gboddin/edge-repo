@@ -10,10 +10,10 @@
 %global ini_name  40-%{pecl_name}.ini
 %endif
 
-Name:		php-pecl-redis
+Name:		php-pecl-memcache
 Version:        3.0.8	
 Release:	1%{?dist}%{!?nophptag:%(%{__php} -r 'echo ".".PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')}
-Summary:	PHP wrapper to redis
+Summary:	PHP wrapper to memcache 
 
 Group:		Development/Tools
 License:	PHP
@@ -47,10 +47,10 @@ Provides:	php-pecl(%{pecl_name})%{?_isa} = %{version}
 
 
 %description
-This extension uses redis to provide API for
-communicating with redis, and writing clients
+This extension uses memcache to provide API for
+communicating with memcache, and writing clients
 
-Documentation: http://php.net/redis
+Documentation: http://php.net/memcache
 
 
 %prep
@@ -62,7 +62,7 @@ sed -e 's/role="test"/role="src"/' -i package.xml
 mv %{pecl_name}-%{version} NTS
 
 # Upstream often forget to change this
-extver=$(sed -n '/#define PHP_REDIS_VERSION/{s/.* "//;s/".*$//;p}' NTS/php_redis.h)
+extver=$(sed -n '/#define PHP_REDIS_VERSION/{s/.* "//;s/".*$//;p}' NTS/php_memcache.h)
 if test "x${extver}" != "x%{version}"; then
    : Error: Upstream version is ${extver}, expecting %{version}.
    exit 1
