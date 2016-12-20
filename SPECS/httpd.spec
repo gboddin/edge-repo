@@ -12,8 +12,8 @@
 
 Summary: Apache HTTP Server
 Name: httpd
-Version: 2.4.23
-Release: 6%{?dist}
+Version: 2.4.25
+Release: 1%{?dist}
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: index.html
@@ -719,6 +719,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_rpmconfigdir}/macros.d/macros.httpd
 
 %changelog
+* Tue Dec 20 2016 Gregory Boddin <gregory@siwhine.net> - 2.4.25-1
+- Updated from upstream
+- Fixes CVE-2016-0736 CVE-2016-2161 CVE-2016-5387 CVE-2016-8740 CVE-2016-8743
+
 * Tue Jul 19 2016 Gregory Boddin <gregory@siwhine.net> - 2.4.23-6
 - added patch to allow long proxy path (httpd-2.4-proxy-name-256.patch)
 - imported
