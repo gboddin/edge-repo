@@ -751,6 +751,7 @@ Provides: config(%{real_name}-gd) = %{version}-%{release}
 Provides: %{real_name}-gd = %{version}-%{release}, %{real_name}-gd%{?_isa} = %{version}-%{release}
 BuildRequires: t1lib-devel
 BuildRequires: gd-devel >= 2.2
+BuildRequires: libvpx-devel
 # Required to build the bundled GD library
 Conflicts: %{real_name}-gd < %{base_ver}
 
