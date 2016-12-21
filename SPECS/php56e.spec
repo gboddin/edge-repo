@@ -101,7 +101,7 @@
 Summary: PHP scripting language for creating dynamic web sites
 Name: %{real_name}%{?ius_suffix}
 Version: 5.6.29
-Release: 2%{?dist}
+Release: 3%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -356,9 +356,6 @@ Provides: %{name}-sockets, %{name}-sockets%{?_isa}
 Provides: %{name}-spl, %{name}-spl%{?_isa}
 Provides: %{name}-standard = %{version}, %{name}-standard%{?_isa} = %{version}
 Provides: %{name}-tokenizer, %{name}-tokenizer%{?_isa}
-%if ! %{php_bootstrap}
-Requires: %{name}-pecl-jsonc%{?_isa}
-%endif
 %if %{with_zip}
 Provides: %{name}-zip, %{name}-zip%{?_isa}
 %endif
@@ -417,9 +414,6 @@ Provides: %{real_name}-devel = %{version}-%{release}, %{real_name}-devel%{?_isa}
 %if %{with_zts}
 Provides: %{name}-zts-devel = %{version}-%{release}, %{name}-zts-devel%{?_isa} = %{version}-%{release}
 Provides: %{real_name}-zts-devel = %{version}-%{release}, %{real_name}-zts-devel%{?_isa} = %{version}-%{release}
-%endif
-%if ! %{php_bootstrap}
-Requires: %{name}-pecl-jsonc-devel%{?_isa}
 %endif
 Conflicts: %{real_name}-devel < %{base_ver}
 
@@ -1834,7 +1828,10 @@ fi
 
 
 %changelog
-* Fri Dec 20 2016 Gregory Boddin <gregory@siwhine.net> - 5.6.29-2
+* Wed Dec 21 2016 Gregory Boddin <gregory@siwhine.net> - 5.6.29-3
+- Fixed bad dependency on jsonc since it's now included in php-common
+
+* Tue Dec 20 2016 Gregory Boddin <gregory@siwhine.net> - 5.6.29-2
 - Imported from IUS for consistancy with php70e/php71e
  
 * Fri Dec 09 2016 Ben Harper <ben.harper@rackspace.com> - 5.6.29-1.ius
