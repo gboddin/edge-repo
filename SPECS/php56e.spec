@@ -101,7 +101,7 @@
 Summary: PHP scripting language for creating dynamic web sites
 Name: %{real_name}%{?ius_suffix}
 Version: 5.6.29
-Release: 3%{?dist}
+Release: 4%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -1820,6 +1820,9 @@ fi
 
 
 %changelog
+* Fri Dec 23 2016 Gregory Boddin <gregory@siwhine.net> - 5.6.29-4
+- Forcing usage of httpd 2.4
+
 * Wed Dec 21 2016 Gregory Boddin <gregory@siwhine.net> - 5.6.29-3
 - Fixed bad dependency on jsonc since it's now included in php-common
 
