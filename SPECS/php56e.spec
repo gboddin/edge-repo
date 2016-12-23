@@ -74,7 +74,7 @@
 %endif
 
 # /usr/sbin/apsx with httpd < 2.4 and defined as /usr/bin/apxs with httpd >= 2.4
-%{!?_httpd_apxs:       %{expand: %%global _httpd_apxs       %%{_sbindir}/apxs}}
+%{!?_httpd_apxs:       %{expand: %%global _httpd_apxs       %%{_bindir}/apxs}}
 %{!?_httpd_mmn:        %{expand: %%global _httpd_mmn        %%(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}}
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
 # /etc/httpd/conf.d with httpd < 2.4 and defined as /etc/httpd/conf.modules.d with httpd >= 2.4
@@ -171,7 +171,7 @@ Patch300: php-5.6.3-datetests.patch
 
 BuildRequires: bzip2-devel, curl-devel >= 7.9
 BuildRequires: pam-devel
-BuildRequires: httpd-devel < 2.4.10
+BuildRequires: httpd-devel >= 2.4
 BuildRequires: libstdc++-devel, openssl-devel
 BuildRequires: bison
 %if 0%{?with_sqlite3}
@@ -211,14 +211,6 @@ Requires(pre): httpd-mmn = %{_httpd_mmn}
 
 Conflicts: %{real_name} < %{base_ver}
 Conflicts: php51, php52, php53u, php54, php55u
-
-%if 0%{?rhel} && 0%{?rhel} < 7
-# Don't provides extensions, which are not shared library, as .so
-%{?filter_provides_in: %filter_provides_in %{_libdir}/php/modules/.*\.so$}
-%{?filter_provides_in: %filter_provides_in %{_libdir}/php-zts/modules/.*\.so$}
-%{?filter_provides_in: %filter_provides_in %{_httpd_moddir}/.*\.so$}
-%{?filter_setup}
-%endif
 
 
 %description
