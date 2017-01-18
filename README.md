@@ -2,6 +2,12 @@
  
 ## Introduction
 
+### WARNING
+
+Some of the packages are compiled with custom patches suiting the author's need. We'll provide a list of those in the future, but they mainly contains license changes and small improvement/tweaks.
+
+Since this repo is customized and usually won't accept external changes, I suggest looking at the well supported [IUSCommunity](iuscommunity.org) packages. Most of our packages are imported from IUS.
+
 ### Goal
 
 This repository is meant for people wanting to use the lastest version of software mainly in LAMP environment. 
@@ -46,14 +52,10 @@ All hosted software remain in their original license. This repository itself and
 ## Thanks and credits
 
 * travis-ci for offering free build for opensource projects. [travis-ci website](https://travis-ci.org)
-* Proot for providing an user-space alternative to chroot and making RPMs distributions possible on travis-ci. [proot project](https://github.com/proot-me/PRoot)
 * All of CentOS developers [CentOS website](https://www.centos.org/)
 * The Fedora developers for taking care of backporting in their spec files [Fedora website](https://getfedora.org/)
+* [IUSCommunity](iuscommunity.org) / Rackspace
 * Remirepo for the php spec file [Remirepo blog](https://blog.remirepo.net/)
 * Docker [Docker](https://www.docker.com/)
 * All other open-source projects involved
 * Oracle, for screwing up the 1 closed-source RPM we use from them [Oracle site](http://eelslap.com/)
-
-## Website
-
-https://edge.siwhine.net
