@@ -80,8 +80,8 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php71e
-Version: 7.1.0
-Release: 3%{?dist}
+Version: 7.1.1
+Release: 1%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -1865,6 +1865,9 @@ fi
 
 
 %changelog
+* Wed Jan 18 2017 Gregory Boddin <gregory@siwhine.net> - 7.1.1-1
+- Upgrade from upstream
+
 * Sun Dec 11 2016 Gregory Boddin <gregory@siwhine.net> - 7.1.0-3
 - Imported from IUS
 - Requiring httpd >= 2.4.10
