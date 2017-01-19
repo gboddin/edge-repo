@@ -12,8 +12,8 @@
 
 Summary: Apache HTTP Server
 Name: httpd
-Version: 2.4.23
-Release: 6%{?dist}
+Version: 2.4.25
+Release: 1%{?dist}
 URL: http://httpd.apache.org/
 Source0: http://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
 Source1: index.html
@@ -68,7 +68,7 @@ Patch31: httpd-2.4.18-sslmultiproxy.patch
 Patch34: httpd-2.4.17-socket-activation.patch
 Patch35: httpd-2.4.17-sslciphdefault.patch
 # Bug fixes
-Patch55: httpd-2.4.4-malformed-host.patch
+#Patch55: httpd-2.4.4-malformed-host.patch
 Patch56: httpd-2.4.4-mod_unique_id.patch
 Patch57: httpd-2.4.10-sigint.patch
 Patch90: httpd-2.4-proxy-name-256.patch
@@ -221,7 +221,7 @@ interface for storing and accessing per-user session data.
 %patch34 -p1 -b .socketactivation
 %patch35 -p1 -b .sslciphdefault
 
-%patch55 -p1 -b .malformedhost
+#%patch55 -p1 -b .malformedhost
 %patch56 -p1 -b .uniqueid
 %patch57 -p1 -b .sigint
 %patch90 -p1 -b .proxysize
@@ -719,6 +719,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_rpmconfigdir}/macros.d/macros.httpd
 
 %changelog
+* Tue Dec 20 2016 Gregory Boddin <gregory@siwhine.net> - 2.4.25-1
+- Updated from upstream
+- Fixes CVE-2016-0736 CVE-2016-2161 CVE-2016-5387 CVE-2016-8740 CVE-2016-8743
+- Removed upstream applied patch for malformed-host
+
 * Tue Jul 19 2016 Gregory Boddin <gregory@siwhine.net> - 2.4.23-6
 - added patch to allow long proxy path (httpd-2.4-proxy-name-256.patch)
 - imported
