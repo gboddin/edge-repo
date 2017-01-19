@@ -100,8 +100,8 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: %{real_name}%{?ius_suffix}
-Version: 5.6.29
-Release: 4%{?dist}
+Version: 5.6.30
+Release: 1%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -1820,6 +1820,9 @@ fi
 
 
 %changelog
+* Thu Jan 19 2017 Gregory Boddin <gregory@siwhine.net> - 5.6.30-1
+- Latest upstream
+
 * Fri Dec 23 2016 Gregory Boddin <gregory@siwhine.net> - 5.6.29-4
 - Forcing usage of httpd 2.4
 
