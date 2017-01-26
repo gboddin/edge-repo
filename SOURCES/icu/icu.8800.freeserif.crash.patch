@@ -1,0 +1,14 @@
+diff -ru orig.icu/source/layout/LookupProcessor.cpp icu/source/layout/LookupProcessor.cpp
+--- orig.icu/source/layout/LookupProcessor.cpp	2016-03-23 21:56:44.000000000 +0100
++++ icu/source/layout/LookupProcessor.cpp	2016-04-15 18:19:26.903927005 +0200
+@@ -223,7 +223,9 @@
+ 
+     if (requiredFeatureIndex != 0xFFFF) {
+       requiredFeatureTable = featureListTable->getFeatureTable(featureListTable, requiredFeatureIndex, &requiredFeatureTag, success);
+-      featureReferences += SWAPW(requiredFeatureTable->lookupCount);
++      if (requiredFeatureTable.isValid()) {
++        featureReferences += SWAPW(requiredFeatureTable->lookupCount);
++      }
+     }
+ 
+     lookupOrderArray = LE_NEW_ARRAY(le_uint16, featureReferences);
